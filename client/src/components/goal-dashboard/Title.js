@@ -11,7 +11,7 @@ const Title = () => {
     <>
       <MainTitle>{textCapitalize(state.shortDescription)}</MainTitle>
       <Typography align="center" variant="body1" gutterBottom>
-        {moment(state.endDate).from()}
+        {moment(state.endDate).format('LL')} ({moment(state.endDate).from()})
       </Typography>
     </>
   )
