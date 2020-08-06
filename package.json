@@ -4,8 +4,8 @@
   "description": "Backend for the goal measurement project",
   "main": "server.js",
   "scripts": {
-    "start": "node ./server.js",
-    "server": "nodemon server --ignore client/",
+    "start": "node ./index.js",
+    "server": "nodemon index.js --ignore client/",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
