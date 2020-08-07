@@ -11,7 +11,7 @@ const { userAvatar } = require('./controllers/user.controller')
 
 const app = express()
 
-app.set('PORT', process.env.PORT)
+// app.set('PORT', process.env.PORT)
 
 // Connect to the database
 connectDB()

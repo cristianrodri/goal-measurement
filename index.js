@@ -6,7 +6,7 @@ require('colors')
 const app = require('./server/app')
 
 const server = express()
-const port = app.get('PORT') || 3001
+const port = process.env.PORT || 3001
 
 server.use(app)
 
