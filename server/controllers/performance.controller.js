@@ -31,7 +31,7 @@ const performanceCtrl = {
 
   /**
    * @desc Create new 'day' performance by specific goal
-   * @route /api/v1/:goalId/performance/create
+   * @route /api/:goalId/performance/create
    * @method POST
    * @access private
    */
@@ -59,7 +59,7 @@ const performanceCtrl = {
 
   /**
    * @desc Get all performances by specific goal
-   * @route /api/v1/:goalId/performances
+   * @route /api/:goalId/performances
    * @method GET
    * @access private
    */
@@ -168,7 +168,7 @@ const performanceCtrl = {
 
   /**
    * @desc Get one performance by specific goal (today performance)
-   * @route /api/v1/:goalId/performance
+   * @route /api/:goalId/performance
    * @method GET
    * @access private
    */
@@ -205,7 +205,7 @@ const performanceCtrl = {
 
   /**
    * @desc Update one performance by specific goal
-   * @route /api/v1/:goalId/performance/:performanceId
+   * @route /api/:goalId/performance/:performanceId
    * @method PUT
    * @access private
    */

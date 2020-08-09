@@ -1,5 +1,5 @@
 const createPerformanceAPI = (token, goalId, data) => {
-  return fetch(`/api/v1/${goalId}/performance/create`, {
+  return fetch(`/api/${goalId}/performance/create`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -13,7 +13,7 @@ const createPerformanceAPI = (token, goalId, data) => {
 }
 
 const getAllPerformancesByGoal = (token, goalId) => {
-  return fetch(`/api/v1/${goalId}/performances`, {
+  return fetch(`/api/${goalId}/performances`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
@@ -26,7 +26,7 @@ const getAllPerformancesByGoal = (token, goalId) => {
 }
 
 const getTodayPerformance = (token, goalId) => {
-  return fetch(`/api/v1/${goalId}/performance`, {
+  return fetch(`/api/${goalId}/performance`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
@@ -39,7 +39,7 @@ const getTodayPerformance = (token, goalId) => {
 }
 
 const updatePerformance = (token, goalId, performanceId, data) => {
-  return fetch(`/api/v1/${goalId}/performance/${performanceId}`, {
+  return fetch(`/api/${goalId}/performance/${performanceId}`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json',

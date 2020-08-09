@@ -19,11 +19,9 @@ router
     auth,
     upload.single('avatar'),
     (err, req, res, next) => {
-      if (err.code === 'LIMIT_FILE_SIZE') {
-        req.exceededFile = true
-      } else {
-        req.exceededFile = false
-      }
+      err.code === 'LIMIT_FILE_SIZE'
+        ? (req.exceededFile = true)
+        : (req.exceededFile = false)
 
       next()
     },

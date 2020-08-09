@@ -9,7 +9,7 @@ const allowedUpdates = require('../helpers/allowedUpdates')
 const userCtrl = {
   /**
    * @desc Create new user
-   * @route /api/v1/user/signup
+   * @route /api/user/signup
    * @method POST
    * @access public
    */
@@ -78,7 +78,7 @@ const userCtrl = {
 
   /**
    * @desc Resend user confirmation link
-   * @route /api/v1/user/resend-link
+   * @route /api/user/resend-link
    * @method POST
    * @access public
    */
@@ -138,7 +138,7 @@ const userCtrl = {
 
   /**
    * @desc User confirm the registration by clicking the link sent to email
-   * @route /api/v1/user/confirmation/:idUser/:idTokenUser
+   * @route /api/user/confirmation/:idUser/:idTokenUser
    * @method GET
    * @access public
    */
@@ -171,7 +171,7 @@ const userCtrl = {
 
   /**
    * @desc User login
-   * @route /api/v1/user/login
+   * @route /api/user/login
    * @method POST
    * @access public
    */
@@ -216,7 +216,7 @@ const userCtrl = {
 
   /**
    * @desc User logout by cleaning cookie (NOT USED YET)
-   * @route /api/v1/user/logout
+   * @route /api/user/logout
    * @method GET
    * @access private
    */
@@ -227,7 +227,7 @@ const userCtrl = {
 
   /**
    * @desc Get authenticated user details
-   * @route /api/v1/user/me
+   * @route /api/user/me
    * @method GET
    * @access private
    */
@@ -250,7 +250,7 @@ const userCtrl = {
 
   /**
    * @desc Update user properties
-   * @route /api/v1/user/me
+   * @route /api/user/me
    * @method PUT
    * @access private
    */
@@ -315,7 +315,7 @@ const userCtrl = {
 
   /**
    * @desc Delete user
-   * @route /api/v1/user/me
+   * @route /api/user/me
    * @method DELETE
    * @access private
    */
@@ -347,7 +347,7 @@ const userCtrl = {
 
   /**
    * @desc Update user password
-   * @route /api/v1/user/update-password
+   * @route /api/user/update-password
    * @method PUT
    * @access private
    */

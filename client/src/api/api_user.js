@@ -1,5 +1,5 @@
 const createUser = data => {
-  return fetch('/api/v1/user/signup', {
+  return fetch('/api/user/signup', {
     method: 'POST',
     body: data
   })
@@ -10,7 +10,7 @@ const createUser = data => {
 }
 
 const resendLinkAPI = data => {
-  return fetch('/api/v1/user/resend-link', {
+  return fetch('/api/user/resend-link', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -23,7 +23,7 @@ const resendLinkAPI = data => {
 }
 
 const loginUser = data => {
-  return fetch('/api/v1/user/login', {
+  return fetch('/api/user/login', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -39,7 +39,7 @@ const loginUser = data => {
 }
 
 const getUserById = token => {
-  return fetch('/api/v1/user/me', {
+  return fetch('/api/user/me', {
     method: 'GET',
     headers: {
       Accept: 'application/json',
@@ -52,7 +52,7 @@ const getUserById = token => {
 }
 
 const updateUser = (token, data) => {
-  return fetch('/api/v1/user/me', {
+  return fetch('/api/user/me', {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
@@ -65,7 +65,7 @@ const updateUser = (token, data) => {
 }
 
 const deleteUser = (token, data) => {
-  return fetch('/api/v1/user/me', {
+  return fetch('/api/user/me', {
     method: 'DELETE',
     headers: {
       Accept: 'application/json',
@@ -79,7 +79,7 @@ const deleteUser = (token, data) => {
 }
 
 const updatePassword = (token, data) => {
-  return fetch('/api/v1/user/update-password', {
+  return fetch('/api/user/update-password', {
     method: 'PUT',
     headers: {
       Accept: 'application/json',

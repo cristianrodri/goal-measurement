@@ -1,7 +1,8 @@
 const express = require('express')
 require('colors')
 
-// require('dotenv').config({ path: './config/dev.env' })
+if (process.env.NODE_ENV !== 'production')
+  require('dotenv').config({ path: './config/dev.env' })
 
 const app = require('./server/app')
 

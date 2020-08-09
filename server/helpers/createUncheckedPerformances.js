@@ -1,8 +1,5 @@
 const moment = require('moment')
 
-// start day
-// end day
-
 const createUncheckedPerformances = (
   startDay,
   endDay,

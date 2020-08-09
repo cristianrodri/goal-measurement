@@ -6,7 +6,7 @@ const moment = require('moment')
 const goalCtrl = {
   /**
    * @desc Create new goal
-   * @route /api/v1/goal/create
+   * @route /api/goal/create
    * @method POST
    * @access private
    */
@@ -41,7 +41,7 @@ const goalCtrl = {
 
   /**
    * @desc Get all the user goals
-   * @route /api/v1/goals
+   * @route /api/goals
    * @method GET
    * @access private
    */
@@ -63,7 +63,7 @@ const goalCtrl = {
 
   /**
    * @desc Get one goal by id
-   * @route /api/v1/goal/:id
+   * @route /api/goal/:id
    * @method GET
    * @access private
    */
@@ -97,7 +97,7 @@ const goalCtrl = {
 
   /**
    * @desc Update one goal by id
-   * @route /api/v1/goal/:id
+   * @route /api/goal/:id
    * @method PUT
    * @access private
    */
@@ -182,7 +182,7 @@ const goalCtrl = {
 
   /**
    * @desc Delete one goal by id
-   * @route /api/v1/goal/:id
+   * @route /api/goal/:id
    * @method DELETE
    * @access private
    */

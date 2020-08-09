@@ -11,8 +11,6 @@ const { userAvatar } = require('./controllers/user.controller')
 
 const app = express()
 
-// app.set('PORT', process.env.PORT)
-
 // Connect to the database
 connectDB()
 
@@ -22,10 +20,10 @@ app.use(cookieParser())
 
 if (process.env.NODE_ENV === 'development') morgan('dev')
 
-app.use('/api/v1/user', userRoutes)
+app.use('/api/user', userRoutes)
 app.get('/api/user/:id/avatar', userAvatar)
-app.use('/api/v1', goalRoutes)
-app.use('/api/v1', performanceRoutes)
+app.use('/api/', goalRoutes)
+app.use('/api/', performanceRoutes)
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.resolve(__dirname, '../client/build')))
