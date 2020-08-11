@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import {
   makeStyles,
   Paper,
@@ -6,10 +6,12 @@ import {
   FormLabel,
   RadioGroup,
   FormControlLabel,
-  Radio
+  Radio,
+  Typography
 } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { GlobalContext } from '../../context/Context'
+import { PropTypes } from 'prop-types'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -25,10 +27,22 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const PrintRewards = () => {
+const PrintRewards = props => {
   const classes = useStyles()
   const [value, setValue] = useState('')
+  const [type, setType] = useState('')
+  const [rewardType, setRewardType] = useState('')
   const { state } = useContext(GlobalContext)
+
+  useEffect(() => {
+    if (props.type === 'week') {
+      setType('week')
+      setRewardType('medium')
+    } else {
+      setType('day')
+      setRewardType('small')
+    }
+  }, [])
 
   const handleChange = e => {
     setValue(e.target.value)
@@ -37,15 +51,14 @@ const PrintRewards = () => {
   return (
     <div className={classes.root}>
       <Alert severity="success" variant="filled">
-        Congrats! You did an excellent job this week, give yourself a weekly
-        reward
+        Congrats! You did an excellent job this {type}, give yourself a reward
       </Alert>
       <Paper className={classes.paper}>
         <FormControl component="fieldset">
-          <FormLabel component="legend">Weekly Rewards</FormLabel>
+          <FormLabel component="legend">Reward of the {type}</FormLabel>
           <RadioGroup
-            aria-label="weekly-reward"
-            name="weekly-reward"
+            aria-label="reward"
+            name="reward"
             value={value}
             onChange={handleChange}
           >
@@ -60,8 +73,17 @@ const PrintRewards = () => {
           </RadioGroup>
         </FormControl>
       </Paper>
+      {value && (
+        <Typography align="center" gutterBottom>
+          You've chosen <strong>{value}</strong>
+        </Typography>
+      )}
     </div>
   )
+}
+
+PrintRewards.propTypes = {
+  type: PropTypes.string.isRequired
 }
 
 export default PrintRewards

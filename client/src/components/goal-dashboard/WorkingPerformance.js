@@ -14,7 +14,7 @@ import { GlobalContext } from '../../context/Context'
 import { updatePerformance } from '../../api/api_performance'
 import Progress from './Progress'
 import { PrimaryButton } from './../Button'
-import WorkDone from './WorkDone'
+import PrintRewards from './PrintRewards'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -121,7 +121,7 @@ const WorkingPerformance = () => {
     }
   }
 
-  if (state.todayPerformance.done) return <WorkDone />
+  if (state.todayPerformance.done) return <PrintRewards type="day" />
 
   return (
     <div className={classes.container}>

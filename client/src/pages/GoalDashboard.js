@@ -21,7 +21,8 @@ const GoalDashboard = props => {
   const [deserveWeeklyReward, setDeserveWeeklyReward] = useState(false)
   const weeklyReward = isWeeklyRewardDay && deserveWeeklyReward
 
-  const sumArray = array => array.reduce((number, current) => number + current)
+  const sumArray = array =>
+    array.reduce((number, current) => number + current, 0)
 
   const averageArray = array => sumArray(array) / array.length
 
@@ -63,7 +64,7 @@ const GoalDashboard = props => {
 
   return (
     <>
-      {weeklyReward && <PrintRewards />}
+      {weeklyReward && <PrintRewards type="week" />}
 
       <Grid container spacing={2} justify="center">
         <Grid
