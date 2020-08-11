@@ -14,16 +14,9 @@ import { updatePassword, deleteUser } from '../api/api_user'
 import { FormContainer, FormContent, FormPassword } from '../components/Form'
 import { MainTitle } from '../components/Title'
 import { GlobalContext } from '../context/Context'
-import { PrimaryButton } from '../components/Button'
+import { DeleteButton, PrimaryButton } from './../components/Button'
 
 const useStyles = makeStyles(theme => ({
-  deleteAccount: {
-    display: 'block',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginTop: theme.spacing(2),
-    color: theme.palette.error[400]
-  },
   buttonDelete: {
     margin: theme.spacing(1)
   }
@@ -115,12 +108,7 @@ const Privacy = () => {
     <>
       {
         // Dialog that confirm your password for deleting account
-        <Dialog
-          open={confirmDialog}
-          onClose={closeConfirmDialog}
-          maxWidth="xs"
-          style={{ padding: theme.spacing(6) }}
-        >
+        <Dialog open={confirmDialog} onClose={closeConfirmDialog} maxWidth="xs">
           <DialogContent
             style={{ padding: theme.spacing(1), paddingBottom: '0' }}
           >
@@ -136,7 +124,7 @@ const Privacy = () => {
               <div
                 style={{
                   display: 'flex',
-                  justifyContent: 'space-around',
+                  justifyContent: 'space-between',
                   marginTop: theme.spacing(2)
                 }}
               >
@@ -179,14 +167,12 @@ const Privacy = () => {
             onChange={e => setConfirmPassword(e.target.value)}
             value={confirmPassword}
           />
-          <PrimaryButton fullWidth type="submit">Change Password</PrimaryButton>
-          <Button
-            className={classes.deleteAccount}
-            onClick={openConfirmDialog}
-            disabled={disabled}
-          >
+          <PrimaryButton fullWidth type="submit">
+            Change Password
+          </PrimaryButton>
+          <DeleteButton onClick={openConfirmDialog} disabled={disabled}>
             Delete Account
-          </Button>
+          </DeleteButton>
         </FormContent>
       </FormContainer>
     </>

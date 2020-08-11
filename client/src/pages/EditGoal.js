@@ -9,13 +9,13 @@ import {
   FormShortDescription,
   FormBigDescription
 } from '../components/goal-form/FormDescription'
-import { PrimaryButton } from '../components/Button'
 import FormActivities from '../components/goal-form/Activities'
 import Rewards from './../components/goal-form/Rewards'
 import Date from './../components/goal-form/Date'
 import GoalForm from './../components/goal-form/GoalForm'
 import withGoalData from './../HOC/withGoalData'
 import ChooseWeeklyReward from './../components/goal-form/ChooseWeeklyReward'
+import { DeleteButton, PrimaryButton } from './../components/Button'
 
 const EditGoal = () => {
   const history = useHistory()
@@ -66,6 +66,8 @@ const EditGoal = () => {
     }
   }
 
+  const openConfirmDialog = () => {}
+
   return (
     <GoalForm>
       <MainTitle>Edit Goal</MainTitle>
@@ -85,6 +87,7 @@ const EditGoal = () => {
           {!disabled ? 'Update Goal' : 'Updating goal...'}
         </PrimaryButton>
       </form>
+      <DeleteButton onClick={openConfirmDialog}>Delete Goal</DeleteButton>
     </GoalForm>
   )
 }
