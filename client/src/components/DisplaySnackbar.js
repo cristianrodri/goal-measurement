@@ -19,7 +19,7 @@ const DisplaySnackbar = ({ open, type }) => {
         horizontal: 'left'
       }}
       open={open}
-      autoHideDuration={6000}
+      autoHideDuration={type === 'success' ? 3000 : 6000}
       onClose={dispatchEmptySnackbar}
       disableWindowBlurListener
     >
