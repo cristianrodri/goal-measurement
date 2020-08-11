@@ -11,7 +11,8 @@ const goalSchema = new mongoose.Schema(
     },
     bigDescription: {
       type: String,
-      trim: true
+      trim: true,
+      maxlength: 500
     },
     activities: [
       {
@@ -45,8 +46,10 @@ const goalSchema = new mongoose.Schema(
 goalSchema.pre('remove', async function (next) {
   const goal = this
 
-  await Performance.deleteMany({ goal: goal._id })
-  next()
+  Performance.deleteMany({ goal: goal._id }, (err, res) => {
+    if (err) throw new Error(err)
+    next()
+  })
 })
 
 const Goal = mongoose.model('Goal', goalSchema)

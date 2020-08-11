@@ -22,8 +22,8 @@ if (process.env.NODE_ENV === 'development') morgan('dev')
 
 app.use('/api/user', userRoutes)
 app.get('/api/user/:id/avatar', userAvatar)
-app.use('/api/', goalRoutes)
-app.use('/api/', performanceRoutes)
+app.use('/api', goalRoutes)
+app.use('/api', performanceRoutes)
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.resolve(__dirname, '../client/build')))

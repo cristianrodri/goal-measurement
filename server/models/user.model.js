@@ -5,39 +5,44 @@ const jwt = require('jsonwebtoken')
 const Goal = require('./goal.model')
 const Performance = require('./performance.model')
 
-const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-    trim: true
+const userSchema = new mongoose.Schema(
+  {
+    username: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 32
+    },
+    email: {
+      type: String,
+      required: true,
+      trim: true,
+      unique: true,
+      lowercase: true,
+      validate(value) {
+        if (!validator.isEmail(value)) throw new Error('Email is invalid')
+      }
+    },
+    password: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 7,
+      validate(value) {
+        if (value.toLowerCase().includes('password'))
+          throw new Error('Password cannot contain "password"')
+      }
+    },
+    isVerified: {
+      type: Boolean,
+      default: false
+    },
+    avatar: Buffer
   },
-  email: {
-    type: String,
-    required: true,
-    trim: true,
-    unique: true,
-    lowercase: true,
-    validate(value) {
-      if (!validator.isEmail(value)) throw new Error('Email is invalid')
-    }
-  },
-  password: {
-    type: String,
-    required: true,
-    trim: true,
-    minlength: 7,
-    validate(value) {
-      if (value.toLowerCase().includes('password')) throw new Error('Password cannot contain "password"')
-    }
-  },
-  isVerified: {
-    type: Boolean,
-    default: false
-  },
-  avatar: Buffer
-}, {
-  timestamps: true
-})
+  {
+    timestamps: true
+  }
+)
 
 userSchema.virtual('goals', {
   ref: 'Goal',
@@ -45,7 +50,7 @@ userSchema.virtual('goals', {
   foreignField: 'owner'
 })
 
-userSchema.methods.toJSON = function() {
+userSchema.methods.toJSON = function () {
   const user = this
   const userObject = user.toObject()
 
@@ -69,7 +74,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
   return user
 }
 
-userSchema.methods.generateAuthToken = function() {
+userSchema.methods.generateAuthToken = function () {
   const user = this
   const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_KEY)
 
@@ -77,7 +82,7 @@ userSchema.methods.generateAuthToken = function() {
 }
 
 // Hash plain password before saving
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function (next) {
   const user = this
 
   if (user.isModified('password')) {
@@ -88,11 +93,16 @@ userSchema.pre('save', async function(next) {
 })
 
 // Delete all user goals before the user is removed
-userSchema.pre('remove', async function(next) {
+userSchema.pre('remove', async function (next) {
   const user = this
-  await Goal.deleteMany({ owner: user._id }) // delete all user goals
-  await Performance.deleteMany({ owner: user._id }) // delete all user performances
-  next()
+
+  try {
+    await Goal.deleteMany({ owner: user._id }) // delete all user goals
+    await Performance.deleteMany({ owner: user._id }) // delete all user performances
+    next()
+  } catch (error) {
+    throw new Error(error.message)
+  }
 })
 
 const User = mongoose.model('User', userSchema)

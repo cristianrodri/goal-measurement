@@ -4,7 +4,10 @@ const performanceSchema = new mongoose.Schema(
   {
     activities: [
       {
-        activity: String,
+        activity: {
+          type: String,
+          maxLength: 50
+        },
         reached: {
           type: Boolean,
           default: false

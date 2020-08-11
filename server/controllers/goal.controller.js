@@ -5,6 +5,37 @@ const moment = require('moment')
 
 const goalCtrl = {
   /**
+   *
+   * @desc Get goal by :id param
+   * @access private
+   */
+  async getGoalById(req, res, next) {
+    try {
+      const goal = await Goal.findOne({
+        _id: req.params.id,
+        owner: req.user._id
+      })
+
+      if (!goal) {
+        return res.status(404).json({
+          success: false,
+          error: true,
+          message: 'Goal is not found'
+        })
+      }
+
+      req.goal = goal
+      next()
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        error: true,
+        message: error.message
+      })
+    }
+  },
+
+  /**
    * @desc Create new goal
    * @route /api/goal/create
    * @method POST
@@ -68,31 +99,10 @@ const goalCtrl = {
    * @access private
    */
   async getGoal(req, res) {
-    try {
-      const goal = await Goal.findOne({
-        _id: req.params.id,
-        owner: req.user._id
-      })
-
-      if (!goal) {
-        return res.status(404).json({
-          success: false,
-          error: true,
-          message: 'Goal is not found'
-        })
-      }
-
-      res.json({
-        success: true,
-        data: goal
-      })
-    } catch (error) {
-      res.status(400).json({
-        success: false,
-        error: true,
-        message: error.message
-      })
-    }
+    res.json({
+      success: true,
+      data: req.goal
+    })
   },
 
   /**
@@ -102,19 +112,19 @@ const goalCtrl = {
    * @access private
    */
   async updateGoal(req, res) {
-    const updates = Object.keys(req.body)
-    const isValidUpdates = allowedUpdates(
-      ['shortDescription', 'bigDescription', 'activities', 'end', 'rewards'],
-      updates
-    )
+    // const updates = Object.keys(req.body)
+    // const isValidUpdates = allowedUpdates(
+    //   ['shortDescription', 'bigDescription', 'activities', 'end', 'rewards'],
+    //   updates
+    // )
 
-    if (!isValidUpdates) {
-      return res.status(400).json({
-        success: false,
-        error: true,
-        message: 'Invalid updates'
-      })
-    }
+    // if (!isValidUpdates) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     error: true,
+    //     message: 'Invalid updates'
+    //   })
+    // }
 
     try {
       const goal = await Goal.findOne({
