@@ -62,14 +62,15 @@ const PrintRewards = props => {
             value={value}
             onChange={handleChange}
           >
-            {state.rewards.medium.map((reward, i) => (
-              <FormControlLabel
-                key={i}
-                value={reward}
-                control={<Radio />}
-                label={reward}
-              />
-            ))}
+            {rewardType &&
+              state.rewards[rewardType].map((reward, i) => (
+                <FormControlLabel
+                  key={i}
+                  value={reward}
+                  control={<Radio />}
+                  label={reward}
+                />
+              ))}
           </RadioGroup>
         </FormControl>
       </Paper>
