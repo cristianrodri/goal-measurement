@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react'
 import {
-  makeStyles,
-  useTheme,
   Dialog,
   DialogContent,
   DialogContentText,
   DialogActions,
-  Button
+  Button,
+  DialogTitle
 } from '@material-ui/core'
 import { useCookies } from 'react-cookie'
 import { useHistory } from 'react-router-dom'
@@ -16,15 +15,7 @@ import { MainTitle } from '../components/Title'
 import { GlobalContext } from '../context/Context'
 import { DeleteButton, PrimaryButton } from './../components/Button'
 
-const useStyles = makeStyles(theme => ({
-  buttonDelete: {
-    margin: theme.spacing(1)
-  }
-}))
-
 const Privacy = () => {
-  const classes = useStyles()
-  const theme = useTheme()
   const history = useHistory()
   const { dispatchError, dispatchSuccessDialog } = useContext(GlobalContext)
   const [cookies, , removeCookie] = useCookies()
@@ -108,44 +99,33 @@ const Privacy = () => {
     <>
       {
         // Dialog that confirm your password for deleting account
-        <Dialog open={confirmDialog} onClose={closeConfirmDialog} maxWidth="xs">
-          <DialogContent
-            style={{ padding: theme.spacing(1), paddingBottom: '0' }}
-          >
-            <DialogContentText>Confirm your password</DialogContentText>
+        <Dialog open={confirmDialog} onClose={closeConfirmDialog}>
+          <DialogTitle>Confirm your password</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to delete your account?
+            </DialogContentText>
+            <FormPassword
+              label="Password"
+              onChange={e => setPasswordToDelete(e.target.value)}
+              value={passwordToDelete}
+            />
           </DialogContent>
           <DialogActions>
-            <form onSubmit={handleDeleteAccount}>
-              <FormPassword
-                label="Password"
-                onChange={e => setPasswordToDelete(e.target.value)}
-                value={passwordToDelete}
-              />
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  marginTop: theme.spacing(2)
-                }}
-              >
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={closeConfirmDialog}
-                  className={classes.buttonDelete}
-                >
-                  Keep Account
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  type="submit"
-                  className={classes.buttonDelete}
-                >
-                  Delete Account
-                </Button>
-              </div>
-            </form>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={closeConfirmDialog}
+            >
+              Keep Account
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleDeleteAccount}
+            >
+              Delete Account
+            </Button>
           </DialogActions>
         </Dialog>
       }
