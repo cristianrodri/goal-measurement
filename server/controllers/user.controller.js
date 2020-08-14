@@ -302,7 +302,8 @@ const userCtrl = {
       res.json({
         success: true,
         user,
-        hasChangedAvatar: oldAvatar !== newAvatar
+        hasChangedAvatar: oldAvatar !== newAvatar,
+        message: 'Your profile was updated successfully'
       })
     } catch (error) {
       res.status(400).json({

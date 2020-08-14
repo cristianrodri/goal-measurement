@@ -198,19 +198,7 @@ const goalCtrl = {
    */
   async deleteGoal(req, res) {
     try {
-      const goal = await Goal.findOne({
-        _id: req.params.id,
-        owner: req.user._id
-      })
-
-      if (!goal) {
-        return res.status(404).json({
-          success: false,
-          error: 'Goal is not found'
-        })
-      }
-
-      await goal.remove()
+      await req.goal.remove()
       res.json({
         success: true,
         message: 'The goal was deleted successfully'

@@ -101,7 +101,7 @@ const EditUser = () => {
           } else if (avatar.status === 404) dispatchChangeAvatar('')
         }
 
-        history.push('/my-goals', { fromEditUser: true })
+        history.push('/my-goals', { fromEditUser: true, message: data.message })
       } else if (data.error) {
         dispatchError(data.message)
         setDisabled(false)

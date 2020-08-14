@@ -38,8 +38,11 @@ const MyGoals = props => {
     const init = async () => {
       try {
         if (props.location.state) {
-          if (props.location.state['fromEditUser']) {
-            dispatchSuccessDialog('Your profile was updated successfully')
+          if (
+            props.location.state['fromEditUser'] ||
+            props.location.state['fromDeleteGoal']
+          ) {
+            dispatchSuccessDialog(props.location.state.message)
             history.replace() // delete fromEditUser property
           }
         }

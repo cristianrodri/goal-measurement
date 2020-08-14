@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
 import { useHistory } from 'react-router-dom'
 import { GlobalContext } from '../context/Context'
-import { updateGoal } from '../api/api_goals'
+import { updateGoal, deleteGoal } from '../api/api_goals'
 import { MainTitle } from '../components/Title'
 import { FormDivider } from '../components/FormGoal'
 import {
@@ -16,6 +16,14 @@ import GoalForm from './../components/goal-form/GoalForm'
 import withGoalData from './../HOC/withGoalData'
 import ChooseWeeklyReward from './../components/goal-form/ChooseWeeklyReward'
 import { DeleteButton, PrimaryButton } from './../components/Button'
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button
+} from '@material-ui/core'
 
 const EditGoal = () => {
   const history = useHistory()
@@ -31,6 +39,7 @@ const EditGoal = () => {
     endDate
   } = state
   const [disabled, setDisabled] = useState(false)
+  const [confirmDialog, setConfirmDialog] = useState(false)
 
   useEffect(() => {
     document.title = 'Edit Goal'
@@ -66,29 +75,81 @@ const EditGoal = () => {
     }
   }
 
-  const openConfirmDialog = () => {}
+  const openConfirmDialog = () => {
+    setConfirmDialog(true)
+  }
+
+  const handleDeleteGoal = async () => {
+    try {
+      const res = await deleteGoal(token, state.goalId)
+
+      if (res.success) {
+        history.push(`/my-goals`, {
+          fromDeleteGoal: true,
+          message: res.message
+        })
+      } else if (res.error) {
+        dispatchError(res.message)
+      }
+    } catch (error) {
+      dispatchError(error.message)
+    }
+  }
+
+  const closeConfirmDialog = () => {
+    setConfirmDialog(false)
+  }
 
   return (
-    <GoalForm>
-      <MainTitle>Edit Goal</MainTitle>
-      <form onSubmit={handleSubmit}>
-        <FormShortDescription />
-        <FormBigDescription />
-        <FormDivider />
-        <FormActivities />
-        <FormDivider />
-        <Rewards />
-        <FormDivider />
-        <ChooseWeeklyReward />
-        <FormDivider />
-        <Date />
-        <FormDivider />
-        <PrimaryButton type="submit" disabled={disabled}>
-          {!disabled ? 'Update Goal' : 'Updating goal...'}
-        </PrimaryButton>
-      </form>
-      <DeleteButton onClick={openConfirmDialog}>Delete Goal</DeleteButton>
-    </GoalForm>
+    <>
+      {
+        // Dialog that confirm your password for deleting Goal
+        <Dialog open={confirmDialog} onClose={closeConfirmDialog}>
+          <DialogTitle>Confirm your password</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to delete your Goal?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={closeConfirmDialog}
+            >
+              Keep Goal
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleDeleteGoal}
+            >
+              Delete Goal
+            </Button>
+          </DialogActions>
+        </Dialog>
+      }
+      <GoalForm>
+        <MainTitle>Edit Goal</MainTitle>
+        <form onSubmit={handleSubmit}>
+          <FormShortDescription />
+          <FormBigDescription />
+          <FormDivider />
+          <FormActivities />
+          <FormDivider />
+          <Rewards />
+          <FormDivider />
+          <ChooseWeeklyReward />
+          <FormDivider />
+          <Date />
+          <FormDivider />
+          <PrimaryButton type="submit" disabled={disabled}>
+            {!disabled ? 'Update Goal' : 'Updating goal...'}
+          </PrimaryButton>
+        </form>
+        <DeleteButton onClick={openConfirmDialog}>Delete Goal</DeleteButton>
+      </GoalForm>
+    </>
   )
 }
 
