@@ -1,0 +1,119 @@
+import React, { useState, useContext } from 'react'
+import { Popover, Typography, makeStyles } from '@material-ui/core'
+import { red, green, lime, grey } from '@material-ui/core/colors'
+import moment from 'moment'
+import { GlobalContext } from '../../context/Context'
+
+const COMPLETED = 'COMPLETED'
+const BETWEEN_80_AND_99 = '80-99'
+const BETWEEN_50_AND_79 = '50-79'
+const BETWEEN_20_AND_49 = '20-49'
+const BETWEEN_1_AND_19 = '1-19'
+const DID_NOTHING = '0'
+const NOT_WORKING_DAY = 'NOT_WORKING_DAY'
+
+const useStyles = makeStyles(theme => ({
+  popover: {
+    pointerEvents: 'none'
+  },
+  [COMPLETED]: {
+    backgroundColor: green[700]
+  },
+  [BETWEEN_80_AND_99]: {
+    backgroundColor: green[600]
+  },
+  [BETWEEN_50_AND_79]: {
+    backgroundColor: green[400]
+  },
+  [BETWEEN_20_AND_49]: {
+    backgroundColor: lime[400]
+  },
+  [BETWEEN_1_AND_19]: {
+    backgroundColor: red[400]
+  },
+  [DID_NOTHING]: {
+    backgroundColor: red[700]
+  },
+  [NOT_WORKING_DAY]: {
+    backgroundColor: grey[300]
+  }
+}))
+
+const progressColor = ({ percentage, isWorkingDay }) => {
+  if (isWorkingDay) {
+    switch (true) {
+      case percentage === 100:
+        return COMPLETED
+      case percentage >= 80:
+        return BETWEEN_80_AND_99
+      case percentage >= 50:
+        return BETWEEN_50_AND_79
+      case percentage >= 20:
+        return BETWEEN_20_AND_49
+      case percentage >= 1:
+        return BETWEEN_1_AND_19
+      default:
+        return DID_NOTHING
+    }
+  } else {
+    return NOT_WORKING_DAY
+  }
+}
+
+const DailyPerformance = ({ performance, index }) => {
+  const classes = useStyles()
+  const [anchorEl, setAnchorEl] = useState(null)
+  const { state } = useContext(GlobalContext)
+
+  const handlePopoverOpen = e => {
+    setAnchorEl(e.currentTarget)
+    console.log(e.currentTarget)
+  }
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null)
+  }
+  const open = Boolean(anchorEl)
+
+  return (
+    <>
+      <span
+        key={moment(performance.createdAt).unix()}
+        className={classes[progressColor(performance)]}
+        style={{
+          gridRow:
+            index === 0
+              ? moment(state.createdAt).day() !== 0
+                ? moment(state.createdAt).day()
+                : 7
+              : 'auto'
+        }}
+        onMouseEnter={handlePopoverOpen}
+        onMouseLeave={handlePopoverClose}
+      ></span>
+      <Popover
+        id="mouse-over-popover"
+        anchorEl={anchorEl}
+        open={open}
+        className={classes.popover}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
+        transformOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center'
+        }}
+      >
+        <Typography
+          aria-owns={open ? 'mouse-over-popover' : undefined}
+          aria-haspopup="true"
+        >
+          {performance.percentage}%
+        </Typography>
+      </Popover>
+    </>
+  )
+}
+
+export default DailyPerformance
