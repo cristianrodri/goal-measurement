@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
 const Header = () => {
   const classes = useStyles()
   const history = useHistory()
-  const [cookies, , removeCookie] = useCookies()
+  const [, , removeCookie] = useCookies()
   const { state, isAuthenticated, dispatchLogout } = useContext(GlobalContext)
 
   const logoutAction = () => {
@@ -66,12 +66,6 @@ const Header = () => {
           </Link>
         </Typography>
         <div className={classes.menuLinks}>
-          {/* <Button color="secondary" className={classes.links}>
-            <Link to="/about" style={{ color: 'inherit' }}>
-              About
-            </Link>
-          </Button> */}
-
           {!isAuthenticated() && (
             <>
               <Button color="secondary" className={classes.links}>

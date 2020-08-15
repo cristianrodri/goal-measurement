@@ -8,6 +8,8 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
+    alignItems: 'center',
+    margin: '0 auto',
     height: '100%',
     minHeight: '80vh',
     width: '100%',
@@ -71,11 +73,9 @@ const Home = props => {
       >
         Goal Measurement
       </Typography>
-      <Typography className={classes.description} variant="h6">
-        What do you want to achieve? To lose weight? To get a job? earn more
-        money? to get more discipline? whatever you want to achieve, you should
-        measure your progress. If you want to measure your goal making good
-        habits every day, you're in the right place.
+      <Typography className={classes.description} variant="h6" align="center">
+        If you want to measure your goal making good habits every day, you're in
+        the right place.
       </Typography>
       <Typography className={classes.linksContainer}>
         <Link to="/signup" className={`${classes.signup} ${classes.button}`}>
