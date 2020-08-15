@@ -16,6 +16,13 @@ const useStyles = makeStyles(theme => ({
   popover: {
     pointerEvents: 'none'
   },
+  typography: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    backgroundColor: grey[100],
+    padding: theme.spacing(1)
+  },
   [COMPLETED]: {
     backgroundColor: green[700]
   },
@@ -108,8 +115,12 @@ const DailyPerformance = ({ performance, index }) => {
         <Typography
           aria-owns={open ? 'mouse-over-popover' : undefined}
           aria-haspopup="true"
+          className={classes.typography}
         >
           {performance.percentage}%
+          <small>
+            {moment(performance.createdAt).format('dddd, DD-MMM-YYYY')}
+          </small>
         </Typography>
       </Popover>
     </>
