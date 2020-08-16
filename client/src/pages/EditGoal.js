@@ -131,7 +131,7 @@ const EditGoal = () => {
       }
       <GoalForm>
         <MainTitle>Edit Goal</MainTitle>
-        <form onSubmit={handleSubmit}>
+        <form>
           <FormShortDescription />
           <FormBigDescription />
           <FormDivider />
@@ -143,7 +143,11 @@ const EditGoal = () => {
           <FormDivider />
           <Date />
           <FormDivider />
-          <PrimaryButton type="submit" disabled={disabled}>
+          <PrimaryButton
+            type="submit"
+            disabled={disabled}
+            onClick={handleSubmit}
+          >
             {!disabled ? 'Update Goal' : 'Updating goal...'}
           </PrimaryButton>
         </form>

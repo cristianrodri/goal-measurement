@@ -74,7 +74,7 @@ const CreateGoal = () => {
   return (
     <GoalForm>
       <MainTitle>Create one goal</MainTitle>
-      <form onSubmit={handleSubmit}>
+      <form>
         <FormShortDescription />
         <FormBigDescription />
         <FormDivider />
@@ -86,7 +86,7 @@ const CreateGoal = () => {
         <FormDivider />
         <Date />
         <FormDivider />
-        <PrimaryButton type="submit" disabled={disabled}>
+        <PrimaryButton type="submit" disabled={disabled} onClick={handleSubmit}>
           {!disabled ? 'Create Goal' : 'Creating goal...'}
         </PrimaryButton>
       </form>

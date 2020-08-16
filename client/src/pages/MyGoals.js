@@ -19,6 +19,13 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: theme.spacing(2),
     fontSize: theme.typography.h4.fontSize,
     color: theme.palette.primary.main
+  },
+  link: {
+    position: 'fixed',
+    bottom: 0,
+    right: 0,
+    marginRight: theme.spacing(2),
+    marginBottom: theme.spacing(2)
   }
 }))
 
@@ -61,27 +68,18 @@ const MyGoals = props => {
 
   return (
     <Container className={classes.container} maxWidth="md">
-      <div
-        className={classes.containerGoals}
-        style={{ borderBottom: `1px solid ${theme.palette.grey[700]}` }}
-      >
+      <div className={classes.containerGoals}>
         <MainTitle>My Goals</MainTitle>
         <Goals goals={userGoals} isLoading={isLoading} />
-        <Link to="/create-goal">
+        <Link to="/create-goal" className={classes.link}>
           <PrimaryButton
             color="primary"
             variant="contained"
             className={classes.button}
           >
             <AddIcon fontSize="large" />
-            Add Goal
           </PrimaryButton>
         </Link>
-      </div>
-      <div className={classes.containerGoals}>
-        <Typography component="h1" variant="h5" align="center" gutterBottom>
-          Reached Goals
-        </Typography>
       </div>
     </Container>
   )

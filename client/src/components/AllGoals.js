@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles, Typography, Paper } from '@material-ui/core'
+import { makeStyles, Typography, Grid } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import Loading from './Loading'
+import GoalCard from './GoalCard'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -59,26 +60,13 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const AllGoals = ({ goals }) => {
-  const classes = useStyles()
-
-  return (
-    <Paper className={classes.paper} elevation={0}>
-      {goals.map(goal => (
-        <div key={goal._id} className={classes.containerGoal}>
-          <Link to={`/my-goals/${goal._id}`} className={classes.link}>
-            <Typography className={classes.goal}>
-              <span>{goal.shortDescription}</span>
-              <span style={{ marginLeft: '0' }}>
-                {moment(goal.end).format('MMMM Do YYYY')}
-              </span>
-            </Typography>
-          </Link>
-        </div>
-      ))}
-    </Paper>
-  )
-}
+const AllGoals = ({ goals }) => (
+  <Grid container spacing={3} justify="center">
+    {goals.map(goal => (
+      <GoalCard key={goal._id} goal={goal} />
+    ))}
+  </Grid>
+)
 
 AllGoals.propTypes = {
   goals: PropTypes.array.isRequired
