@@ -74,7 +74,6 @@ const DailyPerformance = ({ performance, index }) => {
 
   const handlePopoverOpen = e => {
     setAnchorEl(e.currentTarget)
-    console.log(e.currentTarget)
   }
 
   const handlePopoverClose = () => {

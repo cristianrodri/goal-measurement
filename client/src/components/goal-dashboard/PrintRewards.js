@@ -12,6 +12,7 @@ import {
 import { Alert } from '@material-ui/lab'
 import { GlobalContext } from '../../context/Context'
 import { PropTypes } from 'prop-types'
+import { textCapitalize } from './../../utils/text'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -68,7 +69,7 @@ const PrintRewards = props => {
                   key={i}
                   value={reward}
                   control={<Radio />}
-                  label={reward}
+                  label={textCapitalize(reward)}
                 />
               ))}
           </RadioGroup>

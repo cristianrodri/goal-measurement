@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { makeStyles, Paper } from '@material-ui/core'
 import { GlobalContext } from '../../context/Context'
 import moment from 'moment'
+import { textCapitalize } from './../../utils/text'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -32,7 +33,7 @@ const Description = () => {
       </div>
       <div className={classes.description}>
         <span>{`Big reward${rewards.large.length > 1 ? 's' : ''}:`} </span>
-        <span>{rewards.large.map(bigReward => bigReward)}</span>
+        <span>{rewards.large.length && textCapitalize(rewards.large[0])}</span>
       </div>
     </Paper>
   )

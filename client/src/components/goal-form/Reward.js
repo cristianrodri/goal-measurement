@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const Reward = ({ rewards, dispatchFn, name }) => {
+const Reward = ({ rewards, name }) => {
   const classes = useStyles()
   const { dispatchAddReward, dispatchDeleteReward } = useContext(GlobalContext)
   const [rewardValue, setRewardValue] = useState('')
@@ -67,11 +67,14 @@ const Reward = ({ rewards, dispatchFn, name }) => {
     <Grid item>
       <FormControl className={classes.formControl}>
         <RewardsInput
-          label={name + ' rewards'}
+          label={`${name} rewards`}
           onChange={e => setRewardValue(e.target.value)}
           value={rewardValue}
         />
-        <PrimaryButton onClick={handleRewards}>
+        <PrimaryButton
+          onClick={handleRewards}
+          disabled={name === 'Large' && rewards.length}
+        >
           <AddIcon />
           Add Reward
         </PrimaryButton>
