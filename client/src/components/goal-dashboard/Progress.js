@@ -1,5 +1,5 @@
 import React from 'react'
-import { LinearProgress, Box, Typography, withStyles } from '@material-ui/core'
+import { LinearProgress, Box, Typography } from '@material-ui/core'
 
 const Progress = props => (
   <Box display="flex" alignItems="center">

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useCookies } from 'react-cookie'
-import { makeStyles, Container, Typography, useTheme } from '@material-ui/core'
+import { makeStyles, Container } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import { useHistory } from 'react-router-dom'
 import { Link } from 'react-router-dom'
@@ -33,7 +33,6 @@ const MyGoals = props => {
   const [cookies] = useCookies()
   const history = useHistory()
   const classes = useStyles()
-  const theme = useTheme()
   const token = cookies.token
   const { dispatchSuccessDialog, dispatchError } = useContext(GlobalContext)
   const [isLoading, setIsLoading] = useState(true)

@@ -55,7 +55,6 @@ export const RewardsInput = props => (
     variant="filled"
     fullWidth={false}
     inputProps={{ maxLength: 50 }}
-    variant="outlined"
     {...props}
   />
 )

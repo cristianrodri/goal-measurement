@@ -8,7 +8,6 @@ import {
   Button
 } from '@material-ui/core'
 import { GlobalContext } from '../context/Context'
-import { FormPassword } from './Form'
 
 const ConfirmDialog = ({ confirmAction }) => {
   const { state, dispatchCloseDialog } = useContext(GlobalContext)
