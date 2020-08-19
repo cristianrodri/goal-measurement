@@ -73,7 +73,7 @@ const Reward = ({ rewards, name }) => {
         />
         <PrimaryButton
           onClick={handleRewards}
-          disabled={name === 'Large' && rewards.length}
+          disabled={name === 'Large' && !!rewards.length}
         >
           <AddIcon />
           Add Reward

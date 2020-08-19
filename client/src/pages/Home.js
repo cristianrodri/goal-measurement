@@ -70,6 +70,7 @@ const Home = props => {
         component="h1"
         className={classes.title}
         paragraph
+        align="center"
       >
         Goal Measurement
       </Typography>
