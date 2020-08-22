@@ -54,7 +54,7 @@ const FormActivity = () => {
               />
             ))}
           </FormGroup>
-          <div>
+          <div style={{ display: 'grid', gridGap: '1rem' }}>
             <SelectionButton
               onClick={dispatchAllDays}
               className={classes.selectedButton}
