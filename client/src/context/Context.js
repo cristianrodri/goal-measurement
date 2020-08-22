@@ -199,6 +199,10 @@ const GlobalProvider = ({ children }) => {
     dispatch({ type: 'TODAY_PERFORMANCE', todayPerformance })
   }
 
+  const dispatchEmptyPerformances = () => {
+    dispatch({ type: 'EMPTY_PERFORMANCES' })
+  }
+
   if (isLoading) return <Loading />
 
   return (
@@ -233,7 +237,8 @@ const GlobalProvider = ({ children }) => {
         dispatchEndDate,
         dispatchEmptyGoalForm,
         dispatchAllPerformances,
-        dispatchTodayPerformance
+        dispatchTodayPerformance,
+        dispatchEmptyPerformances
       }}
     >
       {children}

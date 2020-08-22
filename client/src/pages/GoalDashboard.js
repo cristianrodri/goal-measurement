@@ -13,7 +13,11 @@ import PrintRewards from '../components/goal-dashboard/PrintRewards'
 import { textCapitalize } from './../utils/text'
 
 const GoalDashboard = props => {
-  const { state, dispatchSuccessDialog } = useContext(GlobalContext)
+  const {
+    state,
+    dispatchSuccessDialog,
+    dispatchEmptyPerformances
+  } = useContext(GlobalContext)
   const { shortDescription } = state
   const history = useHistory()
   const currentDay = moment().format('dddd').toLowerCase()
@@ -60,6 +64,8 @@ const GoalDashboard = props => {
     // calculate previous days if you deserve a weekly reward. How to know if you deserve a weekly reward? since the last "weekly reward day" until previous day you have to achieve 100% of your activities
 
     if (isWeeklyRewardDay) previousDaysActivities()
+
+    return () => dispatchEmptyPerformances()
   }, [])
 
   return (

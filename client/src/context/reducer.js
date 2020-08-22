@@ -198,6 +198,13 @@ export default (state, action) => {
         todayPerformance: action.todayPerformance
       }
 
+    case 'EMPTY_PERFORMANCES':
+      return {
+        ...state,
+        allPerformances: [],
+        todayPerformance: {}
+      }
+
     default:
       return state
   }

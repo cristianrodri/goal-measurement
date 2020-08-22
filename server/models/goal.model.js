@@ -42,7 +42,7 @@ const goalSchema = new mongoose.Schema(
   }
 )
 
-// Delete all performances linked with goalId
+// Delete all performances linked with goalId before the goal is deleted
 goalSchema.pre('remove', async function (next) {
   const goal = this
 
