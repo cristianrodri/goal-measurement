@@ -112,43 +112,18 @@ const goalCtrl = {
    * @access private
    */
   async updateGoal(req, res) {
-    // const updates = Object.keys(req.body)
-    // const isValidUpdates = allowedUpdates(
-    //   ['shortDescription', 'bigDescription', 'activities', 'end', 'rewards'],
-    //   updates
-    // )
-
-    // if (!isValidUpdates) {
-    //   return res.status(400).json({
-    //     success: false,
-    //     error: true,
-    //     message: 'Invalid updates'
-    //   })
-    // }
+    const updates = Object.keys(req.body)
 
     try {
-      const goal = await Goal.findOne({
-        _id: req.params.id,
-        owner: req.user._id
-      })
-
-      if (!goal) {
-        return res.status(404).json({
-          success: false,
-          error: true,
-          message: 'The goal is not found'
-        })
-      }
-
-      updates.forEach(update => (goal[update] = req.body[update]))
+      updates.forEach(update => (req.goal[update] = req.body[update]))
 
       // update goalActivities property of the last performance belongs to this goal
 
-      await goal.save()
+      await req.goal.save()
 
       const performances = await Performance.find(
         {
-          goal: goal._id,
+          goal: req.goal._id,
           owner: req.user._id
         },
         null,
@@ -161,11 +136,11 @@ const goalCtrl = {
       )
 
       if (performances.length) {
-        performances[0].goalActivities = goal.activities
+        performances[0].goalActivities = req.goal.activities
 
         // if performances found (currentDay) is false (activities is not completed yet) then modify performances[0].activities as well
         if (!performances[0].done)
-          performances[0].activities = goal.activities
+          performances[0].activities = req.goal.activities
             .filter(
               activity => activity.days[moment().format('dddd').toLowerCase()]
             )
@@ -179,7 +154,7 @@ const goalCtrl = {
       res.json({
         success: true,
         message: 'Your goal was updated successfully',
-        data: goal
+        data: req.goal
       })
     } catch (error) {
       res.status(400).json({
