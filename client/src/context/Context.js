@@ -6,7 +6,7 @@ import Loading from '../components/Loading'
 
 export const initialState = {
   user: {},
-  avatar: '',
+  // avatar: '',
   error: false,
   success: false,
   snackbarMessage: '',
