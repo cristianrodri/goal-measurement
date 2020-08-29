@@ -20,8 +20,8 @@ export default (state, action) => {
       }
     case 'LOGOUT':
       return initialState
-    case 'CHANGE_AVATAR':
-      return { ...state, avatar: action.image }
+    // case 'CHANGE_AVATAR':
+    //   return { ...state, avatar: action.image }
     case 'SUCCESS_DIALOG':
       return {
         ...state,
