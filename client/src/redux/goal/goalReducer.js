@@ -1,5 +1,5 @@
+import { updateObjInArray } from './../../utils/arrays'
 import {
-import { updateObjInArray } from './../../utils/arrays';
   GOALS,
   SELECTED_GOAL,
   ADD_GOAL,
