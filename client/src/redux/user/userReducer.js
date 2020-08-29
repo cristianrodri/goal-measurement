@@ -1,7 +1,7 @@
-import { USER_DATA } from './userTypes'
+import { USER_DATA, RESET } from './userTypes'
 
 const initialState = {
-  user: {}
+  user: null
 }
 
 const userReducer = (state = initialState, action) => {
@@ -11,6 +11,8 @@ const userReducer = (state = initialState, action) => {
         ...state,
         user: action.payload
       }
+    case RESET:
+      return initialState
 
     default:
       return state

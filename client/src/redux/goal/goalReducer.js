@@ -4,7 +4,8 @@ import {
   SELECTED_GOAL,
   ADD_GOAL,
   UPDATE_GOAL,
-  REMOVE_GOAL
+  REMOVE_GOAL,
+  RESET_GOALS
 } from './goalTypes'
 
 const initialState = {
@@ -39,6 +40,8 @@ const goalReducer = (state = initialState, action) => {
         ...state,
         goals: state.goals.filter(goal => goal._id !== action.id)
       }
+    case RESET_GOALS:
+      return initialState
 
     default:
       return state
