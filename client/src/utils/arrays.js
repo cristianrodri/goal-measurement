@@ -4,3 +4,9 @@ export const updateObjInArray = (obj, arr) => {
 
   return arr
 }
+
+export const firstItemToLast = arr => {
+  arr.push(arr.shift())
+
+  return arr
+}
