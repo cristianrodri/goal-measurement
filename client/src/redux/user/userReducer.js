@@ -1,7 +1,8 @@
-import { USER_DATA, RESET } from './userTypes'
+import { USER_DATA, RESET, USER_AVATAR } from './userTypes'
 
 const initialState = {
-  user: null
+  user: null,
+  avatar: ''
 }
 
 const userReducer = (state = initialState, action) => {
@@ -10,6 +11,11 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         user: action.payload
+      }
+    case USER_AVATAR:
+      return {
+        ...state,
+        avatar: action.payload
       }
     case RESET:
       return initialState

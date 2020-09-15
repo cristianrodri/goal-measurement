@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core'
 import Home from './pages/Home'
@@ -18,7 +18,7 @@ import { SuccessSnackbar, ErrorSnackbar } from './components/DisplaySnackbar'
 import SuccessDialog from './components/SuccessDialog'
 import PrivateRoute from './auth/PrivateRoute'
 import PublicRoute from './auth/PublicRoute'
-import { GlobalContext } from './context/Context'
+import { useSelector } from 'react-redux'
 
 const useStyles = makeStyles(theme => ({
   rootPage: {
@@ -32,8 +32,7 @@ const useStyles = makeStyles(theme => ({
 
 const MainRouter = () => {
   const classes = useStyles()
-  const { state } = useContext(GlobalContext)
-  const { success, error } = state
+  const { successSnackbar, errorSnackbar } = useSelector(state => state.dialog)
 
   return (
     <div className={classes.rootPage}>
@@ -54,16 +53,15 @@ const MainRouter = () => {
           <PrivateRoute exact path="/my-goals/:id" component={GoalDashboard} />
           <PrivateRoute path="/my-goals/:id/edit" component={EditGoal} />
           <PrivateRoute path="/privacy" component={Privacy} />
-          {/* <Route path="/user/:id/avatar" /> */}
           <Route component={NotFound} />
         </Switch>
       </div>
 
       {/* Display snackbar when a success takes place under the app components by dispatching success global state*/}
-      <SuccessSnackbar open={success} type="success" />
+      <SuccessSnackbar open={successSnackbar} type="success" />
 
       {/* Display snackbar when an error takes place under the app components by dispatching error global state*/}
-      <ErrorSnackbar open={error} type="error" />
+      <ErrorSnackbar open={errorSnackbar} type="error" />
 
       {/* Display SuccessDialog after successed action under the app components by dispatching successDialog global state */}
       <SuccessDialog />

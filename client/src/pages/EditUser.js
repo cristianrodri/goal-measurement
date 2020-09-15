@@ -1,8 +1,8 @@
-import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { makeStyles, CardMedia } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
-import { GlobalContext } from '../context/Context'
 import { updateUser, userAvatar } from '../api/api_user'
 import {
   FormContainer,
@@ -13,6 +13,9 @@ import {
 } from '../components/Form'
 import { MainTitle } from '../components/Title'
 import { PrimaryButton } from '../components/Button'
+import { userData } from './../redux/user/userActions'
+import { displayErrorSnackbar } from './../redux/dialogs/dialogActions'
+import { URL } from './../api/url'
 
 const useStyles = makeStyles(theme => ({
   cardMedia: {
@@ -48,25 +51,22 @@ const EditUser = () => {
   const [cookies] = useCookies()
   const history = useHistory()
   const classes = useStyles()
-  const {
-    state,
-    dispatchUserData,
-    dispatchChangeAvatar,
-    dispatchError
-  } = useContext(GlobalContext)
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [hasAvatar, setHasAvatar] = useState(false)
   const [image, setImage] = useState(undefined)
   const [imageName, setImageName] = useState('')
   const [disabled, setDisabled] = useState(false)
+  const user = useSelector(state => state.user.user)
+  const avatar = useSelector(state => state.user.avatar)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     document.title = 'Edit User'
 
-    setUsername(state.user.username)
-    setEmail(state.user.email)
-    setHasAvatar(!!state.avatar)
+    setUsername(user.username)
+    setEmail(user.email)
+    setHasAvatar(!!avatar)
 
     // eslint-disable-next-line
   }, [])
@@ -81,6 +81,7 @@ const EditUser = () => {
     if (image) {
       formData.append('avatar', image)
     }
+
     // check if the avatar was uploaded or not. In case avatar was not uploaded (!image), the avatar existing or not in DB, will be deleted
     formData.append('deleteAvatar', !image)
 
@@ -89,25 +90,25 @@ const EditUser = () => {
 
       // if change came from 'update user' api
       if (data.success) {
-        dispatchUserData(data.user)
+        dispatch(userData(data.user))
 
         // user has changed his avatar
         if (data.hasChangedAvatar) {
-          const avatar = await userAvatar(data.user._id)
-
-          if (avatar.status === 200) {
-            dispatchChangeAvatar('')
-            dispatchChangeAvatar(avatar.url)
-          } else if (avatar.status === 404) dispatchChangeAvatar('')
+          if (data.hasAvatar) {
+            dispatch(userAvatar(''))
+            dispatch(userAvatar(`${URL}/api/user/${data.user._id}/avatar`))
+          } else {
+            dispatch(userAvatar(''))
+          }
         }
 
         history.push('/my-goals', { fromEditUser: true, message: data.message })
       } else if (data.error) {
-        dispatchError(data.message)
+        dispatch(displayErrorSnackbar(data.message))
         setDisabled(false)
       }
     } catch (error) {
-      dispatchError(error.message)
+      dispatch(displayErrorSnackbar(error.message))
       setDisabled(false)
     }
   }
@@ -139,7 +140,7 @@ const EditUser = () => {
         )}
         {hasAvatar && (
           <CardMedia
-            image={state.avatar}
+            image={avatar}
             title="User avatar"
             className={classes.cardMedia}
             onClick={deleteImage}

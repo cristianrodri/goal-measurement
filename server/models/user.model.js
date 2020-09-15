@@ -96,13 +96,9 @@ userSchema.pre('save', async function (next) {
 userSchema.pre('remove', async function (next) {
   const user = this
 
-  try {
-    await Goal.deleteMany({ owner: user._id }) // delete all user goals
-    await Performance.deleteMany({ owner: user._id }) // delete all user performances
-    next()
-  } catch (error) {
-    throw new Error(error.message)
-  }
+  await Goal.deleteMany({ owner: user._id }) // delete all user goals
+  await Performance.deleteMany({ owner: user._id }) // delete all user performances
+  next()
 })
 
 const User = mongoose.model('User', userSchema)

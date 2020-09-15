@@ -1,8 +1,8 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 import { Popover, Typography, makeStyles } from '@material-ui/core'
 import { red, green, lime, grey } from '@material-ui/core/colors'
 import moment from 'moment'
-import { GlobalContext } from '../../context/Context'
+import { useSelector } from 'react-redux'
 
 const COMPLETED = 'COMPLETED'
 const BETWEEN_80_AND_99 = '80-99'
@@ -70,7 +70,7 @@ const progressColor = ({ percentage, isWorkingDay }) => {
 const DailyPerformance = ({ performance, index }) => {
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState(null)
-  const { state } = useContext(GlobalContext)
+  const selectedGoal = useSelector(state => state.goal.selectedGoal)
 
   const handlePopoverOpen = e => {
     setAnchorEl(e.currentTarget)
@@ -84,13 +84,13 @@ const DailyPerformance = ({ performance, index }) => {
   return (
     <>
       <span
-        key={moment(performance.createdAt).unix()}
+        key={moment(performance.date).unix()}
         className={classes[progressColor(performance)]}
         style={{
           gridRow:
             index === 0
-              ? moment(state.createdAt).day() !== 0
-                ? moment(state.createdAt).day()
+              ? moment(selectedGoal.createdAt).day() !== 0
+                ? moment(selectedGoal.createdAt).day()
                 : 7
               : 'auto'
         }}

@@ -1,10 +1,22 @@
+import { getGoalsByUser } from '../../api/api_goals'
+import { displayErrorSnackbar } from '../dialogs/dialogActions'
 import {
   GOALS,
   SELECTED_GOAL,
-  REMOVE_GOAL,
   ADD_GOAL,
+  UPDATE_GOAL,
+  REMOVE_GOAL,
   RESET_GOALS
 } from './goalTypes'
+
+export const getGoalsAPI = token => {
+  return async dispatch => {
+    const res = await getGoalsByUser(token)
+
+    if (res.success) dispatch(getGoals(res.data))
+    else dispatch(displayErrorSnackbar(res.message))
+  }
+}
 
 export const getGoals = goals => {
   return {
@@ -13,7 +25,7 @@ export const getGoals = goals => {
   }
 }
 
-export const getSelectedGoal = id => {
+export const setSelectedGoal = id => {
   return {
     type: SELECTED_GOAL,
     id

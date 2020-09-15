@@ -7,7 +7,8 @@ import {
   Typography,
   Button,
   Card,
-  CardContent
+  CardContent,
+  Divider
 } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 
@@ -40,6 +41,16 @@ const useStyles = makeStyles(theme => ({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     marginBottom: theme.spacing(1)
+  },
+  divider: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2)
+  },
+  submit: {
+    display: 'block',
+    marginTop: theme.spacing(2),
+    marginLeft: 'auto',
+    marginRight: 'auto'
   }
 }))
 
@@ -86,6 +97,8 @@ export const FormPassword = props => (
     {...props}
   />
 )
+
+export const FormDivider = () => <Divider className={useStyles().divider} />
 
 export const FormAvatar = ({ imageName, setImageName, uploadImage }) => {
   const classes = useStyles()

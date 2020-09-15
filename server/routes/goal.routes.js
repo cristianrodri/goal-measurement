@@ -1,21 +1,28 @@
 const express = require('express')
 const router = express.Router()
 const auth = require('../middleware/auth')
-const goalCtrl = require('../controllers/goal.controller')
+const {
+  getGoalById,
+  createGoal,
+  getGoals,
+  getGoal,
+  deleteGoal,
+  updateGoal
+} = require('../controllers/goal.controller')
 
 // Create goal
-router.post('/goal/create', auth, goalCtrl.createGoal)
+router.post('/goal/create', auth, createGoal)
 
 // Get all user goals
-router.get('/goals', auth, goalCtrl.getGoals)
+router.get('/goals', auth, getGoals)
 
-// get, edit and delete specific goal
+// get and delete specific goal
 router
   .route('/goal/:id')
-  .get(auth, goalCtrl.getGoalById, goalCtrl.getGoal)
-  .put(auth, goalCtrl.getGoalById, goalCtrl.updateGoal)
-  .delete(auth, goalCtrl.getGoalById, goalCtrl.deleteGoal)
+  .get(auth, getGoalById, getGoal)
+  .delete(auth, getGoalById, deleteGoal)
 
-// router.param('id', goalCtrl.getGoalById)
+// update specific goal
+router.put('/goal/:id/:currentDay', auth, getGoalById, updateGoal)
 
 module.exports = router

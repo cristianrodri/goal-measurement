@@ -1,7 +1,8 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { makeStyles, Paper, Typography } from '@material-ui/core'
 import { Link, useHistory } from 'react-router-dom'
-import { GlobalContext } from '../context/Context'
+import { displaySuccessSnackbar } from '../redux'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -43,14 +44,14 @@ const useStyles = makeStyles(theme => ({
 
 const Home = props => {
   const classes = useStyles()
-  const { dispatchSuccessDialog } = useContext(GlobalContext)
   const history = useHistory()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     document.title = 'Goal Measurement'
 
     const init = () => {
-      dispatchSuccessDialog(props.location.state['message'])
+      dispatch(displaySuccessSnackbar(props.location.state['message']))
       history.replace() // delete fromDeletedUser and message properties
     }
 

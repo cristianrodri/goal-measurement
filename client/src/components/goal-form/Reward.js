@@ -1,4 +1,5 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import {
   makeStyles,
@@ -13,9 +14,9 @@ import {
 import AddIcon from '@material-ui/icons/Add'
 import DeleteIcon from '@material-ui/icons/Delete'
 import DoneIcon from '@material-ui/icons/Done'
-import { GlobalContext } from '../../context/Context'
 import { RewardsInput } from './FormDescription'
 import { PrimaryButton } from '../Button'
+import { setReward, deleteReward } from '../../redux'
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -45,22 +46,22 @@ const useStyles = makeStyles(theme => ({
 
 const Reward = ({ rewards, name }) => {
   const classes = useStyles()
-  const { dispatchAddReward, dispatchDeleteReward } = useContext(GlobalContext)
+  const dispatch = useDispatch()
   const [rewardValue, setRewardValue] = useState('')
 
   const handleRewards = () => {
-    dispatchAddReward(name, rewardValue)
+    dispatch(setReward(name, rewardValue))
     setRewardValue('')
   }
 
-  const deleteReward = e => {
+  const handleDeleteReward = e => {
     const button = e.target.closest('[aria-label="delete"]')
     if (!button) return
 
     const value = button.dataset.name
 
     // delete reward from rewards reducer
-    dispatchDeleteReward(name, value)
+    dispatch(deleteReward(name, value))
   }
 
   return (
@@ -90,7 +91,7 @@ const Reward = ({ rewards, name }) => {
               aria-label="delete"
               className={classes.iconButton}
               data-name={reward}
-              onClick={deleteReward}
+              onClick={handleDeleteReward}
               title="Delete reward"
             >
               <DeleteIcon fontSize="small" />

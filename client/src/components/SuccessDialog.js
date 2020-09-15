@@ -1,4 +1,5 @@
-import React, { useContext } from 'react'
+import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import {
   Dialog,
   DialogContent,
@@ -6,18 +7,23 @@ import {
   DialogActions,
   Button
 } from '@material-ui/core'
-import { GlobalContext } from '../context/Context'
+import { closeDialog } from '../redux'
 
 const SuccessDialog = () => {
-  const { state, dispatchCloseDialog } = useContext(GlobalContext)
+  const state = useSelector(state => state.dialog)
+  const dispatch = useDispatch()
 
   return (
-    <Dialog open={state.successDialog} onClose={dispatchCloseDialog} transitionDuration={{ enter: 0 }}>
+    <Dialog
+      open={state.successDialog}
+      onClose={() => dispatch(closeDialog())}
+      transitionDuration={{ enter: 0 }}
+    >
       <DialogContent>
         <DialogContentText>{state.dialogMessage}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button color="secondary" onClick={dispatchCloseDialog}>
+        <Button color="secondary" onClick={() => dispatch(closeDialog())}>
           Ok
         </Button>
       </DialogActions>

@@ -1,8 +1,8 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { makeStyles, Paper } from '@material-ui/core'
-import { GlobalContext } from '../../context/Context'
 import moment from 'moment'
 import { textCapitalize } from './../../utils/text'
+import { useSelector } from 'react-redux'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -18,8 +18,9 @@ const useStyles = makeStyles(theme => ({
 
 const Description = () => {
   const classes = useStyles()
-  const { state } = useContext(GlobalContext)
-  const { bigDescription, createdAt, rewards } = state
+  const { bigDescription, createdAt, rewards } = useSelector(
+    state => state.goal.selectedGoal
+  )
 
   return (
     <Paper elevation={0} className={classes.paper}>

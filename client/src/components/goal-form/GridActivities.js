@@ -1,4 +1,5 @@
-import React, { useContext } from 'react'
+import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import {
   makeStyles,
   Grid,
@@ -9,7 +10,7 @@ import {
   Typography
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
-import { GlobalContext } from '../../context/Context'
+import { deleteActivitiy } from '../../redux'
 
 const useStyles = makeStyles(theme => ({
   grid: {
@@ -41,7 +42,8 @@ const useStyles = makeStyles(theme => ({
 
 const GridActivities = () => {
   const classes = useStyles()
-  const { state, dispatchDeleteActivity } = useContext(GlobalContext)
+  const activities = useSelector(state => state.goalForm.activities)
+  const dispatch = useDispatch()
 
   const deleteActivity = e => {
     const button = e.target.closest('[aria-label="delete"]')
@@ -50,12 +52,12 @@ const GridActivities = () => {
     const name = button.dataset.name
 
     // delete activity from the activities state
-    dispatchDeleteActivity(name)
+    deleteActivitiy(name)
   }
 
   return (
     <Grid className={classes.grid} container spacing={1}>
-      {state.activities.map((activity, i) => (
+      {activities.map((activity, i) => (
         <Grid item key={i}>
           <Card className={classes.card}>
             <CardContent>

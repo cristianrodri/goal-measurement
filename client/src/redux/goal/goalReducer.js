@@ -21,9 +21,10 @@ const goalReducer = (state = initialState, action) => {
         goals: action.payload
       }
     case SELECTED_GOAL:
+      const filteredGoal = state.goals.filter(goal => goal._id === action.id)
       return {
         ...state,
-        selectedGoal: state.goals.filter(goal => goal._id === action.id)
+        selectedGoal: filteredGoal.length ? filteredGoal : null
       }
     case ADD_GOAL:
       return {

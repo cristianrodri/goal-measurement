@@ -1,6 +1,7 @@
 import React from 'react'
 import { makeStyles, Typography } from '@material-ui/core'
 import moment from 'moment'
+import { firstItemToLast } from '../../utils/arrays'
 
 const useStyles = makeStyles(theme => ({
   containerDays: {
@@ -17,8 +18,7 @@ const useStyles = makeStyles(theme => ({
 const DaysCalendar = () => {
   const classes = useStyles()
   const daysOfTheWeek = moment()._locale._weekdaysShort // sun to sat
-  const days = daysOfTheWeek.slice(1)
-  days.push(daysOfTheWeek[0])
+  const days = firstItemToLast(daysOfTheWeek)
 
   return (
     <div className={classes.containerDays}>

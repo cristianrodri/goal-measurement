@@ -1,5 +1,7 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
+import { closeDialog } from '../redux'
 import {
   Dialog,
   DialogContent,
@@ -7,15 +9,15 @@ import {
   DialogActions,
   Button
 } from '@material-ui/core'
-import { GlobalContext } from '../context/Context'
 
 const ConfirmDialog = ({ confirmAction }) => {
-  const { state, dispatchCloseDialog } = useContext(GlobalContext)
+  const state = useSelector(state => state.dialog)
+  const dispatch = useDispatch()
 
   return (
     <Dialog
       open={state.confirmDialog}
-      onClose={dispatchCloseDialog}
+      onClose={() => dispatch(closeDialog())}
       transitionDuration={{ exit: 0 }}
     >
       <DialogContent>
@@ -27,7 +29,7 @@ const ConfirmDialog = ({ confirmAction }) => {
         </Button>
       </DialogActions>
       <DialogActions>
-        <Button color="secondary" onClick={dispatchCloseDialog}>
+        <Button color="secondary" onClick={() => dispatch(closeDialog())}>
           Cancel
         </Button>
       </DialogActions>

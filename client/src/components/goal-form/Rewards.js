@@ -1,15 +1,11 @@
-import React, { useContext } from 'react'
+import React from 'react'
+import { useSelector } from 'react-redux'
 import { SecondaryTitle } from '../Title'
 import { Grid } from '@material-ui/core'
 import Reward from './Reward'
-import { GlobalContext } from '../../context/Context'
 
 const Rewards = () => {
-  const {
-    state
-  } = useContext(GlobalContext)
-
-  const { small, medium, large } = state.rewards
+  const { small, medium, large } = useSelector(state => state.goalForm.rewards)
 
   return (
     <div>

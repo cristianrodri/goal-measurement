@@ -10,3 +10,10 @@ export const firstItemToLast = arr => {
 
   return arr
 }
+
+export const arrayOfStringLowercase = arr => arr.map(item => item.toLowerCase())
+
+export const sumArray = array =>
+  array.reduce((number, current) => number + current, 0)
+
+export const averageArray = array => sumArray(array) / array.length

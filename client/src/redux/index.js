@@ -1,7 +1,13 @@
-export { getUserData, logout } from './user/userActions'
+export {
+  getUserDataAPI,
+  userData,
+  userAvatar,
+  logout
+} from './user/userActions'
 export {
   getGoals,
-  getSelectedGoal,
+  getGoalsAPI,
+  setSelectedGoal,
   addGoal,
   updateGoal,
   removeGoal,
@@ -9,7 +15,11 @@ export {
 } from './goal/goalActions'
 export {
   getAllPerformances,
-  todayPerformance,
+  getAllPerformancesAPI,
+  setTodayPerformance,
+  createPerformanceDay,
+  removeLastPerformance,
+  addLastPerformance,
   resetPerformance
 } from './performance/performanceActions'
 export {
@@ -20,3 +30,20 @@ export {
   displayErrorSnackbar,
   closeSnackbar
 } from './dialogs/dialogActions'
+export {
+  setShortDescription,
+  setBigDescription,
+  setActivities,
+  addActivitiy,
+  deleteActivitiy,
+  setActivityName,
+  setActivityDays,
+  selectAllDays,
+  emptyActivity,
+  setRewards,
+  setReward,
+  deleteReward,
+  setWeeklyReward,
+  setEndDate,
+  emptyForm
+} from './goal-form/goalFormActions'

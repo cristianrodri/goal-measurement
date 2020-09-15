@@ -1,21 +1,9 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { useCookies } from 'react-cookie'
 import { useHistory } from 'react-router-dom'
-import { GlobalContext } from '../context/Context'
 import { updateGoal, deleteGoal } from '../api/api_goals'
-import { MainTitle } from '../components/Title'
-import { FormDivider } from '../components/FormGoal'
-import {
-  FormShortDescription,
-  FormBigDescription
-} from '../components/goal-form/FormDescription'
-import FormActivities from '../components/goal-form/Activities'
-import Rewards from './../components/goal-form/Rewards'
-import Date from './../components/goal-form/Date'
-import GoalForm from './../components/goal-form/GoalForm'
 import withGoalData from './../HOC/withGoalData'
-import ChooseWeeklyReward from './../components/goal-form/ChooseWeeklyReward'
-import { DeleteButton, PrimaryButton } from './../components/Button'
 import {
   Dialog,
   DialogTitle,
@@ -24,22 +12,21 @@ import {
   DialogActions,
   Button
 } from '@material-ui/core'
+import moment from 'moment'
+import GoalForm from '../components/GoalForm'
+import { DeleteButton } from '../components/Button'
+import { displayErrorSnackbar } from '../redux'
 
 const EditGoal = () => {
   const history = useHistory()
   const [cookies] = useCookies()
   const token = cookies.token
-  const { state, dispatchError } = useContext(GlobalContext)
-  const {
-    shortDescription,
-    bigDescription,
-    activities,
-    rewards,
-    weeklyReward,
-    endDate
-  } = state
+  const goal = useSelector(state => state.goal)
+  const goalFormState = useSelector(state => state.goalForm)
+  const dispatch = useDispatch()
   const [disabled, setDisabled] = useState(false)
   const [confirmDialog, setConfirmDialog] = useState(false)
+  const currentDay = moment().format('dddd').toLowerCase()
 
   useEffect(() => {
     document.title = 'Edit Goal'
@@ -49,28 +36,31 @@ const EditGoal = () => {
     e.preventDefault()
 
     const data = {
-      shortDescription,
-      bigDescription,
-      activities,
-      rewards,
-      weeklyReward,
-      endDate
+      ...goalFormState
     }
+
+    delete data.activityName
+    delete data.activityDays
 
     try {
       setDisabled(true)
-      const res = await updateGoal(data, token, state.goalId)
+      const res = await updateGoal(data, token, currentDay)
+
       if (res.success) {
+        // update goal from redux
+        dispatch(updateGoal(res.data._id))
+
+        // move into updated goal performance
         history.push(`/my-goals/${res.data._id}`, {
           fromUpdatedGoal: true,
           message: res.message
         })
       } else if (res.error) {
-        dispatchError(res.message)
+        dispatch(displayErrorSnackbar(res.message))
         setDisabled(false)
       }
     } catch (error) {
-      dispatchError(error.message)
+      dispatch(displayErrorSnackbar(error.message))
       setDisabled(false)
     }
   }
@@ -81,18 +71,21 @@ const EditGoal = () => {
 
   const handleDeleteGoal = async () => {
     try {
-      const res = await deleteGoal(token, state.goalId)
+      const res = await deleteGoal(token, goal._id)
 
       if (res.success) {
+        // delete goal from redux
+        dispatch(deleteGoal(res.goalId))
+
         history.push(`/my-goals`, {
           fromDeleteGoal: true,
           message: res.message
         })
       } else if (res.error) {
-        dispatchError(res.message)
+        dispatch(displayErrorSnackbar(res.message))
       }
     } catch (error) {
-      dispatchError(error.message)
+      dispatch(displayErrorSnackbar(error.message))
     }
   }
 
@@ -129,30 +122,8 @@ const EditGoal = () => {
           </DialogActions>
         </Dialog>
       }
-      <GoalForm>
-        <MainTitle>Edit Goal</MainTitle>
-        <form>
-          <FormShortDescription />
-          <FormBigDescription />
-          <FormDivider />
-          <FormActivities />
-          <FormDivider />
-          <Rewards />
-          <FormDivider />
-          <ChooseWeeklyReward />
-          <FormDivider />
-          <Date />
-          <FormDivider />
-          <PrimaryButton
-            type="submit"
-            disabled={disabled}
-            onClick={handleSubmit}
-          >
-            {!disabled ? 'Update Goal' : 'Updating goal...'}
-          </PrimaryButton>
-        </form>
-        <DeleteButton onClick={openConfirmDialog}>Delete Goal</DeleteButton>
-      </GoalForm>
+      <GoalForm type="Edit" handleSubmit={handleSubmit} disabled={disabled} />
+      <DeleteButton onClick={openConfirmDialog}>Delete Goal</DeleteButton>
     </>
   )
 }

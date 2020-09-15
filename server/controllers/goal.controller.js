@@ -5,7 +5,7 @@ const moment = require('moment')
 
 const goalCtrl = {
   /**
-   *
+   * // middleware
    * @desc Get goal by :id param
    * @access private
    */
@@ -51,8 +51,7 @@ const goalCtrl = {
       const performance = new Performance({
         goal: goal._id,
         owner: req.user._id,
-        activities: goal.activities,
-        goalActivities: goal.goalActivities
+        activities: goal.activities
       })
 
       await performance.save()
@@ -82,7 +81,7 @@ const goalCtrl = {
 
       res.json({
         success: true,
-        data: goals
+        data: !goals ? [] : goals
       })
     } catch (error) {
       res.status(400).json({
@@ -113,43 +112,40 @@ const goalCtrl = {
    */
   async updateGoal(req, res) {
     const updates = Object.keys(req.body)
+    const isValidUpdate = allowedUpdates(
+      [
+        'shortDescription',
+        'bigDescription',
+        'activities',
+        'end',
+        'completed',
+        'rewards',
+        'weeklyReward'
+      ],
+      updates
+    )
+
+    if (!isValidUpdate)
+      return res.status(401).json({
+        success: false,
+        error: true,
+        message: 'Not allowed to update'
+      })
+
+    const prevGoal = { activities: req.goal.activities }
 
     try {
       updates.forEach(update => (req.goal[update] = req.body[update]))
 
-      // update goalActivities property of the last performance belongs to this goal
-
       await req.goal.save()
 
-      const performances = await Performance.find(
-        {
-          goal: req.goal._id,
-          owner: req.user._id
-        },
-        null,
-        {
-          sort: {
-            createdAt: -1
-          },
-          limit: 1
-        }
+      // update activities property of the last day performance belongs to this goal
+      await Performance.checkLastPerformance(
+        req.user._id,
+        req.goal._id,
+        prevGoal,
+        req.params.currentDay
       )
-
-      if (performances.length) {
-        performances[0].goalActivities = req.goal.activities
-
-        // if performances found (currentDay) is false (activities is not completed yet) then modify performances[0].activities as well
-        if (!performances[0].done)
-          performances[0].activities = req.goal.activities
-            .filter(
-              activity => activity.days[moment().format('dddd').toLowerCase()]
-            )
-            .map(activity => ({
-              activity: activity.activity
-            }))
-
-        await performances[0].save()
-      }
 
       res.json({
         success: true,
@@ -173,10 +169,13 @@ const goalCtrl = {
    */
   async deleteGoal(req, res) {
     try {
+      const goalId = req.goal._id
+
       await req.goal.remove()
       res.json({
         success: true,
-        message: 'The goal was deleted successfully'
+        message: 'The goal was deleted successfully',
+        goalId
       })
     } catch (error) {
       res.status(400).json({

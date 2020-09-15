@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   makeStyles,
   FormControl,
@@ -10,11 +10,17 @@ import {
 import moment from 'moment'
 import { useCookies } from 'react-cookie'
 import { SecondaryTitle } from '../Title'
-import { GlobalContext } from '../../context/Context'
-import { updatePerformance } from '../../api/api_performance'
 import Progress from './Progress'
 import { PrimaryButton } from './../Button'
 import PrintRewards from './PrintRewards'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  setTodayPerformance,
+  displaySuccessSnackbar,
+  displayErrorSnackbar,
+  addLastPerformance
+} from '../../redux'
+import { updatePerformanceDay } from './../../api/api_performance'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -29,14 +35,12 @@ const useStyles = makeStyles(theme => ({
 const WorkingPerformance = () => {
   const classes = useStyles()
   const [cookies] = useCookies()
-  const {
-    state,
-    dispatchAllPerformances,
-    dispatchTodayPerformance,
-    dispatchError,
-    dispatchSuccess
-  } = useContext(GlobalContext)
-  const { activities, _id } = state.todayPerformance
+  const goal = useSelector(state => state.goal)
+  const todayPerformance = useSelector(
+    state => state.performance.todayPerformance
+  )
+  const dispatch = useDispatch()
+  const { activities, _id } = todayPerformance
   const [value, setValue] = useState(0)
   const [isUploading, setIsUploading] = useState(false)
 
@@ -45,9 +49,8 @@ const WorkingPerformance = () => {
 
   useEffect(() => {
     // calculate percentage about reached activities
-    const reachedActivities = state.todayPerformance.activities.filter(
-      activity => activity.reached
-    ).length
+    const reachedActivities = activities.filter(activity => activity.reached)
+      .length
     setValue(percentageValue(reachedActivities, activities))
   }, [])
 
@@ -61,13 +64,13 @@ const WorkingPerformance = () => {
     updatedActivity.reached = e.target.checked
 
     const updatedTodayPerformance = {
-      ...state.todayPerformance,
+      ...todayPerformance,
       activities: [...prevActivities, updatedActivity].sort((a, b) =>
         a._id < b._id ? -1 : 1
       )
     }
 
-    dispatchTodayPerformance(updatedTodayPerformance)
+    dispatch(setTodayPerformance(updatedTodayPerformance))
 
     // calculate percentage about reached activities
     const reachedActivities = activities.filter(activity => activity.reached)
@@ -75,53 +78,49 @@ const WorkingPerformance = () => {
     setValue(percentageValue(reachedActivities, activities))
 
     try {
-      const res = await updatePerformance(
-        cookies.token,
-        state.goalId,
-        _id,
-        updatedTodayPerformance
-      )
+      const res = await updatePerformanceDay(cookies.token, goal._id, _id, {
+        done: updatedTodayPerformance.done,
+        activities: updatedTodayPerformance.activities
+      })
 
       if (res.success) {
-        dispatchSuccess('Saved')
+        dispatch(displaySuccessSnackbar('Saved'))
       } else if (res.error) {
-        dispatchError(res.message)
+        dispatch(displayErrorSnackbar(res.message))
       }
     } catch (error) {
-      dispatchError(error.message)
+      dispatch(displayErrorSnackbar(error.message))
     }
   }
 
   // change 'done' value in todayPerformance global state to true when 100% is reached and change the UI component to 'WorkDone component'
   const handleDone = async () => {
     const updatedTodayPerformance = {
-      ...state.todayPerformance,
+      ...todayPerformance,
       done: true
     }
 
     try {
       setIsUploading(true)
-      const res = await updatePerformance(
-        cookies.token,
-        state.goalId,
-        _id,
-        updatedTodayPerformance
-      )
+      const res = await updatePerformanceDay(cookies.token, goal._id, _id, {
+        activities: updatedTodayPerformance.activities,
+        done: updatedTodayPerformance.done
+      })
 
       if (res.success) {
-        dispatchTodayPerformance(res.data)
-        dispatchAllPerformances([...state.allPerformances, res.data])
+        dispatch(setTodayPerformance(res.data))
+        dispatch(addLastPerformance(res.data))
       } else if (res.error) {
-        dispatchError(res.message)
+        dispatch(displayErrorSnackbar(res.message))
       }
     } catch (error) {
-      dispatchError(error.message)
+      dispatch(displayErrorSnackbar(error.message))
     } finally {
       setIsUploading(false)
     }
   }
 
-  if (state.todayPerformance.done) return <PrintRewards type="day" />
+  if (todayPerformance.done) return <PrintRewards type="day" />
 
   return (
     <div className={classes.container}>

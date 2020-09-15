@@ -1,11 +1,10 @@
-import React, { useContext } from 'react'
+/* import React from 'react'
 import { makeStyles, Button } from '@material-ui/core'
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker
 } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
-import { GlobalContext } from '../../context/Context'
 import { SecondaryTitle } from '../Title'
 
 const useStyles = makeStyles(theme => ({
@@ -15,6 +14,7 @@ const useStyles = makeStyles(theme => ({
     // alignItems: 'center'
   }
 }))
+
 const ChangeEndDate = () => {
   const classes = useStyles()
   const { state, dispatchEndDate } = useContext(GlobalContext)
@@ -41,3 +41,4 @@ const ChangeEndDate = () => {
 }
 
 export default ChangeEndDate
+ */

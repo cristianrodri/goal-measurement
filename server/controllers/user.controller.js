@@ -236,7 +236,7 @@ const userCtrl = {
       const user = await User.findById(req.user._id)
       res.json({
         success: true,
-        user,
+        data: user,
         hasAvatar: !!user.avatar
       })
     } catch (error) {
@@ -302,6 +302,7 @@ const userCtrl = {
       res.json({
         success: true,
         user,
+        hasAvatar: newAvatar,
         hasChangedAvatar: oldAvatar !== newAvatar,
         message: 'Your profile was updated successfully'
       })

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import {
   useTheme,
@@ -7,10 +7,12 @@ import {
   IconButton
 } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
-import { GlobalContext } from '../context/Context'
+import { useSelector, useDispatch } from 'react-redux'
+import { closeSnackbar } from '../redux/dialogs/dialogActions'
 
 const DisplaySnackbar = ({ open, type }) => {
-  const { state, dispatchEmptySnackbar } = useContext(GlobalContext)
+  const snackbarMessage = useSelector(state => state.dialog.snackbarMessage)
+  const dispatch = useDispatch()
 
   return (
     <Snackbar
@@ -20,20 +22,20 @@ const DisplaySnackbar = ({ open, type }) => {
       }}
       open={open}
       autoHideDuration={type === 'success' ? 2000 : 6000}
-      onClose={dispatchEmptySnackbar}
+      onClose={() => dispatch(closeSnackbar())}
       disableWindowBlurListener
     >
       <SnackbarContent
         style={{
           backgroundColor: useTheme().palette[type].dark
         }}
-        message={state.snackbarMessage}
+        message={snackbarMessage}
         action={[
           <IconButton
             key="close"
             aria-label="close"
             color="inherit"
-            onClick={dispatchEmptySnackbar}
+            onClick={() => dispatch(closeSnackbar())}
           >
             <CloseIcon />
           </IconButton>

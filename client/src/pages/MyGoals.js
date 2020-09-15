@@ -1,14 +1,13 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { useCookies } from 'react-cookie'
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { makeStyles, Container } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import { useHistory } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-import { getGoals } from '../api/api_goals'
-import { GlobalContext } from '../context/Context'
-import Goals from '../components/AllGoals'
+import Goals from '../components/Goals'
 import { MainTitle } from '../components/Title'
 import { PrimaryButton } from '../components/Button'
+import { displayDialog } from '../redux'
 
 const useStyles = makeStyles(theme => ({
   containerGoals: {
@@ -30,46 +29,30 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const MyGoals = props => {
-  const [cookies] = useCookies()
+  const goals = useSelector(state => state.goal.goals)
+  const dispatch = useDispatch()
   const history = useHistory()
   const classes = useStyles()
-  const token = cookies.token
-  const { dispatchSuccessDialog, dispatchError } = useContext(GlobalContext)
-  const [isLoading, setIsLoading] = useState(true)
-  const [userGoals, setUserGoals] = useState([])
 
   useEffect(() => {
     document.title = 'My Goals'
 
-    const init = async () => {
-      try {
-        if (props.location.state) {
-          if (
-            props.location.state['fromEditUser'] ||
-            props.location.state['fromDeleteGoal']
-          ) {
-            dispatchSuccessDialog(props.location.state.message)
-            history.replace() // delete fromEditUser property
-          }
-        }
-
-        const data = await getGoals(token)
-        setIsLoading(false)
-        setUserGoals(data.data)
-      } catch (error) {
-        dispatchError(error.message)
+    if (props.location.state) {
+      if (
+        props.location.state['fromEditUser'] ||
+        props.location.state['fromDeleteGoal']
+      ) {
+        dispatch(displayDialog(props.location.state.message))
+        history.replace() // delete fromEditUser property
       }
     }
-
-    init()
-    // eslint-disable-next-line
   }, [])
 
   return (
     <Container className={classes.container} maxWidth="md">
       <div className={classes.containerGoals}>
         <MainTitle>My Goals</MainTitle>
-        <Goals goals={userGoals} isLoading={isLoading} />
+        <Goals goals={goals} />
         <Link to="/create-goal" className={classes.link}>
           <PrimaryButton
             color="primary"

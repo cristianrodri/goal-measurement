@@ -1,4 +1,4 @@
-const getGoals = token => {
+const getGoalsByUser = token => {
   return fetch('/api/goals', {
     method: 'GET',
     headers: {
@@ -38,8 +38,8 @@ const getGoalById = (token, goalId) => {
     .catch(err => console.log(err))
 }
 
-const updateGoal = (data, token, goalId) => {
-  return fetch(`/api/goal/${goalId}`, {
+const updateGoal = (data, token, currentDay) => {
+  return fetch(`/api/goal/${data._id}/${currentDay}`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
@@ -65,4 +65,4 @@ const deleteGoal = (token, goalId) => {
     .catch(err => console.log(err))
 }
 
-export { getGoals, createGoal, getGoalById, updateGoal, deleteGoal }
+export { getGoalsByUser, createGoal, getGoalById, updateGoal, deleteGoal }

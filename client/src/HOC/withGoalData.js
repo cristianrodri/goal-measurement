@@ -1,72 +1,46 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { getGoalById } from '../api/api_goals'
-import { useCookies } from 'react-cookie'
+import React, { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { GlobalContext } from '../context/Context'
-import Loading from './../components/Loading'
+import {
+  setShortDescription,
+  setBigDescription,
+  setActivities,
+  setRewards,
+  setWeeklyReward,
+  setEndDate
+} from '../redux'
 
 const withGoalData = Component => props => {
   const { id } = props.match.params
   const history = useHistory()
-  const [cookies] = useCookies()
-  const [isLoading, setIsLoading] = useState(true)
-  const {
-    state,
-    dispatchGoalId,
-    dispatchCreatedAt,
-    dispatchShortDescription,
-    dispatchBigDescription,
-    dispatchGetActivities,
-    dispatchGetRewards,
-    dispatchWeeklyReward,
-    dispatchEndDate,
-    dispatchError
-  } = useContext(GlobalContext)
+  const goals = useSelector(state => state.goal.goals)
+  const dispatch = useDispatch()
+  const [goal, setGoal] = useState({})
 
   useEffect(() => {
-    const init = async () => {
-      try {
-        const data = await getGoalById(cookies.token, id)
-
-        if (data.success) {
-          const {
-            _id,
-            createdAt,
-            shortDescription,
-            bigDescription,
-            activities,
-            rewards,
-            weeklyReward,
-            end
-          } = data.data
-
-          dispatchGoalId(_id)
-          dispatchCreatedAt(createdAt)
-          dispatchShortDescription(shortDescription)
-          dispatchBigDescription(bigDescription)
-          dispatchGetActivities(activities)
-          dispatchGetRewards(rewards)
-          dispatchWeeklyReward(weeklyReward)
-          dispatchEndDate(end)
-
-          setIsLoading(false)
-        } else if (data.error) {
-          history.push('/404')
-        }
-      } catch (error) {
-        dispatchError(error.message)
-      }
+    const init = () => {
+      dispatch(setShortDescription(goal.shortDescription))
+      dispatch(setBigDescription(goal.bigDescription))
+      dispatch(setActivities(goal.activities))
+      dispatch(setRewards(goal.rewards))
+      dispatch(setWeeklyReward(goal.weeklyReward))
+      dispatch(setEndDate(goal.end))
     }
 
-    // check if goalId state is different from params id or goalId is and empty string. If any case is true, an api must be called
-    if (id !== state.goalId || state.goalId === '') {
+    // check if there is a goal with id from match.params.id
+    const goalWithIdExist = goals.some(goalObj => {
+      if (goalObj._id === id) {
+        setGoal({ ...goal, goalObj })
+        return true
+      }
+    })
+
+    if (goalWithIdExist) {
       init()
     } else {
-      setIsLoading(false)
+      history.push('/404')
     }
   }, [])
-
-  if (isLoading) return <Loading />
 
   return <Component {...props} />
 }

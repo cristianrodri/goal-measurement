@@ -1,4 +1,5 @@
-import React, { useContext } from 'react'
+import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import {
   makeStyles,
   FormControl,
@@ -8,7 +9,9 @@ import {
   Radio,
   FormHelperText
 } from '@material-ui/core'
-import { GlobalContext } from '../../context/Context'
+import moment from 'moment'
+import { firstItemToLast } from '../../utils/arrays'
+import { setWeeklyReward } from '../../redux'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -37,11 +40,9 @@ const useStyles = makeStyles(theme => ({
 
 const ChooseWeeklyReward = () => {
   const classes = useStyles()
-  const { state, dispatchWeeklyReward } = useContext(GlobalContext)
-
-  const handleChange = e => {
-    dispatchWeeklyReward(e.target.value)
-  }
+  const weeklyReward = useSelector(state => state.goalForm.weeklyReward)
+  const dispatch = useDispatch()
+  const daysOfWeek = firstItemToLast(moment.weekdays()) // from monday to sunday
 
   return (
     <div className={classes.container}>
@@ -52,11 +53,11 @@ const ChooseWeeklyReward = () => {
         <RadioGroup
           aria-label="daysOfWeek"
           name="daysOfWeek"
-          onChange={handleChange}
+          onChange={e => dispatch(setWeeklyReward(e.target.value))}
           className={classes.radioGroup}
-          value={state.weeklyReward}
+          value={weeklyReward}
         >
-          {Object.keys(state.activityDays).map((day, i) => (
+          {daysOfWeek.map((day, i) => (
             <FormControlLabel
               key={i + 1}
               value={day}

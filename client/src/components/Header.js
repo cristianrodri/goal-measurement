@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import {
   makeStyles,
   AppBar,
@@ -15,7 +15,8 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state'
 import logo from '../assets/favicon.png'
 import { Link, useHistory } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
-import { GlobalContext } from '../context/Context'
+import { useDispatch, useSelector } from 'react-redux'
+import { emptyForm, logout, resetGoals, resetPerformance } from '../redux'
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -47,13 +48,18 @@ const useStyles = makeStyles(theme => ({
 const Header = () => {
   const classes = useStyles()
   const history = useHistory()
-  const [, , removeCookie] = useCookies()
-  const { state, isAuthenticated, dispatchLogout } = useContext(GlobalContext)
+  const avatar = useSelector(state => state.user.avatar)
+  const dispatch = useDispatch()
+  const [cookies, , removeCookie] = useCookies()
+  const token = cookies.token
 
   const logoutAction = () => {
     removeCookie('token')
     removeCookie('user')
-    dispatchLogout()
+    dispatch(logout())
+    dispatch(resetGoals())
+    dispatch(resetPerformance())
+    dispatch(emptyForm())
     history.push('/')
   }
 
@@ -66,7 +72,7 @@ const Header = () => {
           </Link>
         </Typography>
         <div className={classes.menuLinks}>
-          {!isAuthenticated() && (
+          {!token && (
             <>
               <Button color="secondary" className={classes.links}>
                 <Link to="/signup" style={{ color: 'inherit' }}>
@@ -81,7 +87,7 @@ const Header = () => {
             </>
           )}
 
-          {isAuthenticated() && (
+          {token && (
             <PopupState variant="popover" popupId="demo-popup-menu">
               {popupState => (
                 <React.Fragment>
@@ -90,10 +96,10 @@ const Header = () => {
                     className={classes.links}
                     {...bindTrigger(popupState)}
                   >
-                    {!state.avatar ? (
+                    {!avatar ? (
                       <PersonIcon />
                     ) : (
-                      <Avatar alt="User avatar" src={state.avatar} />
+                      <Avatar alt="User avatar" src={avatar} />
                     )}
                   </IconButton>
                   <Menu {...bindMenu(popupState)} onClick={popupState.close}>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -7,17 +7,18 @@ import {
   Button,
   DialogTitle
 } from '@material-ui/core'
+import { useDispatch } from 'react-redux'
 import { useCookies } from 'react-cookie'
 import { useHistory } from 'react-router-dom'
 import { updatePassword, deleteUser } from '../api/api_user'
 import { FormContainer, FormContent, FormPassword } from '../components/Form'
 import { MainTitle } from '../components/Title'
-import { GlobalContext } from '../context/Context'
 import { DeleteButton, PrimaryButton } from './../components/Button'
+import { displayErrorSnackbar, displayDialog } from '../redux'
 
 const Privacy = () => {
   const history = useHistory()
-  const { dispatchError, dispatchSuccessDialog } = useContext(GlobalContext)
+  const dispatch = useDispatch()
   const [cookies, , removeCookie] = useCookies()
   const [password, setPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
@@ -36,7 +37,7 @@ const Privacy = () => {
     setDisabled(true)
 
     if (!newPassword || !confirmPassword || newPassword !== confirmPassword) {
-      dispatchError('Your passwords must be equals')
+      dispatch(displayErrorSnackbar('Your passwords must be equals'))
       return
     }
 
@@ -47,15 +48,15 @@ const Privacy = () => {
       })
 
       if (data.success) {
-        dispatchSuccessDialog(data.message)
+        dispatch(displayDialog(data.message))
 
         const passwordState = [setPassword, setNewPassword, setConfirmPassword]
 
         // empty inputs
         passwordState.forEach(eachState => eachState(''))
-      } else if (data.error) dispatchError(data.message)
+      } else if (data.error) dispatch(displayErrorSnackbar(data.message))
     } catch (error) {
-      dispatchError(error.message)
+      dispatch(displayErrorSnackbar(error.message))
     } finally {
       setDisabled(false)
     }
@@ -83,10 +84,10 @@ const Privacy = () => {
         removeCookie('user')
         history.push('/', { fromDeletedUser: true, message: data.message })
       } else if (data.error) {
-        dispatchError(data.message)
+        dispatch(displayErrorSnackbar(data.message))
       }
     } catch (error) {
-      dispatchError(error.message)
+      dispatch(displayErrorSnackbar(error.message))
     }
   }
 

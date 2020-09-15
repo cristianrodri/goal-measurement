@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   makeStyles,
   Paper,
@@ -10,9 +10,9 @@ import {
   Typography
 } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
-import { GlobalContext } from '../../context/Context'
 import { PropTypes } from 'prop-types'
 import { textCapitalize } from './../../utils/text'
+import { useSelector } from 'react-redux'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -33,7 +33,7 @@ const PrintRewards = props => {
   const [value, setValue] = useState('')
   const [type, setType] = useState('')
   const [rewardType, setRewardType] = useState('')
-  const { state } = useContext(GlobalContext)
+  const selectedGoal = useSelector(state => state.goal.selectedGoal)
 
   useEffect(() => {
     if (props.type === 'week') {
@@ -64,7 +64,7 @@ const PrintRewards = props => {
             onChange={handleChange}
           >
             {rewardType &&
-              state.rewards[rewardType].map((reward, i) => (
+              selectedGoal.rewards[rewardType].map((reward, i) => (
                 <FormControlLabel
                   key={i}
                   value={reward}

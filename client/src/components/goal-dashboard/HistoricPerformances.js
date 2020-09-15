@@ -1,7 +1,7 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { makeStyles } from '@material-ui/core'
-import { GlobalContext } from '../../context/Context'
 import DailyPerformance from './DailyPerformance'
+import { useSelector } from 'react-redux'
 
 const useStyles = makeStyles(theme => ({
   containerPerformances: {
@@ -14,11 +14,13 @@ const useStyles = makeStyles(theme => ({
 
 const HistoricPerformances = () => {
   const classes = useStyles()
-  const { state } = useContext(GlobalContext)
+  const allPerformances = useSelector(
+    state => state.performance.allPerformances
+  )
 
   return (
     <div className={classes.containerPerformances}>
-      {state.allPerformances.map((performance, i) => (
+      {allPerformances.map((performance, i) => (
         <DailyPerformance key={i} performance={performance} index={i} />
       ))}
     </div>

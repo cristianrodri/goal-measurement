@@ -16,7 +16,18 @@ const goalSchema = new mongoose.Schema(
     },
     activities: [
       {
-        days: Object,
+        days: {
+          type: Object,
+          default: {
+            monday: false,
+            tuesday: false,
+            wednesday: false,
+            thursday: false,
+            friday: false,
+            saturday: false,
+            sunday: false
+          }
+        },
         activity: String
       }
     ],
@@ -46,7 +57,7 @@ const goalSchema = new mongoose.Schema(
 goalSchema.pre('remove', function (next) {
   const goal = this
 
-  Performance.deleteMany({ goal: goal._id }, (err, res) => {
+  Performance.deleteOne({ goal: goal._id }, (err, res) => {
     if (err) throw new Error(err)
     next()
   })
