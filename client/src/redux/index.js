@@ -2,11 +2,11 @@ export {
   getUserDataAPI,
   userData,
   userAvatar,
+  completedData,
   logout
 } from './user/userActions'
 export {
   getGoals,
-  getGoalsAPI,
   setSelectedGoal,
   addGoal,
   updateGoal,
@@ -15,9 +15,7 @@ export {
 } from './goal/goalActions'
 export {
   getAllPerformances,
-  getAllPerformancesAPI,
   setTodayPerformance,
-  createPerformanceDay,
   removeLastPerformance,
   addLastPerformance,
   resetPerformance

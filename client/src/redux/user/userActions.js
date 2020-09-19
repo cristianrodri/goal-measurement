@@ -1,7 +1,9 @@
-import { USER_DATA, RESET, USER_AVATAR } from './userTypes'
+import { USER_DATA, RESET, USER_AVATAR, COMPLETED_DATA } from './userTypes'
 import { displayErrorSnackbar } from '../dialogs/dialogActions'
 import { getUserById } from '../../api/api_user'
 import { URL } from './../../api/url'
+import { getGoalsByUser } from '../../api/api_goals'
+import { getGoals } from '../goal/goalActions'
 
 export const getUserDataAPI = token => {
   return async dispatch => {
@@ -10,13 +12,23 @@ export const getUserDataAPI = token => {
     if (res.success) {
       dispatch(userData(res.data))
 
-      console.log('daimakoro')
-
       if (res.hasAvatar)
         dispatch(userAvatar(`${URL}/api/user/${res.data._id}/avatar`))
+
+      const goalRes = await getGoalsByUser(token)
+
+      if (goalRes.success) dispatch(getGoals(goalRes.data))
     } else {
       dispatch(displayErrorSnackbar(res.message))
     }
+
+    dispatch(completedData())
+  }
+}
+
+export const completedData = () => {
+  return {
+    type: COMPLETED_DATA
   }
 }
 

@@ -17,7 +17,7 @@ router.post(
   createPerformance
 )
 
-router.put('/:goalId/createNewDay', auth, goalBelongsToUser, createNewDay)
+router.put('/:goalId/createnewday', auth, goalBelongsToUser, createNewDay)
 
 router.put(
   '/:goalId/updatePerformanceDay/:performanceId/:todayPerformanceId',

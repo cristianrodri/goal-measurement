@@ -71,7 +71,7 @@ const EditGoal = () => {
 
   const handleDeleteGoal = async () => {
     try {
-      const res = await deleteGoal(token, goal._id)
+      const res = await deleteGoal(token)
 
       if (res.success) {
         // delete goal from redux

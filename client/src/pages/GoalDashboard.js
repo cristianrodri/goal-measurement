@@ -10,14 +10,17 @@ import WeeklyReward from '../components/goal-dashboard/WeeklyReward'
 import withPerformanceData from '../HOC/withPerformanceData'
 import { useDispatch, useSelector } from 'react-redux'
 import { displayDialog } from './../redux/dialogs/dialogActions'
+import withGoal from './../HOC/withGoal'
 
 const GoalDashboard = props => {
   const history = useHistory()
-  const goal = useSelector(state => state.goal)
+  const { shortDescription, _id } = useSelector(
+    state => state.goal.selectedGoal
+  )
   const dispatch = useDispatch()
 
   useEffect(() => {
-    document.title = textCapitalize(goal.shortDescription)
+    document.title = textCapitalize(shortDescription)
 
     try {
       if (props.location.state['fromUpdatedGoal']) {
@@ -43,7 +46,7 @@ const GoalDashboard = props => {
           }}
         >
           <Title />
-          <Link to={`/my-goals/${goal._id}/edit`}>EDIT</Link>
+          <Link to={`/my-goals/${_id}/edit`}>EDIT</Link>
         </Grid>
         <Grid item xs={12} md={6}>
           <Description />
@@ -59,4 +62,4 @@ const GoalDashboard = props => {
   )
 }
 
-export default withPerformanceData(GoalDashboard)
+export default withGoal(withPerformanceData(GoalDashboard))

@@ -1,5 +1,5 @@
 export const createNewDayPerformance = (token, goalId, date) => {
-  return fetch(`/api/${goalId}/createNewDay`, {
+  return fetch(`/api/${goalId}/createnewday`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json',

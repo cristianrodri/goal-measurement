@@ -52,8 +52,8 @@ const dialogReducer = (state = initialState, action) => {
     case CLOSE_SNACKBAR:
       return {
         ...state,
-        success: false,
-        error: false,
+        successSnackbar: false,
+        errorSnackbar: false,
         snackbarMessage: ''
       }
 

@@ -52,7 +52,7 @@ const GridActivities = () => {
     const name = button.dataset.name
 
     // delete activity from the activities state
-    deleteActivitiy(name)
+    dispatch(deleteActivitiy(name))
   }
 
   return (

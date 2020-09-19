@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import { useSelector, useDispatch } from 'react-redux'
-import { closeSnackbar } from '../redux/dialogs/dialogActions'
+import { closeSnackbar } from '../redux'
 
 const DisplaySnackbar = ({ open, type }) => {
   const snackbarMessage = useSelector(state => state.dialog.snackbarMessage)

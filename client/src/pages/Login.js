@@ -19,9 +19,10 @@ import {
   displayErrorSnackbar,
   userData,
   userAvatar,
-  getGoalsAPI
+  getGoals
 } from '../redux'
 import { URL } from './../api/url'
+import { getGoalsByUser } from '../api/api_goals'
 
 const Login = () => {
   const history = useHistory()
@@ -29,12 +30,18 @@ const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [disabled, setDisabled] = useState(false)
-  const [cookies, setCookie] = useCookies(['token'])
-  const token = cookies.token
+  const [, setCookie] = useCookies(['token'])
 
   useEffect(() => {
     document.title = 'Login'
   }, [])
+
+  const getGoalsAPI = async token => {
+    const res = await getGoalsByUser(token)
+
+    if (res.success) dispatch(getGoals(res.data))
+    else dispatch(displayErrorSnackbar(res.message))
+  }
 
   const handleSubmit = async e => {
     e.preventDefault()
@@ -56,7 +63,7 @@ const Login = () => {
         }
 
         // call user goals from API
-        await getGoalsAPI(token)
+        await getGoalsAPI(data.token)
 
         // redirect to /my-goals
         history.push('/my-goals')

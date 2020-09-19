@@ -50,7 +50,7 @@ const Reward = ({ rewards, name }) => {
   const [rewardValue, setRewardValue] = useState('')
 
   const handleRewards = () => {
-    dispatch(setReward(name, rewardValue))
+    dispatch(setReward(name.toLowerCase(), rewardValue))
     setRewardValue('')
   }
 
@@ -61,7 +61,7 @@ const Reward = ({ rewards, name }) => {
     const value = button.dataset.name
 
     // delete reward from rewards reducer
-    dispatch(deleteReward(name, value))
+    dispatch(deleteReward(name.toLowerCase(), value))
   }
 
   return (

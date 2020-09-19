@@ -6,8 +6,8 @@ const performanceCtrl = {
   async goalBelongsToUser(req, res, next) {
     try {
       const goal = await Goal.findOne({
-        _id: req.params.goalId
-        // owner: req.user._id
+        _id: req.params.goalId,
+        owner: req.user._id
       })
 
       if (!goal)
@@ -24,33 +24,6 @@ const performanceCtrl = {
         .json({ success: false, error: true, message: error.message })
     }
   },
-
-  // middleware
-  /* async checkPerformance(req, res) {
-    try {
-      const performance = await Performance.findOne({
-        _id: req.params.performanceId,
-        goal: req.goal._id,
-        owner: req.user._id
-      })
-
-      if (!performance) {
-        return res.status(404).json({
-          success: false,
-          error: true,
-          message: 'Performance is not found'
-        })
-      }
-
-      req.performance = performance
-
-      next()
-    } catch (error) {
-      res
-        .status(400)
-        .json({ success: false, error: true, message: error.message })
-    }
-  }, */
 
   /**
    * @desc Create new 'day' performance by specific goal
@@ -83,7 +56,7 @@ const performanceCtrl = {
   /**
    *
    * @desc Create new day (array) into performance array in Performance model
-   * @route /api/:goalId/createNewDay/:performanceId
+   * @route /api/:goalId/createNewDay
    * @method PUT
    * @access private
    */

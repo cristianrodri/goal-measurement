@@ -1,12 +1,18 @@
-import { USER_DATA, RESET, USER_AVATAR } from './userTypes'
+import { USER_DATA, RESET, USER_AVATAR, COMPLETED_DATA } from './userTypes'
 
 const initialState = {
   user: null,
-  avatar: ''
+  avatar: '',
+  isLoading: true
 }
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
+    case COMPLETED_DATA:
+      return {
+        ...state,
+        isLoading: false
+      }
     case USER_DATA:
       return {
         ...state,
@@ -18,7 +24,10 @@ const userReducer = (state = initialState, action) => {
         avatar: action.payload
       }
     case RESET:
-      return initialState
+      return {
+        ...initialState,
+        isLoading: false
+      }
 
     default:
       return state
