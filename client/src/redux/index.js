@@ -9,7 +9,7 @@ export {
   getGoals,
   setSelectedGoal,
   addGoal,
-  updateGoal,
+  updateSelectedGoal,
   removeGoal,
   resetGoals
 } from './goal/goalActions'

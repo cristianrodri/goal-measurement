@@ -23,7 +23,10 @@ import {
   setRewards,
   setWeeklyReward,
   setEndDate,
-  emptyForm
+  emptyForm,
+  updateSelectedGoal,
+  removeGoal,
+  setTodayPerformance
 } from '../redux'
 
 const EditGoal = () => {
@@ -70,21 +73,22 @@ const EditGoal = () => {
 
     try {
       setDisabled(true)
-      console.log(_id)
+
       const res = await updateGoal(data, _id, token, currentDay)
 
       if (res.success) {
-        console.log(res)
         // update goal from redux
-        dispatch(updateGoal(res.data._id))
+        dispatch(updateSelectedGoal(res.data.goal))
+
+        if (res.data.todayPerformance)
+          dispatch(setTodayPerformance(res.data.todayPerformance))
 
         // move into updated goal performance
-        history.push(`/my-goals/${res.data._id}`, {
+        history.push(`/my-goals/${res.data.goal._id}`, {
           fromUpdatedGoal: true,
           message: res.message
         })
       } else if (res.error) {
-        console.log(res)
         dispatch(displayErrorSnackbar(res.message))
         setDisabled(false)
       }
@@ -100,11 +104,11 @@ const EditGoal = () => {
 
   const handleDeleteGoal = async () => {
     try {
-      const res = await deleteGoal(token)
+      const res = await deleteGoal(token, _id)
 
       if (res.success) {
         // delete goal from redux
-        dispatch(deleteGoal(res.goalId))
+        dispatch(removeGoal(res.goalId))
 
         history.push(`/my-goals`, {
           fromDeleteGoal: true,
@@ -114,6 +118,7 @@ const EditGoal = () => {
         dispatch(displayErrorSnackbar(res.message))
       }
     } catch (error) {
+      console.log(error)
       dispatch(displayErrorSnackbar(error.message))
     }
   }

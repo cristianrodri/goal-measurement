@@ -130,7 +130,7 @@ const performanceCtrl = {
 
       res.json({
         success: true,
-        data: performance
+        data: performance.performances[performance.performances.length - 1]
       })
     } catch (error) {
       res.status(400).json({ success: false, error: true, message: error })

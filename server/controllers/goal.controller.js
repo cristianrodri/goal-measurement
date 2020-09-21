@@ -140,17 +140,22 @@ const goalCtrl = {
       await req.goal.save()
 
       // update activities property of the last day performance belongs to this goal
-      await Performance.checkLastPerformance(
+      const performance = await Performance.checkLastPerformance(
         req.user._id,
-        req.goal._id,
         prevGoal,
+        req.goal,
         req.params.currentDay
       )
 
       res.json({
         success: true,
         message: 'Your goal was updated successfully',
-        data: req.goal
+        data: {
+          goal: req.goal,
+          todayPerformance: performance
+            ? performance.performances[performance.performances.length - 1]
+            : false
+        }
       })
     } catch (error) {
       res.status(400).json({
@@ -169,13 +174,12 @@ const goalCtrl = {
    */
   async deleteGoal(req, res) {
     try {
-      const goalId = req.goal._id
+      const goal = await req.goal.remove()
 
-      await req.goal.remove()
       res.json({
         success: true,
         message: 'The goal was deleted successfully',
-        goalId
+        goalId: goal._id
       })
     } catch (error) {
       res.status(400).json({

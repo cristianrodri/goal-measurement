@@ -28,7 +28,7 @@ export const addGoal = goal => {
   }
 }
 
-export const updateGoal = goal => {
+export const updateSelectedGoal = goal => {
   return {
     type: UPDATE_GOAL,
     payload: goal

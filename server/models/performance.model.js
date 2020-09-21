@@ -21,6 +21,7 @@ const performanceSchema = new mongoose.Schema(
           type: Boolean,
           default: false
         }
+        // isWorkingDay: Boolean
       }
     ],
     goal: {
@@ -41,8 +42,8 @@ const performanceSchema = new mongoose.Schema(
 
 performanceSchema.statics.checkLastPerformance = async (
   userId,
-  goalId,
   prevGoal,
+  newGoal,
   currentDayFromClient
 ) => {
   // check if today (from client day) it's working day by checking one of the activities goal has true is some activities today
@@ -54,15 +55,37 @@ performanceSchema.statics.checkLastPerformance = async (
   if (!isWorkingDayInOldGoalActivities) return
 
   const performance = await Performance.findOne({
-    goal: goalId,
+    goal: newGoal._id,
     owner: userId
   })
 
   // extract last performance
-  const todayPerformance = performance.performances.shift()
+  const todayPerformance =
+    performance.performances[performance.performances.length - 1]
 
-  // check is todayPerformance is false, if it's false, save the extracted performance
-  if (!todayPerformance.done) await performance.save()
+  // check is todayPerformance is false, if it's false, update the last performance
+  if (!todayPerformance.done) {
+    const performance = await Performance.findOneAndUpdate(
+      {
+        goal: newGoal._id,
+        owner: userId,
+        'performances._id': todayPerformance._id
+      },
+      {
+        $set: {
+          'performances.$.done': false,
+          'performances.$.activities': [...newGoal.activities]
+        }
+      },
+      {
+        new: true
+      }
+    )
+
+    return performance
+  }
+
+  return false
 }
 
 const Performance = mongoose.model('Performance', performanceSchema)
