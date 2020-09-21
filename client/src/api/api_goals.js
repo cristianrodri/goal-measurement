@@ -38,8 +38,8 @@ const getGoalById = (token, goalId) => {
     .catch(err => console.log(err))
 }
 
-const updateGoal = (data, token, currentDay) => {
-  return fetch(`/api/goal/${data._id}/${currentDay}`, {
+const updateGoal = (data, id, token, currentDay) => {
+  return fetch(`/api/goal/${id}/${currentDay}`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json',

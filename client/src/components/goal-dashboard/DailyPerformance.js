@@ -81,6 +81,12 @@ const DailyPerformance = ({ performance, index }) => {
   }
   const open = Boolean(anchorEl)
 
+  const calculatePercentage = activities => {
+    const reachedActivities = activities.filter(activity => activity.reached)
+
+    return Math.floor((reachedActivities / activities.length) * 100)
+  }
+
   return (
     <>
       <span
@@ -116,10 +122,8 @@ const DailyPerformance = ({ performance, index }) => {
           aria-haspopup="true"
           className={classes.typography}
         >
-          {performance.percentage}%
-          <small>
-            {moment(performance.createdAt).format('dddd, DD-MMM-YYYY')}
-          </small>
+          {calculatePercentage(performance.activities)}%
+          <small>{moment(performance.date).format('dddd, DD-MMM-YYYY')}</small>
         </Typography>
       </Popover>
     </>

@@ -24,13 +24,12 @@ const CreateGoal = () => {
 
   useEffect(() => {
     document.title = 'Create Goal'
+
     return () => dispatch(emptyForm())
   }, [])
 
   const createDayPerformance = async (token, id, date) => {
-    console.log(token, id, date)
     const res = await createNewDayPerformance(token, id, date)
-    console.log('goku 3')
 
     if (res.success) dispatch(addLastPerformance(res.data))
   }

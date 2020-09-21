@@ -16,7 +16,6 @@ const withPerformanceData = Component => props => {
   const [cookies] = useCookies()
   const token = cookies.token
   const selectedGoal = useSelector(state => state.goal.selectedGoal)
-  console.log(selectedGoal)
   const id = selectedGoal._id
   const allPerformances = useSelector(
     state => state.performance.allPerformances

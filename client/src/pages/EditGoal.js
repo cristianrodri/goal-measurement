@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useCookies } from 'react-cookie'
 import { useHistory } from 'react-router-dom'
 import { updateGoal, deleteGoal } from '../api/api_goals'
-import withGoalData from './../HOC/withGoalData'
+import withGoal from './../HOC/withGoal'
 import {
   Dialog,
   DialogTitle,
@@ -15,21 +15,47 @@ import {
 import moment from 'moment'
 import GoalForm from '../components/GoalForm'
 import { DeleteButton } from '../components/Button'
-import { displayErrorSnackbar } from '../redux'
+import {
+  displayErrorSnackbar,
+  setShortDescription,
+  setBigDescription,
+  setActivities,
+  setRewards,
+  setWeeklyReward,
+  setEndDate,
+  emptyForm
+} from '../redux'
 
 const EditGoal = () => {
   const history = useHistory()
   const [cookies] = useCookies()
   const token = cookies.token
-  const goal = useSelector(state => state.goal)
   const goalFormState = useSelector(state => state.goalForm)
   const dispatch = useDispatch()
   const [disabled, setDisabled] = useState(false)
   const [confirmDialog, setConfirmDialog] = useState(false)
   const currentDay = moment().format('dddd').toLowerCase()
+  const {
+    shortDescription,
+    bigDescription,
+    activities,
+    rewards,
+    weeklyReward,
+    end,
+    _id
+  } = useSelector(state => state.goal.selectedGoal)
 
   useEffect(() => {
     document.title = 'Edit Goal'
+
+    dispatch(setShortDescription(shortDescription))
+    dispatch(setBigDescription(bigDescription))
+    dispatch(setActivities(activities))
+    dispatch(setRewards(rewards))
+    dispatch(setWeeklyReward(weeklyReward))
+    dispatch(setEndDate(end))
+
+    return () => dispatch(emptyForm())
   }, [])
 
   const handleSubmit = async e => {
@@ -44,9 +70,11 @@ const EditGoal = () => {
 
     try {
       setDisabled(true)
-      const res = await updateGoal(data, token, currentDay)
+      console.log(_id)
+      const res = await updateGoal(data, _id, token, currentDay)
 
       if (res.success) {
+        console.log(res)
         // update goal from redux
         dispatch(updateGoal(res.data._id))
 
@@ -56,6 +84,7 @@ const EditGoal = () => {
           message: res.message
         })
       } else if (res.error) {
+        console.log(res)
         dispatch(displayErrorSnackbar(res.message))
         setDisabled(false)
       }
@@ -128,4 +157,4 @@ const EditGoal = () => {
   )
 }
 
-export default withGoalData(EditGoal)
+export default withGoal(EditGoal)
