@@ -37,7 +37,7 @@ const EditGoal = () => {
   const dispatch = useDispatch()
   const [disabled, setDisabled] = useState(false)
   const [confirmDialog, setConfirmDialog] = useState(false)
-  const currentDay = moment().format('dddd').toLowerCase()
+  const currentDate = moment().format()
   const {
     shortDescription,
     bigDescription,
@@ -74,7 +74,7 @@ const EditGoal = () => {
     try {
       setDisabled(true)
 
-      const res = await updateGoal(data, _id, token, currentDay)
+      const res = await updateGoal(data, _id, token, currentDate)
 
       if (res.success) {
         // update goal from redux

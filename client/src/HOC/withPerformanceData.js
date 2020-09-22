@@ -40,7 +40,10 @@ const withPerformanceData = Component => props => {
   const createPerformanceDay = async (token, id) => {
     const currentDate = moment().format()
 
-    const res = await createNewDayPerformance(token, id, { date: currentDate })
+    const res = await createNewDayPerformance(token, id, {
+      date: currentDate,
+      currentDay
+    })
 
     if (res.success) {
       dispatch(setTodayPerformance(res.data))

@@ -9,7 +9,6 @@ import Loading from './components/Loading'
 import { getUserDataAPI } from './redux'
 import { useDispatch, useSelector } from 'react-redux'
 import { completedData } from './redux'
-import moment from 'moment'
 
 const theme = createMuiTheme({
   palette: {

@@ -23,6 +23,6 @@ router
   .delete(auth, getGoalById, deleteGoal)
 
 // update specific goal
-router.put('/goal/:id/:currentDay', auth, getGoalById, updateGoal)
+router.put('/goal/:id/:currentDate', auth, getGoalById, updateGoal)
 
 module.exports = router

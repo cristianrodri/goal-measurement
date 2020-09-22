@@ -67,7 +67,10 @@ const performanceCtrl = {
 
     const addNewDay = {
       activities,
-      date: req.body.date
+      date: req.body.date,
+      isWorkingDay: req.goal.activities.some(
+        activity => activity.days[req.body.currentDay]
+      )
     }
 
     try {

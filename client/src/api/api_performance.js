@@ -1,4 +1,4 @@
-export const createNewDayPerformance = (token, goalId, date) => {
+export const createNewDayPerformance = (token, goalId, data) => {
   return fetch(`/api/${goalId}/createnewday`, {
     method: 'PUT',
     headers: {
@@ -6,7 +6,7 @@ export const createNewDayPerformance = (token, goalId, date) => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`
     },
-    body: JSON.stringify(date)
+    body: JSON.stringify(data)
   })
     .then(res => res.json())
     .catch(error => console.log(error))
