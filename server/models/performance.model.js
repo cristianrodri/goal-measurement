@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const moment = require('moment')
 
 const performanceSchema = new mongoose.Schema(
   {
@@ -20,8 +21,8 @@ const performanceSchema = new mongoose.Schema(
         done: {
           type: Boolean,
           default: false
-        }
-        // isWorkingDay: Boolean
+        },
+        isWorkingDay: Boolean
       }
     ],
     goal: {
@@ -42,34 +43,34 @@ const performanceSchema = new mongoose.Schema(
 
 performanceSchema.statics.checkLastPerformance = async (
   userId,
-  prevGoal,
   newGoal,
-  currentDayFromClient
+  currentDateFromClient
 ) => {
-  // check if today (from client day) it's working day by checking one of the activities goal has true is some activities today
-  const isWorkingDayInOldGoalActivities = prevGoal.activities.some(
-    activity => activity.days[currentDayFromClient]
-  )
-
-  // if today it's now working day, not modify performance and return
-  if (!isWorkingDayInOldGoalActivities) return
-
   const performance = await Performance.findOne({
     goal: newGoal._id,
     owner: userId
   })
 
   // extract last performance
-  const todayPerformance =
+  const lastPerformance =
     performance.performances[performance.performances.length - 1]
 
-  // check is todayPerformance is false, if it's false, update the last performance
-  if (!todayPerformance.done) {
+  // check if last performance is current day (from client user). If it's true, change its activities, regardless if user has done or not
+
+  const startCurrentDay = moment(lastPerformance.date).isSameOrAfter(
+    moment(currentDateFromClient).startOf('day')
+  )
+
+  const endCurrentDay = moment(lastPerformance.date).isSameOrAfter(
+    moment(currentDateFromClient).endOf('day')
+  )
+
+  if (startCurrentDay && endCurrentDay) {
     const performance = await Performance.findOneAndUpdate(
       {
         goal: newGoal._id,
         owner: userId,
-        'performances._id': todayPerformance._id
+        'performances._id': lastPerformance._id
       },
       {
         $set: {
