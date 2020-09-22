@@ -1,15 +1,10 @@
 export const updateObjInArray = (obj, arr) => {
   const index = arr.findIndex(item => item._id === obj._id)
-  arr.splice(index, 1, obj)
 
-  return arr
+  return [...arr.splice(index, 1, obj)]
 }
 
-export const firstItemToLast = arr => {
-  arr.push(arr.shift())
-
-  return arr
-}
+export const firstItemToLast = arr => [...arr.slice(1), ...arr.slice(0, 1)]
 
 export const arrayOfStringLowercase = arr => arr.map(item => item.toLowerCase())
 
