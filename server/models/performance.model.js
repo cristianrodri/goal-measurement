@@ -61,7 +61,7 @@ performanceSchema.statics.checkLastPerformance = async (
     moment(currentDateFromClient).startOf('day')
   )
 
-  const endCurrentDay = moment(lastPerformance.date).isSameOrAfter(
+  const endCurrentDay = moment(lastPerformance.date).isSameOrBefore(
     moment(currentDateFromClient).endOf('day')
   )
 
