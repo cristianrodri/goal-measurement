@@ -24,10 +24,9 @@ const performanceReducer = (state = initialState, action) => {
         todayPerformance: action.payload
       }
     case REMOVE_LAST_PERFORMANCE:
-      state.allPerformances.pop()
       return {
         ...state,
-        allPerformances: state.allPerformances
+        allPerformances: state.allPerformances.slice(0, -1)
       }
     case ADD_LAST_PERFORMANCE:
       return {
