@@ -41,6 +41,46 @@ const performanceSchema = new mongoose.Schema(
   }
 )
 
+performanceSchema.statics.createNewDayPerformance = async (
+  goal,
+  userId,
+  dateFromClient
+) => {
+  const activities = goal.activities.map(activity => ({
+    activity: activity.activity
+  }))
+
+  const currentDayClient = moment(dateFromClient).format('dddd').toLowerCase()
+
+  const addNewDay = {
+    activities,
+    date: dateFromClient,
+    isWorkingDay: goal.activities.some(
+      activity => activity.days[currentDayClient]
+    )
+  }
+
+  const performance = await Performance.findOneAndUpdate(
+    {
+      goal: goal._id,
+      owner: userId
+    },
+    {
+      $push: {
+        performances: { ...addNewDay }
+      }
+    },
+    {
+      new: true
+    }
+  )
+
+  const lastPerformance =
+    performance.performances[performance.performances.length - 1]
+
+  return lastPerformance
+}
+
 performanceSchema.statics.checkLastPerformance = async (
   userId,
   newGoal,

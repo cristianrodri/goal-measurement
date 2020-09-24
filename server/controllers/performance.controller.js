@@ -54,58 +54,6 @@ const performanceCtrl = {
   },
 
   /**
-   *
-   * @desc Create new day (array) into performance array in Performance model
-   * @route /api/:goalId/createNewDay
-   * @method PUT
-   * @access private
-   */
-  async createNewDay(req, res) {
-    const activities = req.goal.activities.map(activity => ({
-      activity: activity.activity
-    }))
-
-    const addNewDay = {
-      activities,
-      date: req.body.date,
-      isWorkingDay: req.goal.activities.some(
-        activity => activity.days[req.body.currentDay]
-      )
-    }
-
-    try {
-      const performance = await Performance.findOneAndUpdate(
-        {
-          goal: req.goal._id,
-          owner: req.user._id
-        },
-        {
-          $push: {
-            performances: { ...addNewDay }
-          }
-        },
-        {
-          new: true
-        }
-      )
-
-      const lastPerformance =
-        performance.performances[performance.performances.length - 1]
-
-      res.json({
-        success: true,
-        data: lastPerformance
-      })
-    } catch (error) {
-      res.status(400).json({
-        success: false,
-        error: true,
-        message: error.message
-      })
-    }
-  },
-
-  /**
    * @desc Update one performance by specific goal
    * @route /api/:goalId/updatePerformanceDay/:performanceId
    * @method PUT
@@ -159,9 +107,32 @@ const performanceCtrl = {
           message: 'Performance not found'
         })
 
+      let lastPerformance =
+        performance.performances[performance.performances.length - 1]
+
+      const startCurrentDay = moment(lastPerformance.date).isSameOrAfter(
+        moment(dateFromClient).startOf('day')
+      )
+
+      const endCurrentDay = moment(lastPerformance).isSameOrBefore(
+        moment(dateFromClient).endOf('day')
+      )
+
+      // if last performance is not current day, create new one
+      if (!startCurrentDay && !endCurrentDay) {
+        lastPerformance = await Performance.createNewDayPerformance(
+          req.goal,
+          req.user._id,
+          req.params.date
+        )
+      }
+
       res.json({
         success: true,
-        data: performance.performances
+        data: {
+          allPerformances: performance.performances,
+          todayPerformance: lastPerformance
+        }
       })
     } catch (error) {
       res.status(400).json({

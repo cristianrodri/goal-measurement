@@ -12,8 +12,8 @@ export const createNewDayPerformance = (token, goalId, data) => {
     .catch(error => console.log(error))
 }
 
-export const getAllPerformancesByGoal = (token, goalId) => {
-  return fetch(`/api/${goalId}/performances`, {
+export const getAllPerformancesByGoal = (token, goalId, currentDate) => {
+  return fetch(`/api/${goalId}/performances/${currentDate}`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',

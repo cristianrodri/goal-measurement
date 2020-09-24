@@ -2,9 +2,7 @@ const express = require('express')
 const router = express.Router()
 const {
   goalBelongsToUser,
-  // checkPerformance,
   createPerformance,
-  createNewDay,
   updatePerformanceDay,
   getPerformance
 } = require('../controllers/performance.controller')
@@ -17,8 +15,6 @@ router.post(
   createPerformance
 )
 
-router.put('/:goalId/createnewday', auth, goalBelongsToUser, createNewDay)
-
 router.put(
   '/:goalId/updatePerformanceDay/:performanceId/:todayPerformanceId',
   auth,
@@ -26,6 +22,11 @@ router.put(
   updatePerformanceDay
 )
 
-router.get('/:goalId/performances', auth, goalBelongsToUser, getPerformance)
+router.get(
+  '/:goalId/performances/:currentDate',
+  auth,
+  goalBelongsToUser,
+  getPerformance
+)
 
 module.exports = router
