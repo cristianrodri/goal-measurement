@@ -37,6 +37,7 @@ export {
   setActivityName,
   setActivityDays,
   selectAllDays,
+  unselectAllDays,
   emptyActivity,
   setRewards,
   setReward,

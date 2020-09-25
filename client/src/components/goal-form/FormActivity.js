@@ -17,7 +17,8 @@ import {
   selectAllDays,
   emptyActivity,
   addActivitiy,
-  setActivityDays
+  setActivityDays,
+  unselectAllDays
 } from '../../redux'
 import { textCapitalize } from './../../utils/text'
 
@@ -34,6 +35,11 @@ const FormActivity = () => {
   const classes = useStyles()
   const { activityName, activityDays } = useSelector(state => state.goalForm)
   const dispatch = useDispatch()
+
+  const handleSubmit = () => {
+    dispatch(addActivitiy())
+    dispatch(emptyActivity())
+  }
 
   return (
     <FormControl>
@@ -74,7 +80,7 @@ const FormActivity = () => {
               Select All
             </SelectionButton>
             <SelectionButton
-              onClick={() => dispatch(emptyActivity())}
+              onClick={() => dispatch(unselectAllDays())}
               disabled={
                 !Object.keys(activityDays).some(day => activityDays[day])
               }
@@ -84,7 +90,7 @@ const FormActivity = () => {
           </div>
         </FormControl>
       </FormGroup>
-      <PrimaryButton onClick={() => dispatch(addActivitiy())}>
+      <PrimaryButton onClick={handleSubmit}>
         <AddIcon />
         Add Activity
       </PrimaryButton>

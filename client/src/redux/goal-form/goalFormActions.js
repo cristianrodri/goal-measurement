@@ -9,6 +9,7 @@ const {
   ACTIVITY_NAME,
   ACTIVITY_DAYS,
   SELECT_ALL_DAYS,
+  UNSELECT_ALL_DAYS,
   EMPTY_ACTIVITY,
   REWARDS,
   ADD_REWARD,
@@ -69,6 +70,12 @@ export const setActivityDays = day => {
 export const selectAllDays = () => {
   return {
     type: SELECT_ALL_DAYS
+  }
+}
+
+export const unselectAllDays = () => {
+  return {
+    type: UNSELECT_ALL_DAYS
   }
 }
 

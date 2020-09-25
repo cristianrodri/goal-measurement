@@ -38,6 +38,7 @@ const goalFormReducer = (state = initialState, action) => {
     ACTIVITY_NAME,
     ACTIVITY_DAYS,
     SELECT_ALL_DAYS,
+    UNSELECT_ALL_DAYS,
     EMPTY_ACTIVITY,
     REWARDS,
     ADD_REWARD,
@@ -95,6 +96,11 @@ const goalFormReducer = (state = initialState, action) => {
       return {
         ...state,
         activityDays: { ...allDaysSelected }
+      }
+    case UNSELECT_ALL_DAYS:
+      return {
+        ...state,
+        activityDays: { ...defaultDays }
       }
     case EMPTY_ACTIVITY:
       return {
