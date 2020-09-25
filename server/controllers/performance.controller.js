@@ -1,5 +1,6 @@
 const Performance = require('../models/performance.model')
 const Goal = require('../models/goal.model')
+const moment = require('moment')
 
 const performanceCtrl = {
   // middleware
@@ -96,7 +97,9 @@ const performanceCtrl = {
    */
   async getPerformance(req, res) {
     try {
-      const performance = await Performance.findOne({
+      const currentClientDate = req.params.currentDate
+
+      let performance = await Performance.findOne({
         goal: req.goal._id
       })
 
@@ -110,21 +113,20 @@ const performanceCtrl = {
       let lastPerformance =
         performance.performances[performance.performances.length - 1]
 
-      const startCurrentDay = moment(lastPerformance.date).isSameOrAfter(
-        moment(dateFromClient).startOf('day')
-      )
-
-      const endCurrentDay = moment(lastPerformance).isSameOrBefore(
-        moment(dateFromClient).endOf('day')
+      const isPreviousDay = moment(lastPerformance.date).isBefore(
+        moment(currentClientDate).startOf('day')
       )
 
       // if last performance is not current day, create new one
-      if (!startCurrentDay && !endCurrentDay) {
-        lastPerformance = await Performance.createNewDayPerformance(
+      if (isPreviousDay) {
+        const newPerformance = await Performance.createNewDayPerformance(
           req.goal,
           req.user._id,
-          req.params.date
+          currentClientDate
         )
+
+        performance = newPerformance.performance
+        lastPerformance = newPerformance.lastPerformance
       }
 
       res.json({

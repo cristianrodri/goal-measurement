@@ -47,7 +47,8 @@ performanceSchema.statics.createNewDayPerformance = async (
   dateFromClient
 ) => {
   const activities = goal.activities.map(activity => ({
-    activity: activity.activity
+    activity: activity.activity,
+    days: activity.days
   }))
 
   const currentDayClient = moment(dateFromClient).format('dddd').toLowerCase()
@@ -78,7 +79,7 @@ performanceSchema.statics.createNewDayPerformance = async (
   const lastPerformance =
     performance.performances[performance.performances.length - 1]
 
-  return lastPerformance
+  return { performance, lastPerformance }
 }
 
 performanceSchema.statics.checkLastPerformance = async (
