@@ -8,10 +8,10 @@ import {
   emptyForm,
   setSelectedGoal,
   addGoal,
-  addLastPerformance
+  getAllPerformances,
+  setTodayPerformance,
+  displayErrorSnackbar
 } from '../redux'
-import { displayErrorSnackbar } from '../redux'
-import { createNewDayPerformance } from '../api/api_performance'
 import moment from 'moment'
 
 const CreateGoal = () => {
@@ -28,12 +28,6 @@ const CreateGoal = () => {
     return () => dispatch(emptyForm())
   }, [])
 
-  const createDayPerformance = async (token, id, date) => {
-    const res = await createNewDayPerformance(token, id, date)
-
-    if (res.success) dispatch(addLastPerformance(res.data))
-  }
-
   const handleSubmit = async e => {
     e.preventDefault()
 
@@ -47,20 +41,20 @@ const CreateGoal = () => {
     try {
       setDisabled(true)
 
-      const dataDB = await createGoal(data, token)
+      const res = await createGoal(data, token, {
+        currentDate: moment().format()
+      })
 
-      if (dataDB.success) {
-        dispatch(addGoal(dataDB.data))
-        dispatch(setSelectedGoal(dataDB.data._id))
+      if (res.success) {
+        dispatch(addGoal(res.data.goal))
+        dispatch(setSelectedGoal(res.data.goal._id))
 
-        // create new day performance after goal is created
-        await createDayPerformance(token, dataDB.data._id, {
-          date: moment().format()
-        })
+        dispatch(getAllPerformances(res.data.allPerformances))
+        dispatch(setTodayPerformance(res.data.todayPerformanc))
 
-        history.push(`/my-goals/${dataDB.data._id}`)
-      } else if (dataDB.error) {
-        dispatch(displayErrorSnackbar(dataDB.message))
+        history.push(`/my-goals/${res.data.goal._id}`)
+      } else if (res.error) {
+        dispatch(displayErrorSnackbar(res.message))
         setDisabled(false)
       }
     } catch (error) {

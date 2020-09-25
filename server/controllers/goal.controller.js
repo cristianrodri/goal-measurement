@@ -56,9 +56,19 @@ const goalCtrl = {
 
       await performance.save()
 
+      const newDayPerformance = await Performance.createNewDayPerformance(
+        goal,
+        req.user._id,
+        req.params.currentDate
+      )
+
       res.status(201).json({
         success: true,
-        data: goal
+        data: {
+          goal,
+          allPerformances: newDayPerformance.performances.slice(0, -1),
+          todayPerformance: newDayPerformance.lastPerformance
+        }
       })
     } catch (error) {
       res.status(400).json({

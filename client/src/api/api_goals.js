@@ -11,8 +11,8 @@ const getGoalsByUser = token => {
     .catch(err => console.log(err))
 }
 
-const createGoal = (data, token) => {
-  return fetch('/api/goal/create', {
+const createGoal = (data, token, currentDate) => {
+  return fetch(`/api/goal/create/${currentDate}`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',

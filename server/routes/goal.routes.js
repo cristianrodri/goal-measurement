@@ -11,7 +11,7 @@ const {
 } = require('../controllers/goal.controller')
 
 // Create goal
-router.post('/goal/create', auth, createGoal)
+router.post('/goal/create/:currentDate', auth, createGoal)
 
 // Get all user goals
 router.get('/goals', auth, getGoals)
