@@ -46,7 +46,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const progressColor = ({ percentage, isWorkingDay }) => {
+const progressColor = (percentage, isWorkingDay) => {
   if (isWorkingDay) {
     switch (true) {
       case percentage === 100:
@@ -83,6 +83,7 @@ const DailyPerformance = ({ performance, index }) => {
 
   const calculatePercentage = activities => {
     const reachedActivities = activities.filter(activity => activity.reached)
+      .length
 
     return Math.floor((reachedActivities / activities.length) * 100)
   }
@@ -91,7 +92,14 @@ const DailyPerformance = ({ performance, index }) => {
     <>
       <span
         key={moment(performance.date).unix()}
-        className={classes[progressColor(performance)]}
+        className={
+          classes[
+            progressColor(
+              calculatePercentage(performance.activities),
+              performance.isWorkingDay
+            )
+          ]
+        }
         style={{
           gridRow:
             index === 0
