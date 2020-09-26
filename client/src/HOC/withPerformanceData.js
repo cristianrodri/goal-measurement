@@ -7,7 +7,8 @@ import {
   displayErrorSnackbar,
   removeLastPerformance,
   getAllPerformances,
-  setTodayPerformance
+  setTodayPerformance,
+  resetPerformance
 } from '../redux'
 import { getAllPerformancesByGoal } from '../api/api_performance'
 
@@ -45,6 +46,8 @@ const withPerformanceData = Component => props => {
     } catch (error) {
       dispatch(displayErrorSnackbar(error.message))
     }
+
+    return () => dispatch(resetPerformance())
   }, [])
 
   if (isLoading) return <Loading />
