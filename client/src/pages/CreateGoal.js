@@ -41,16 +41,14 @@ const CreateGoal = () => {
     try {
       setDisabled(true)
 
-      const res = await createGoal(data, token, {
-        currentDate: moment().format()
-      })
+      const res = await createGoal(data, token, moment().format())
 
       if (res.success) {
         dispatch(addGoal(res.data.goal))
         dispatch(setSelectedGoal(res.data.goal._id))
 
         dispatch(getAllPerformances(res.data.allPerformances))
-        dispatch(setTodayPerformance(res.data.todayPerformanc))
+        dispatch(setTodayPerformance(res.data.todayPerformance))
 
         history.push(`/my-goals/${res.data.goal._id}`)
       } else if (res.error) {
