@@ -42,9 +42,8 @@ export const removeGoal = id => {
   }
 }
 
-export const resetGoals = id => {
+export const resetGoals = () => {
   return {
-    type: RESET_GOALS,
-    id
+    type: RESET_GOALS
   }
 }
