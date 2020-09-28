@@ -28,7 +28,10 @@ const goalSchema = new mongoose.Schema(
             sunday: false
           }
         },
-        activity: String
+        activity: {
+          type: String,
+          trim: true
+        }
       }
     ],
     end: Date,
