@@ -16,7 +16,7 @@ router.post(
 )
 
 router.put(
-  '/:goalId/updatePerformanceDay/:performanceId/:todayPerformanceId',
+  '/:goalId/updatePerformanceDay/:todayPerformanceId',
   auth,
   goalBelongsToUser,
   updatePerformanceDay
