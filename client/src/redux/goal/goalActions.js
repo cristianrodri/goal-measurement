@@ -4,7 +4,8 @@ import {
   ADD_GOAL,
   UPDATE_GOAL,
   REMOVE_GOAL,
-  RESET_GOALS
+  RESET_GOALS,
+  RESET_SELECTED_GOAL
 } from './goalTypes'
 
 export const getGoals = goals => {
@@ -45,5 +46,11 @@ export const removeGoal = id => {
 export const resetGoals = () => {
   return {
     type: RESET_GOALS
+  }
+}
+
+export const resetSelectedGoal = () => {
+  return {
+    type: RESET_SELECTED_GOAL
   }
 }

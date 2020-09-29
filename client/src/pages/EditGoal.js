@@ -26,7 +26,8 @@ import {
   emptyForm,
   updateSelectedGoal,
   setTodayPerformance,
-  resetGoals
+  resetGoals,
+  removeGoal
 } from '../redux'
 
 const EditGoal = () => {
@@ -80,9 +81,6 @@ const EditGoal = () => {
         // update goal from redux
         dispatch(updateSelectedGoal(res.data.goal))
 
-        if (res.data.todayPerformance)
-          dispatch(setTodayPerformance(res.data.todayPerformance))
-
         // move into updated goal performance
         history.push(`/my-goals/${res.data.goal._id}`, {
           fromUpdatedGoal: true,
@@ -108,7 +106,7 @@ const EditGoal = () => {
 
       if (res.success) {
         // delete goal from redux
-        dispatch(resetGoals())
+        dispatch(removeGoal(res._id))
 
         history.push(`/my-goals`, {
           fromDeleteGoal: true,

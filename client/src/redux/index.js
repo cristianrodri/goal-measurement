@@ -11,6 +11,7 @@ export {
   addGoal,
   updateSelectedGoal,
   removeGoal,
+  resetSelectedGoal,
   resetGoals
 } from './goal/goalActions'
 export {

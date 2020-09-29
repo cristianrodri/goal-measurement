@@ -5,6 +5,7 @@ import {
   ADD_GOAL,
   UPDATE_GOAL,
   REMOVE_GOAL,
+  RESET_SELECTED_GOAL,
   RESET_GOALS
 } from './goalTypes'
 
@@ -34,12 +35,18 @@ const goalReducer = (state = initialState, action) => {
     case UPDATE_GOAL:
       return {
         ...state,
-        goals: updateObjInArray(action.payload, state.goals)
+        goals: state.goals
       }
     case REMOVE_GOAL:
       return {
         ...state,
-        goals: state.goals.filter(goal => goal._id !== action.id)
+        goals: state.goals.filter(goal => goal._id !== action.id),
+        selectedGoal: null
+      }
+    case RESET_SELECTED_GOAL:
+      return {
+        ...state,
+        selectedGoal: null
       }
     case RESET_GOALS:
       return initialState
