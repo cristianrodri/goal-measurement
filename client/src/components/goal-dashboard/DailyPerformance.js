@@ -82,6 +82,7 @@ const DailyPerformance = ({ performance, index }) => {
   const open = Boolean(anchorEl)
 
   const calculatePercentage = activities => {
+    if (!activities.length) return 0
     const reachedActivities = activities.filter(activity => activity.reached)
       .length
 

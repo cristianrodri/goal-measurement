@@ -22,7 +22,16 @@ const performanceSchema = new mongoose.Schema(
           type: Boolean,
           default: false
         },
-        isWorkingDay: Boolean
+        isWorkingDay: Boolean,
+        goalWorkingDays: {
+          monday: false,
+          tuesday: false,
+          wednesday: false,
+          thursday: false,
+          friday: false,
+          saturday: false,
+          sunday: false
+        }
       }
     ],
     goal: {
@@ -44,22 +53,66 @@ const performanceSchema = new mongoose.Schema(
 performanceSchema.statics.createNewDayPerformance = async (
   goal,
   userId,
-  dateFromClient
+  dateFromClient,
+  lastPerformance = null
 ) => {
-  const activities = goal.activities.map(activity => ({
-    activity: activity.activity,
-    days: activity.days
-  }))
-
   const currentDayClient = moment(dateFromClient).format('dddd').toLowerCase()
+  const activitiesToday = goal.activities.filter(
+    activity => activity.days[currentDayClient]
+  )
+
+  const activities = activitiesToday.length
+    ? activitiesToday.map(activity => {
+        delete activity.days
+
+        return activity
+      })
+    : []
+
+  const weekDays = moment.weekdays()
+  const weekDaysMonToSun = [...weekDays.slice(1), ...weekDays.slice(0, 1)]
+
+  let performancesToAdd = []
+
+  // create previous performance in case some days were empty by checking if the difference between current day and last performance day is greater than 1
+  if (lastPerformance) {
+    const lastPerformanceDate = moment(lastPerformance.date).startOf('day')
+    const currentDateClient = moment(dateFromClient).startOf('day')
+    const daysDiff = currentDateClient.diff(lastPerformanceDate, 'days')
+
+    if (daysDiff > 1) {
+      for (let i = 1; i < daysDiff; i++) {
+        const date = moment(lastPerformance.date).add(i, 'days')
+
+        performancesToAdd.push({
+          activities: [],
+          date,
+          isWorkingDay:
+            lastPerformance.goalWorkingDays[
+              moment(date).format('dddd').toLowerCase()
+            ],
+          goalWorkingDays: lastPerformance.goalWorkingDays
+        })
+      }
+    }
+  }
 
   const addNewDay = {
     activities,
     date: dateFromClient,
-    isWorkingDay: goal.activities.some(
-      activity => activity.days[currentDayClient]
-    )
+    isWorkingDay: !!activitiesToday.length,
+    goalWorkingDays: weekDaysMonToSun.reduce(
+      (prev, cur) => ({
+        ...prev,
+        [cur.toLowerCase()]: goal.activities.some(
+          activity => activity.days[cur.toLowerCase()]
+        )
+      }),
+      {}
+    ) // create {monday: true | false, tuesday: true | false ... until sunday}
   }
+
+  performancesToAdd.push(addNewDay)
 
   const performance = await Performance.findOneAndUpdate(
     {
@@ -68,7 +121,9 @@ performanceSchema.statics.createNewDayPerformance = async (
     },
     {
       $push: {
-        performances: { ...addNewDay }
+        performances: {
+          $each: performancesToAdd
+        }
       }
     },
     {
@@ -76,10 +131,11 @@ performanceSchema.statics.createNewDayPerformance = async (
     }
   )
 
-  const lastPerformance =
-    performance.performances[performance.performances.length - 1]
-
-  return { performance, lastPerformance }
+  return {
+    performance,
+    lastPerformance:
+      performance.performances[performance.performances.length - 1]
+  }
 }
 
 performanceSchema.statics.checkLastPerformance = async (
@@ -106,6 +162,12 @@ performanceSchema.statics.checkLastPerformance = async (
     moment(currentDateFromClient).endOf('day')
   )
 
+  const activities = newGoal.activities.map(activity => {
+    delete activity.days
+
+    return activity
+  })
+
   if (startCurrentDay && endCurrentDay) {
     const performance = await Performance.findOneAndUpdate(
       {
@@ -116,7 +178,7 @@ performanceSchema.statics.checkLastPerformance = async (
       {
         $set: {
           'performances.$.done': false,
-          'performances.$.activities': [...newGoal.activities]
+          'performances.$.activities': [...activities]
         }
       },
       {

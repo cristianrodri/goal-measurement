@@ -1,7 +1,6 @@
 const Goal = require('../models/goal.model')
 const Performance = require('../models/performance.model')
 const allowedUpdates = require('../helpers/allowedUpdates')
-const moment = require('moment')
 
 const goalCtrl = {
   /**

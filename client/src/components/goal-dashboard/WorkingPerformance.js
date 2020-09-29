@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
 const WorkingPerformance = () => {
   const classes = useStyles()
   const [cookies] = useCookies()
-  const goal = useSelector(state => state.goal)
+  const goal = useSelector(state => state.goal.selectedGoal)
   const todayPerformance = useSelector(
     state => state.performance.todayPerformance
   )
@@ -57,12 +57,15 @@ const WorkingPerformance = () => {
   const handleChange = async e => {
     const id = e.target.dataset.id
     const prevActivities = activities.filter(activity => activity._id !== id)
+
+    // capture updated activity by id and change its "reached" by checked event target
     const updatedActivity = activities.filter(
       activity => activity._id === id
     )[0]
 
     updatedActivity.reached = e.target.checked
 
+    // update activities in todayPerformances state and dispatch the changes
     const updatedTodayPerformance = {
       ...todayPerformance,
       activities: [...prevActivities, updatedActivity].sort((a, b) =>
@@ -72,7 +75,7 @@ const WorkingPerformance = () => {
 
     dispatch(setTodayPerformance(updatedTodayPerformance))
 
-    // calculate percentage about reached activities
+    // calculate percentage when reached activities is changed
     const reachedActivities = activities.filter(activity => activity.reached)
       .length
     setValue(percentageValue(reachedActivities, activities))

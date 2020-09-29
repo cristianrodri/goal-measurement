@@ -40,6 +40,7 @@ const withPerformanceData = Component => props => {
 
       setIsLoading(false)
     }
+
     try {
       if (!todayPerformance) getAllPerformancesAPI(token, id, currentDate)
       else setIsLoading(false)

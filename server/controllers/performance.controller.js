@@ -122,7 +122,8 @@ const performanceCtrl = {
         const newPerformance = await Performance.createNewDayPerformance(
           req.goal,
           req.user._id,
-          currentClientDate
+          currentClientDate,
+          lastPerformance
         )
 
         performance = newPerformance.performance
