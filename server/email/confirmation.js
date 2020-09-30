@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport(
 )
 
 const mailOptions = (user, token, host, protocol) => ({
-  from: 'contacto.cristianrodriguez.com',
+  from: 'carlo.interpab@gmail.com',
   to: user.email,
   subject: 'Confirmation email',
   text: `

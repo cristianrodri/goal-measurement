@@ -50,27 +50,31 @@ const Signup = () => {
 
     setDisabled(true)
 
-    const data = await createUser(formData)
+    try {
+      const data = await createUser(formData)
 
-    // signup is successed but need to verify the account in display dialog
-    if (data.success) {
-      dispatch(displayDialog(data.message))
+      // signup is successed but need to verify the account in display dialog
+      if (data.success) {
+        dispatch(displayDialog(data.message))
 
-      // Empty all input fields after success sign up
-      let fields = [
-        setUsername,
-        setEmail,
-        setPassword,
-        setConfirmPassword,
-        setImageName
-      ]
-      fields.map(field => field(''))
+        // Empty all input fields after success sign up
+        let fields = [
+          setUsername,
+          setEmail,
+          setPassword,
+          setConfirmPassword,
+          setImageName
+        ]
+        fields.map(field => field(''))
 
-      setImage(undefined)
-    } else if (data.error) {
-      dispatch(displayErrorSnackbar(data.message))
+        setImage(undefined)
+      } else if (data.error) {
+        dispatch(displayErrorSnackbar(data.message))
+      }
+      setDisabled(false)
+    } catch (error) {
+      dispatch(displayErrorSnackbar(error.message))
     }
-    setDisabled(false)
   }
 
   const uploadImage = e => {
