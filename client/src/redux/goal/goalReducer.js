@@ -35,7 +35,9 @@ const goalReducer = (state = initialState, action) => {
     case UPDATE_GOAL:
       return {
         ...state,
-        goals: state.goals
+        goals: state.goals.map(goal =>
+          goal._id === action.payload._id ? action.payload : goal
+        )
       }
     case REMOVE_GOAL:
       return {
