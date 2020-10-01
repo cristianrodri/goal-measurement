@@ -36,23 +36,22 @@ const userCtrl = {
       await token.save()
 
       // Use localhost in dev mode and domain url in prod mode
-      const host =
-        process.env.NODE_ENV !== 'production'
-          ? 'localhost:3000'
-          : req.headers.host
+      const siteName = process.env.SITE_NAME
 
-      transporter.sendMail(
-        mailOptions(user, token, host, req.protocol),
-        err => {
-          if (err) return res.status(400).json(err)
-
-          res.status(201).json({
-            success: true,
-            user,
-            message: `A verification link was sent to ${user.email}`
+      transporter.sendMail(mailOptions(user, token, siteName), err => {
+        if (err)
+          return res.status(400).json({
+            success: false,
+            error: true,
+            message: err.message
           })
-        }
-      )
+
+        res.status(201).json({
+          success: true,
+          user,
+          message: `A verification link was sent to ${user.email}`
+        })
+      })
     } catch (error) {
       if (error.code === 11000) {
         res.status(400).json({
@@ -105,28 +104,22 @@ const userCtrl = {
       await token.save()
 
       // Use localhost in dev mode and domain url in prod mode
-      const host =
-        process.env.NODE_ENV !== 'production'
-          ? 'localhost:3000'
-          : req.headers.host
+      const siteName = process.env.SITE_NAME
 
-      transporter.sendMail(
-        mailOptions(user, token, host, req.protocol),
-        err => {
-          if (err)
-            return res.status(400).json({
-              success: false,
-              error: true,
-              message: err.message
-            })
-
-          res.status(201).json({
-            success: true,
-            message: `A verification link was sent to ${user.email}`,
-            error: false
+      transporter.sendMail(mailOptions(user, token, siteName), err => {
+        if (err)
+          return res.status(400).json({
+            success: false,
+            error: true,
+            message: err.message
           })
-        }
-      )
+
+        res.status(201).json({
+          success: true,
+          message: `A verification link was sent to ${user.email}`,
+          error: false
+        })
+      })
     } catch (error) {
       res.status(400).json({
         success: false,
