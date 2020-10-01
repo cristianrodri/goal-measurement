@@ -6,13 +6,21 @@ import PrintRewards from './PrintRewards'
 
 const WeeklyReward = () => {
   const currentDay = moment().format('dddd').toLowerCase()
-  const weeklyRewardDay = useSelector(state => state.goal.weeklyReward)
+  const weeklyRewardDay = useSelector(
+    state => state.goal.selectedGoal.weeklyReward
+  )
   const allPerformances = useSelector(
     state => state.performance.allPerformances
   )
   const isWeeklyRewardDay = weeklyRewardDay === currentDay
   const [deserveWeeklyReward, setDeserveWeeklyReward] = useState(false)
   const weeklyReward = isWeeklyRewardDay && deserveWeeklyReward
+
+  const calculateReachedActivities = activities => {
+    const reachedActivities = activities.filter(activity => activity.reached)
+
+    return Math.floor((reachedActivities / activities.length) * 100)
+  }
 
   const previousDaysActivities = () => {
     const lastWeeklyRewardDay = moment().subtract(1, 'week').startOf('day')
@@ -26,7 +34,9 @@ const WeeklyReward = () => {
           moment(date).isBefore(currentDayInit) &&
           isWorkingDay
       )
-      .map(({ percentage }) => percentage)
+      .map(({ activities, done }) =>
+        done ? 100 : calculateReachedActivities(activities)
+      )
 
     const averagePercentageWeek = averageArray(previousWeekPerformances)
 
