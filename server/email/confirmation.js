@@ -10,13 +10,13 @@ const transporter = nodemailer.createTransport(
   })
 )
 
-const mailOptions = (user, token, host, protocol) => ({
+const mailOptions = (user, token, siteName) => ({
   from: 'carlo.interpab@gmail.com',
   to: user.email,
   subject: 'Confirmation email',
   text: `
     Confirm your account here
-    ${protocol}://${host}/user/confirmation/${user._id}/${token.token}
+    ${siteName}/user/confirmation/${user._id}/${token.token}
   `
 })
 
