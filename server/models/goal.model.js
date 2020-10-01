@@ -30,7 +30,9 @@ const goalSchema = new mongoose.Schema(
         },
         activity: {
           type: String,
-          trim: true
+          trim: true,
+          maxlength: 60,
+          required: [true, 'Activity name is required']
         }
       }
     ],
@@ -40,11 +42,40 @@ const goalSchema = new mongoose.Schema(
       default: false
     },
     rewards: {
-      small: Array,
-      medium: Array,
-      large: Array
+      small: [
+        {
+          type: String,
+          trim: true,
+          maxlength: 50
+        }
+      ],
+      medium: [
+        {
+          type: String,
+          trim: true,
+          maxlength: 50
+        }
+      ],
+      large: [
+        {
+          type: String,
+          trim: true,
+          maxlength: 50
+        }
+      ]
     },
-    weeklyReward: String,
+    weeklyReward: {
+      type: String,
+      enum: [
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+        'friday'
+      ]
+    },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
