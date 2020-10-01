@@ -53,7 +53,9 @@ const ChooseWeeklyReward = () => {
         <RadioGroup
           aria-label="daysOfWeek"
           name="daysOfWeek"
-          onChange={e => dispatch(setWeeklyReward(e.target.value))}
+          onChange={e =>
+            dispatch(setWeeklyReward(e.target.value.toLowerCase()))
+          }
           className={classes.radioGroup}
           value={weeklyReward}
         >
