@@ -1,4 +1,3 @@
-import { updateObjInArray } from './../../utils/arrays'
 import {
   GOALS,
   SELECTED_GOAL,
@@ -42,8 +41,7 @@ const goalReducer = (state = initialState, action) => {
     case REMOVE_GOAL:
       return {
         ...state,
-        goals: state.goals.filter(goal => goal._id !== action.id),
-        selectedGoal: null
+        goals: state.goals.filter(goal => goal._id !== action.id)
       }
     case RESET_SELECTED_GOAL:
       return {
