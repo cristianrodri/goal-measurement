@@ -65,7 +65,10 @@ const goalCtrl = {
         success: true,
         data: {
           goal,
-          allPerformances: newDayPerformance.performances.slice(0, -1),
+          allPerformances: newDayPerformance.performance.performances.slice(
+            0,
+            -1
+          ),
           todayPerformance: newDayPerformance.lastPerformance
         }
       })
