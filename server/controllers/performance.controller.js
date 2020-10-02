@@ -146,7 +146,8 @@ const performanceCtrl = {
           todayPerformance: lastPerformance,
           isPreviousDay,
           lastPerformance: moment(lastPerformance.date),
-          clientDate: moment(clientDate)
+          clientDate: moment(clientDate),
+          date: clientDate
         }
       })
     } catch (error) {
