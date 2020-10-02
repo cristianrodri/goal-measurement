@@ -22,7 +22,7 @@ const withPerformanceData = Component => props => {
   )
   const dispatch = useDispatch()
   const [isLoading, setIsLoading] = useState(true)
-  const currentDate = moment().format()
+  const currentDateUTC = moment().utcOffset()
 
   useEffect(() => {
     const getAllPerformancesAPI = async (token, id, date) => {
@@ -44,7 +44,7 @@ const withPerformanceData = Component => props => {
     }
 
     try {
-      if (!todayPerformance) getAllPerformancesAPI(token, id, currentDate)
+      if (!todayPerformance) getAllPerformancesAPI(token, id, currentDateUTC)
       else setIsLoading(false)
     } catch (error) {
       dispatch(displayErrorSnackbar(error.message))

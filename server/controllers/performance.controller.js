@@ -97,7 +97,7 @@ const performanceCtrl = {
    */
   async getPerformance(req, res) {
     try {
-      const currentClientDate = req.params.currentDate
+      const currentClientDateUTC = +req.params.currentDate
 
       let performance = await Performance.findOne({
         goal: req.goal._id
@@ -113,20 +113,25 @@ const performanceCtrl = {
       let lastPerformance =
         performance.performances[performance.performances.length - 1]
 
+      console.log(currentClientDateUTC)
+
+      const clientDate = moment().utcOffset(currentClientDateUTC)
+
       const isPreviousDay = moment(lastPerformance.date).isBefore(
-        moment(currentClientDate).startOf('day')
+        moment(clientDate).startOf('day')
       )
 
       console.log(isPreviousDay)
       console.log(moment(lastPerformance.date))
-      console.log(moment(currentClientDate))
+      console.log(clientDate)
+      console.log(moment(clientDate))
 
       // if last performance is not current day, create new one
       if (isPreviousDay) {
         const newPerformance = await Performance.createNewDayPerformance(
           req.goal,
           req.user._id,
-          currentClientDate,
+          clientDate,
           lastPerformance
         )
 
@@ -141,7 +146,7 @@ const performanceCtrl = {
           todayPerformance: lastPerformance,
           isPreviousDay,
           lastPerformance: moment(lastPerformance.date),
-          clientDate: moment(currentClientDate)
+          clientDate: moment(clientDate)
         }
       })
     } catch (error) {
