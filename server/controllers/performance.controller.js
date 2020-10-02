@@ -117,6 +117,10 @@ const performanceCtrl = {
         moment(currentClientDate).startOf('day')
       )
 
+      console.log(isPreviousDay)
+      console.log(moment(lastPerformance.date))
+      console.log(moment(currentClientDate))
+
       // if last performance is not current day, create new one
       if (isPreviousDay) {
         const newPerformance = await Performance.createNewDayPerformance(
@@ -134,7 +138,10 @@ const performanceCtrl = {
         success: true,
         data: {
           allPerformances: performance.performances,
-          todayPerformance: lastPerformance
+          todayPerformance: lastPerformance,
+          isPreviousDay,
+          lastPerformance: moment(lastPerformance.date),
+          clientDate: moment(currentClientDate)
         }
       })
     } catch (error) {
