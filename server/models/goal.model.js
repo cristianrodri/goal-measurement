@@ -73,7 +73,7 @@ const goalSchema = new mongoose.Schema(
         'thursday',
         'friday',
         'saturday',
-        'friday'
+        'sunday'
       ]
     },
     owner: {
