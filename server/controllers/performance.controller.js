@@ -132,7 +132,8 @@ const performanceCtrl = {
           req.goal,
           req.user._id,
           clientDate,
-          lastPerformance
+          lastPerformance,
+          currentClientDateUTC
         )
 
         performance = newPerformance.performance
