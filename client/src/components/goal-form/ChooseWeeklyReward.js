@@ -10,7 +10,7 @@ import {
   FormHelperText
 } from '@material-ui/core'
 import moment from 'moment'
-import { firstItemToLast } from '../../utils/arrays'
+import { arrayOfStringLowercase, firstItemToLast } from '../../utils/arrays'
 import { setWeeklyReward } from '../../redux'
 
 const useStyles = makeStyles(theme => ({
@@ -42,7 +42,9 @@ const ChooseWeeklyReward = () => {
   const classes = useStyles()
   const weeklyReward = useSelector(state => state.goalForm.weeklyReward)
   const dispatch = useDispatch()
-  const daysOfWeek = firstItemToLast(moment.weekdays()) // from monday to sunday
+  const daysOfWeek = arrayOfStringLowercase(firstItemToLast(moment.weekdays())) // from monday to sunday
+
+  console.log(daysOfWeek)
 
   return (
     <div className={classes.container}>
