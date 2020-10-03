@@ -54,7 +54,8 @@ performanceSchema.statics.createNewDayPerformance = async (
   goal,
   userId,
   dateFromClient,
-  lastPerformance = null
+  lastPerformance = undefined,
+  utcClient = undefined
 ) => {
   const currentDayClient = moment(dateFromClient).format('dddd').toLowerCase()
   const activitiesToday = goal.activities.filter(
@@ -76,8 +77,12 @@ performanceSchema.statics.createNewDayPerformance = async (
 
   // create previous performance in case some days were empty by checking if the difference between current day and last performance day is greater than 1
   if (lastPerformance) {
-    const lastPerformanceDate = moment(lastPerformance.date).startOf('day')
-    const currentDateClient = moment(dateFromClient).startOf('day')
+    const lastPerformanceDate = moment(
+      moment(lastPerformance.date).utcOffset(utcClient)
+    ).startOf('day')
+    const currentDateClient = moment(
+      moment(dateFromClient).utcOffset(utcClient)
+    ).startOf('day')
     const daysDiff = currentDateClient.diff(lastPerformanceDate, 'days')
 
     if (daysDiff > 1) {
@@ -141,7 +146,7 @@ performanceSchema.statics.createNewDayPerformance = async (
 performanceSchema.statics.checkLastPerformance = async (
   userId,
   newGoal,
-  currentDateFromClient
+  clientUTC
 ) => {
   const performance = await Performance.findOne({
     goal: newGoal._id,
@@ -155,20 +160,20 @@ performanceSchema.statics.checkLastPerformance = async (
   // check if last performance is current day (from client user). If it's true, change its activities, regardless if user has done or not
 
   const startCurrentDay = moment(lastPerformance.date).isSameOrAfter(
-    moment(currentDateFromClient).startOf('day')
+    moment(moment().utcOffset(clientUTC)).startOf('day')
   )
 
   const endCurrentDay = moment(lastPerformance.date).isSameOrBefore(
-    moment(currentDateFromClient).endOf('day')
+    moment(moment().utcOffset(clientUTC)).endOf('day')
   )
 
-  const activities = newGoal.activities.map(activity => {
-    delete activity.days
-
-    return activity
-  })
-
   if (startCurrentDay && endCurrentDay) {
+    const activities = newGoal.activities.map(activity => {
+      delete activity.days
+
+      return activity
+    })
+
     const performance = await Performance.findOneAndUpdate(
       {
         goal: newGoal._id,

@@ -144,18 +144,18 @@ const goalCtrl = {
         message: 'Not allowed to update'
       })
 
-    // const prevGoal = { activities: req.goal.activities }
-
     try {
       updates.forEach(update => (req.goal[update] = req.body[update]))
 
       await req.goal.save()
 
+      const clientUTC = +req.params.currentDate
+
       // update activities property of the last day performance belongs to this goal
       const performance = await Performance.checkLastPerformance(
         req.user._id,
         req.goal,
-        req.params.currentDate
+        clientUTC
       )
 
       res.json({
