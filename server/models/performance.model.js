@@ -168,11 +168,20 @@ performanceSchema.statics.checkLastPerformance = async (
   )
 
   if (startCurrentDay && endCurrentDay) {
-    const activities = newGoal.activities.map(activity => {
-      delete activity.days
+    const currentDayClient = moment(moment().utcOffset(clientUTC))
+      .format('dddd')
+      .toLowerCase()
+    const activitiesToday = newGoal.activities.filter(
+      activity => activity.days[currentDayClient]
+    )
 
-      return activity
-    })
+    const activities = activitiesToday.length
+      ? activitiesToday.map(activity => {
+          delete activity.days
+
+          return activity
+        })
+      : []
 
     const performance = await Performance.findOneAndUpdate(
       {
