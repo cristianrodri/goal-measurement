@@ -51,11 +51,6 @@ const Login = () => {
       const data = await loginUser({ email, password })
 
       if (data.success) {
-        // create two cookies, token and user object data
-        const expires = new Date(Date.now() + 6 * 3600000)
-        setCookie('token', data.token, { expires, path: '/' }) // expires 6h
-        setCookie('user', data.user, { expires, path: '/' }) // expires 6h
-
         dispatch(userData(data.user))
 
         if (data.hasAvatar) {
@@ -64,6 +59,10 @@ const Login = () => {
 
         // call user goals from API
         await getGoalsAPI(data.token)
+
+        // create two cookies, token and user object data
+        const expires = new Date(Date.now() + 6 * 3600000)
+        setCookie('token', data.token, { expires, path: '/' }) // expires 6h
 
         // redirect to /my-goals
         history.push('/my-goals')
