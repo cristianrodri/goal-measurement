@@ -2,13 +2,17 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { resetSelectedGoal, setSelectedGoal } from '../redux'
+import moment from 'moment'
+import EndDateReached from './../components/goal-dashboard/EndDateReached'
 
 const withGoal = Component => props => {
   const goals = useSelector(state => state.goal.goals)
+  const selectedGoal = useSelector(state => state.goal.selectedGoal)
   const dispatch = useDispatch()
   const history = useHistory()
   const { id } = props.match.params
   const [isReady, setIsReady] = useState(false)
+  // const [goalToCheck, setGoalToCheck] = useState(null)
 
   useEffect(() => {
     const goalExists = goals.some(goal => {
@@ -24,6 +28,15 @@ const withGoal = Component => props => {
 
     return () => dispatch(resetSelectedGoal())
   }, [])
+
+  // after selectedGoal is dispatched check if it is the deadline
+  if (selectedGoal) {
+    const isEndGoalDate = moment().isSameOrAfter(
+      moment(selectedGoal.end).startOf('day')
+    )
+
+    if (isEndGoalDate) return <EndDateReached goal={selectedGoal} />
+  }
 
   if (isReady) return <Component {...props} />
   else return null

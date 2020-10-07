@@ -28,8 +28,6 @@ const withPerformanceData = Component => props => {
     const getAllPerformancesAPI = async (token, id, date) => {
       const res = await getAllPerformancesByGoal(token, id, date)
 
-      console.log(res.data)
-
       if (res.success) {
         dispatch(getAllPerformances(res.data.allPerformances))
         dispatch(setTodayPerformance(res.data.todayPerformance))
