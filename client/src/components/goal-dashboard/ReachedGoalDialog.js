@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Dialog,
   DialogActions,
@@ -7,42 +7,27 @@ import {
   DialogTitle,
   Button
 } from '@material-ui/core'
-import { useSelector } from 'react-redux'
 
-const ReachedGoalDialog = () => {
-  const endGoalDate = useSelector(state => state.goal.selectedGoal.end)
-  const isEndGoalDate = moment().isSameOrAfter(
-    moment(endGoalDate).startOf('day')
-  )
-  const [open, setOpen] = useState(isEndGoalDate)
-
-  const handleClose = () => {
-    setOpen(false)
-  }
-
+const ReachedGoalDialog = ({ handleNoReached, handleReached }) => {
   return (
     <div>
       <Dialog
-        open={open}
-        onClose={handleClose}
+        open={true}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {"Use Google's location service?"}
-        </DialogTitle>
+        <DialogTitle id="alert-dialog-title">Deadline reached</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending
-            anonymous location data to Google, even when no apps are running.
+            Deadline was reached. Did you achieve your goal?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Disagree
+          <Button onClick={handleNoReached} color="primary">
+            Not yet
           </Button>
-          <Button onClick={handleClose} color="primary" autoFocus>
-            Agree
+          <Button onClick={handleReached} color="primary" autoFocus>
+            Yes, Of course
           </Button>
         </DialogActions>
       </Dialog>

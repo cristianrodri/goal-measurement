@@ -11,6 +11,7 @@ import withPerformanceData from '../HOC/withPerformanceData'
 import { useDispatch, useSelector } from 'react-redux'
 import { displayDialog } from './../redux/dialogs/dialogActions'
 import withGoal from './../HOC/withGoal'
+import EndDateReached from '../components/goal-dashboard/EndDateReached'
 
 const GoalDashboard = props => {
   const history = useHistory()
@@ -34,6 +35,7 @@ const GoalDashboard = props => {
   return (
     <>
       <WeeklyReward />
+      <EndDateReached />
 
       <Grid container spacing={2} justify="center">
         <Grid
