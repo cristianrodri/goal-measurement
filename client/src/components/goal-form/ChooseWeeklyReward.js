@@ -44,8 +44,6 @@ const ChooseWeeklyReward = () => {
   const dispatch = useDispatch()
   const daysOfWeek = arrayOfStringLowercase(firstItemToLast(moment.weekdays())) // from monday to sunday
 
-  console.log(daysOfWeek)
-
   return (
     <div className={classes.container}>
       <FormControl component="fieldset" className={classes.formControl}>

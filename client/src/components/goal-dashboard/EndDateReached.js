@@ -6,7 +6,7 @@ import NewEndDate from './NewEndDate'
 import ReachedGoalDialog from './ReachedGoalDialog'
 import moment from 'moment'
 import { useDispatch } from 'react-redux'
-import { displayErrorSnackbar } from './../../redux'
+import { displayErrorSnackbar, updateSelectedGoal } from './../../redux'
 
 const EndDateReached = ({ goal }) => {
   const [step, setStep] = useState(0)
@@ -30,7 +30,7 @@ const EndDateReached = ({ goal }) => {
       )
 
       if (res.success) {
-        dispatch(updateGoal(res.data.goal))
+        dispatch(updateSelectedGoal(res.data.goal))
 
         setStep(2)
       } else if (res.error) dispatch(displayErrorSnackbar(res.message))
@@ -46,7 +46,7 @@ const EndDateReached = ({ goal }) => {
   }
 
   const handlePrevious = () => {
-    setStep(0)
+    setStep(step === 2 ? 1 : goal.completed ? 2 : 0)
   }
 
   switch (step) {
@@ -61,7 +61,7 @@ const EndDateReached = ({ goal }) => {
     case 1:
       return <NewEndDate handlePrevious={handlePrevious} />
     case 2:
-      return <CompletedGoal />
+      return <CompletedGoal handlePrevious={handlePrevious} />
   }
 }
 

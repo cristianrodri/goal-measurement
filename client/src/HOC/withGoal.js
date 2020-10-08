@@ -12,7 +12,6 @@ const withGoal = Component => props => {
   const history = useHistory()
   const { id } = props.match.params
   const [isReady, setIsReady] = useState(false)
-  // const [goalToCheck, setGoalToCheck] = useState(null)
 
   useEffect(() => {
     const goalExists = goals.some(goal => {
