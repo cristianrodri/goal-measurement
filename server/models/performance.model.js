@@ -31,7 +31,8 @@ const performanceSchema = new mongoose.Schema(
           friday: false,
           saturday: false,
           sunday: false
-        }
+        },
+        goalDeadline: Date
       }
     ],
     goal: {
@@ -53,11 +54,12 @@ const performanceSchema = new mongoose.Schema(
 performanceSchema.statics.createNewDayPerformance = async (
   goal,
   userId,
-  dateFromClient,
   lastPerformance = undefined,
   utcClient = undefined
 ) => {
-  const currentDayClient = moment(dateFromClient).format('dddd').toLowerCase()
+  const currentDayClient = moment(moment().utcOffset(utcClient))
+    .format('dddd')
+    .toLowerCase()
   const activitiesToday = goal.activities.filter(
     activity => activity.days[currentDayClient]
   )
@@ -77,26 +79,37 @@ performanceSchema.statics.createNewDayPerformance = async (
 
   // create previous performance in case some days were empty by checking if the difference between current day and last performance day is greater than 1
   if (lastPerformance) {
-    const lastPerformanceDate = moment(
-      moment(lastPerformance.date).utcOffset(utcClient)
-    ).startOf('day')
-    const currentDateClient = moment(
-      moment(dateFromClient).utcOffset(utcClient)
-    ).startOf('day')
+    const lastPerformanceDate = moment(lastPerformance.date).startOf('day')
+    const currentDateClient = moment().startOf('day')
     const daysDiff = currentDateClient.diff(lastPerformanceDate, 'days')
 
     if (daysDiff > 1) {
       for (let i = 1; i < daysDiff; i++) {
-        const date = moment(lastPerformance.date).add(i, 'days')
+        const date = moment(lastPerformance.date).add(i, 'days').format()
+        const lastPerformanceActivities = lastPerformance.activities.map(
+          activity => ({ activity: activity.activity, reached: false })
+        )
+
+        const isSameOrAfterPrevGoalDeadline = moment(
+          moment(date).utcOffset(utcClient)
+        ).isSameOrAfter(
+          moment(lastPerformance.goalDeadline).utcOffset(utcClient)
+        )
 
         performancesToAdd.push({
-          activities: [],
+          activities: isSameOrAfterPrevGoalDeadline
+            ? []
+            : [...lastPerformanceActivities],
           date,
-          isWorkingDay:
-            lastPerformance.goalWorkingDays[
-              moment(date).format('dddd').toLowerCase()
-            ],
-          goalWorkingDays: lastPerformance.goalWorkingDays
+          isWorkingDay: isSameOrAfterPrevGoalDeadline
+            ? false
+            : lastPerformance.goalWorkingDays[
+                moment(moment().utcOffset(utcClient))
+                  .format('dddd')
+                  .toLowerCase()
+              ],
+          goalWorkingDays: lastPerformance.goalWorkingDays,
+          goalDeadline: lastPerformance.goalDeadline
         })
       }
     }
@@ -104,8 +117,9 @@ performanceSchema.statics.createNewDayPerformance = async (
 
   const addNewDay = {
     activities,
-    date: dateFromClient,
+    date: moment().format(),
     isWorkingDay: !!activitiesToday.length,
+    goalDeadline: goal.end,
     goalWorkingDays: weekDaysMonToSun.reduce(
       (prev, cur) => ({
         ...prev,
@@ -167,7 +181,7 @@ performanceSchema.statics.checkLastPerformance = async (
     moment(moment().utcOffset(clientUTC)).endOf('day')
   )
 
-  if (startCurrentDay && endCurrentDay) {
+  if (startCurrentDay && endCurrentDay && !lastPerformance.done) {
     const currentDayClient = moment(moment().utcOffset(clientUTC))
       .format('dddd')
       .toLowerCase()
