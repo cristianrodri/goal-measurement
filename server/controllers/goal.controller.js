@@ -57,8 +57,7 @@ const goalCtrl = {
 
       const newDayPerformance = await Performance.createNewDayPerformance(
         goal,
-        req.user._id,
-        req.params.currentDate
+        req.user._id
       )
 
       res.status(201).json({

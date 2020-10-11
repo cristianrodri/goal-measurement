@@ -113,25 +113,17 @@ const performanceCtrl = {
       let lastPerformance =
         performance.performances[performance.performances.length - 1]
 
-      console.log(currentClientDateUTC)
-
       const clientDate = moment().utcOffset(currentClientDateUTC)
 
       const isPreviousDay = moment(lastPerformance.date).isBefore(
         moment(clientDate).startOf('day')
       )
 
-      console.log(isPreviousDay)
-      console.log(moment(lastPerformance.date))
-      console.log(clientDate)
-      console.log(moment(clientDate))
-
       // if last performance is not current day, create new one
       if (isPreviousDay) {
         const newPerformance = await Performance.createNewDayPerformance(
           req.goal,
           req.user._id,
-          clientDate,
           lastPerformance,
           currentClientDateUTC
         )
@@ -144,11 +136,7 @@ const performanceCtrl = {
         success: true,
         data: {
           allPerformances: performance.performances,
-          todayPerformance: lastPerformance,
-          isPreviousDay,
-          lastPerformance: moment(lastPerformance.date),
-          clientDate: moment(clientDate),
-          date: clientDate
+          todayPerformance: lastPerformance
         }
       })
     } catch (error) {
