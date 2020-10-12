@@ -10,5 +10,5 @@ export const averageArray = array => sumArray(array) / array.length
 export const calculateReachedActivities = activities => {
   const reachedActivities = activities.filter(activity => activity.reached)
 
-  return Math.floor((reachedActivities / activities.length) * 100)
+  return Math.floor((reachedActivities.length / activities.length) * 100)
 }
