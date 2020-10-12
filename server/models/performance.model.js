@@ -181,7 +181,7 @@ performanceSchema.statics.checkLastPerformance = async (
     moment(moment().utcOffset(clientUTC)).endOf('day')
   )
 
-  if (startCurrentDay && endCurrentDay && !lastPerformance.done) {
+  if (startCurrentDay && endCurrentDay) {
     const currentDayClient = moment(moment().utcOffset(clientUTC))
       .format('dddd')
       .toLowerCase()
