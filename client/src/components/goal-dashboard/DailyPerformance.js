@@ -131,7 +131,11 @@ const DailyPerformance = ({ performance, index }) => {
           aria-haspopup="true"
           className={classes.typography}
         >
-          {calculatePercentage(performance.activities)}%
+          {performance.isWorkingDay ? (
+            `${calculatePercentage(performance.activities)}%`
+          ) : (
+            <small>No activities</small>
+          )}
           <small>{moment(performance.date).format('dddd, DD-MMM-YYYY')}</small>
         </Typography>
       </Popover>

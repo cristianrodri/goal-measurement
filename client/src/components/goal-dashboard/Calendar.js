@@ -1,8 +1,9 @@
 import React from 'react'
-import { makeStyles, Container } from '@material-ui/core'
-import { SecondaryTitle } from '../Title'
+import { makeStyles, Container, Typography } from '@material-ui/core'
 import DaysCalendar from './DaysCalendar'
 import HistoricPerformances from './HistoricPerformances'
+import { useSelector } from 'react-redux'
+import { averageArray, calculateReachedActivities } from '../../utils/arrays'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -19,9 +20,33 @@ const useStyles = makeStyles(theme => ({
 
 const Calendar = () => {
   const classes = useStyles()
+  const allPerformances = useSelector(
+    state => state.performance.allPerformances
+  )
+  const workingDays = allPerformances.filter(
+    performance => performance.isWorkingDay
+  )
+
+  console.log(allPerformances)
+  console.log(workingDays)
+
+  const getPercentage = workingDaysPerformances => {
+    const percentages = workingDaysPerformances.map(({ activities, done }) =>
+      done ? 100 : calculateReachedActivities(activities)
+    )
+
+    const averagePercentage = Math.floor(averageArray(percentages))
+
+    return averagePercentage
+  }
+
+  const percentage = getPercentage(workingDays)
+
   return (
     <div>
-      <SecondaryTitle>Historic Performance</SecondaryTitle>
+      <Typography align="center" gutterBottom>
+        You did <strong>{percentage}%</strong> of your activites until now
+      </Typography>
       <Container className={classes.container}>
         <DaysCalendar />
         <HistoricPerformances />
