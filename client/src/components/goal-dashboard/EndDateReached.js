@@ -7,6 +7,7 @@ import ReachedGoalDialog from './ReachedGoalDialog'
 import moment from 'moment'
 import { useDispatch } from 'react-redux'
 import { displayErrorSnackbar, updateSelectedGoal } from './../../redux'
+import { Dialog } from '@material-ui/core'
 
 const EndDateReached = ({ goal }) => {
   const [step, setStep] = useState(0)
@@ -46,23 +47,24 @@ const EndDateReached = ({ goal }) => {
   }
 
   const handlePrevious = () => {
-    setStep(step === 2 ? 1 : goal.completed ? 2 : 0)
+    setStep(step > 1 ? 1 : goal.completed ? 2 : 0)
   }
 
-  switch (step) {
-    case 0:
-      return (
+  return (
+    <Dialog open={true} aria-labelledby="alert-dialog-title">
+      {step === 0 ? (
         <ReachedGoalDialog
           handleReached={handleReached}
           handleNoReached={handleNoReached}
           isLoading={isLoading}
         />
-      )
-    case 1:
-      return <NewEndDate handlePrevious={handlePrevious} />
-    case 2:
-      return <CompletedGoal handlePrevious={handlePrevious} />
-  }
+      ) : step === 1 ? (
+        <NewEndDate handlePrevious={handlePrevious} />
+      ) : (
+        <CompletedGoal handlePrevious={handlePrevious} />
+      )}
+    </Dialog>
+  )
 }
 
 export default EndDateReached
