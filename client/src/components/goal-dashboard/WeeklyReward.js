@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
-import { averageArray } from '../../utils/arrays'
+import { averageArray, calculateReachedActivities } from '../../utils/arrays'
 import PrintRewards from './PrintRewards'
 
 const WeeklyReward = () => {
@@ -15,12 +15,6 @@ const WeeklyReward = () => {
   const isWeeklyRewardDay = weeklyRewardDay === currentDay
   const [deserveWeeklyReward, setDeserveWeeklyReward] = useState(false)
   const weeklyReward = isWeeklyRewardDay && deserveWeeklyReward
-
-  const calculateReachedActivities = activities => {
-    const reachedActivities = activities.filter(activity => activity.reached)
-
-    return Math.floor((reachedActivities / activities.length) * 100)
-  }
 
   const previousDaysActivities = () => {
     const lastWeeklyRewardDay = moment().subtract(1, 'week').startOf('day')

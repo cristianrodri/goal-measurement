@@ -6,3 +6,9 @@ export const sumArray = array =>
   array.reduce((number, current) => number + current, 0)
 
 export const averageArray = array => sumArray(array) / array.length
+
+export const calculateReachedActivities = activities => {
+  const reachedActivities = activities.filter(activity => activity.reached)
+
+  return Math.floor((reachedActivities / activities.length) * 100)
+}
