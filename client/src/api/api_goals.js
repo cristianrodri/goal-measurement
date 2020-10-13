@@ -1,5 +1,5 @@
-const getGoalsByUser = token => {
-  return fetch('/api/goals', {
+const getGoalsByUser = (token, clientUTC) => {
+  return fetch(`/api/goals/${clientUTC}`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',

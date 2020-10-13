@@ -14,7 +14,7 @@ const {
 router.post('/goal/create/:currentDate', auth, createGoal)
 
 // Get all user goals
-router.get('/goals', auth, getGoals)
+router.get('/goals/:clientUTC', auth, getGoals)
 
 // get and delete specific goal
 router

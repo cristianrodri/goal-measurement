@@ -4,6 +4,7 @@ import { getUserById } from '../../api/api_user'
 import { URL } from './../../api/url'
 import { getGoalsByUser } from '../../api/api_goals'
 import { getGoals } from '../goal/goalActions'
+import moment from 'moment'
 
 export const getUserDataAPI = token => {
   return async dispatch => {
@@ -15,7 +16,7 @@ export const getUserDataAPI = token => {
       if (res.hasAvatar)
         dispatch(userAvatar(`${URL}/api/user/${res.data._id}/avatar`))
 
-      const goalRes = await getGoalsByUser(token)
+      const goalRes = await getGoalsByUser(token, moment().utcOffset())
 
       if (goalRes.success) dispatch(getGoals(goalRes.data))
     } else {

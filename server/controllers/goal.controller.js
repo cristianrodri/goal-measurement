@@ -1,6 +1,7 @@
 const Goal = require('../models/goal.model')
 const Performance = require('../models/performance.model')
 const allowedUpdates = require('../helpers/allowedUpdates')
+const moment = require('moment')
 
 const goalCtrl = {
   /**
@@ -87,12 +88,51 @@ const goalCtrl = {
    * @access private
    */
   async getGoals(req, res) {
+    const clientUTC = +req.params.clientUTC
+
     try {
       const goals = await Goal.find({ owner: req.user._id })
+      const allGoalsPerformances = await Performance.find({
+        owner: req.user._id
+      })
+
+      const customizedGoals = goals.map(goal => {
+        const belongPerformance = allGoalsPerformances.find(
+          performance => performance.goal.toString() === goal._id.toString()
+        ).performances
+        const lastPerformance = belongPerformance[belongPerformance.length - 1]
+
+        const startCurrentDay = moment(lastPerformance.date).isSameOrAfter(
+          moment(moment().utcOffset(clientUTC)).startOf('day')
+        )
+        const endCurrentDay = moment(lastPerformance.date).isSameOrBefore(
+          moment(moment().utcOffset(clientUTC)).endOf('day')
+        )
+
+        const lastPerformanceIsToday = startCurrentDay && endCurrentDay
+        const todayIsWorkingDay = lastPerformanceIsToday
+          ? lastPerformance.isWorkingDay
+          : goal.activities.some(
+              activity =>
+                activity.days[
+                  moment().utcOffset(clientUTC).format('dddd').toLowerCase()
+                ]
+            )
+
+        return {
+          ...goal._doc,
+          isWorkingDay: todayIsWorkingDay,
+          performancesDone:
+            todayIsWorkingDay && !lastPerformanceIsToday
+              ? false
+              : lastPerformance.done
+        }
+      })
 
       res.json({
         success: true,
-        data: !goals ? [] : goals
+        data: !goals ? [] : customizedGoals,
+        allGoalsPerformances
       })
     } catch (error) {
       res.status(400).json({
