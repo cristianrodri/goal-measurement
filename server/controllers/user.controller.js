@@ -292,6 +292,7 @@ const userCtrl = {
       await user.save()
 
       const newAvatar = user.avatar
+
       res.json({
         success: true,
         user,

@@ -27,9 +27,6 @@ const Calendar = () => {
     performance => performance.isWorkingDay
   )
 
-  console.log(allPerformances)
-  console.log(workingDays)
-
   const getPercentage = workingDaysPerformances => {
     const percentages = workingDaysPerformances.map(({ activities, done }) =>
       done ? 100 : calculateReachedActivities(activities)

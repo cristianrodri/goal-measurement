@@ -33,17 +33,15 @@ const MyGoals = props => {
   const dispatch = useDispatch()
   const history = useHistory()
   const classes = useStyles()
+  const { state } = props.location
 
   useEffect(() => {
     document.title = 'My Goals'
 
-    if (props.location.state) {
-      if (
-        props.location.state['fromEditUser'] ||
-        props.location.state['fromDeleteGoal']
-      ) {
-        dispatch(displayDialog(props.location.state.message))
-        history.replace() // delete fromEditUser property
+    if (state) {
+      if (state['fromEditUser'] || state['fromDeleteGoal']) {
+        dispatch(displayDialog(state.message))
+        history.replace()
       }
     }
   }, [])

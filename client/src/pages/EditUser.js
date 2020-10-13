@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { makeStyles, CardMedia } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
-import { updateUser, userAvatar } from '../api/api_user'
+import { updateUser } from '../api/api_user'
 import {
   FormContainer,
   FormUsername,
@@ -13,8 +13,7 @@ import {
 } from '../components/Form'
 import { MainTitle } from '../components/Title'
 import { PrimaryButton } from '../components/Button'
-import { userData } from './../redux/user/userActions'
-import { displayErrorSnackbar } from './../redux/dialogs/dialogActions'
+import { userData, userAvatar, displayErrorSnackbar } from './../redux'
 import { URL } from './../api/url'
 
 const useStyles = makeStyles(theme => ({
@@ -102,7 +101,10 @@ const EditUser = () => {
           }
         }
 
-        history.push('/my-goals', { fromEditUser: true, message: data.message })
+        history.push('/my-goals', {
+          fromEditUser: true,
+          message: data.message
+        })
       } else if (data.error) {
         dispatch(displayErrorSnackbar(data.message))
         setDisabled(false)
