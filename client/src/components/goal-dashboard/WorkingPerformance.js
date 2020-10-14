@@ -21,6 +21,7 @@ import {
   addLastPerformance
 } from '../../redux'
 import { updatePerformanceDay } from './../../api/api_performance'
+import { goalPerformanceDone } from './../../redux/goal/goalActions'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -113,6 +114,8 @@ const WorkingPerformance = () => {
       if (res.success) {
         dispatch(setTodayPerformance(res.data))
         dispatch(addLastPerformance(res.data))
+
+        dispatch(goalPerformanceDone(goal._id))
       } else if (res.error) {
         dispatch(displayErrorSnackbar(res.message))
       }

@@ -122,7 +122,7 @@ const goalCtrl = {
         return {
           ...goal._doc,
           isWorkingDay: todayIsWorkingDay,
-          performancesDone:
+          performanceDone:
             todayIsWorkingDay && !lastPerformanceIsToday
               ? false
               : lastPerformance.done
