@@ -1,8 +1,10 @@
+import moment from 'moment'
 import {
   GOALS,
   SELECTED_GOAL,
   ADD_GOAL,
   UPDATE_GOAL,
+  GOAL_PERFORMANCE_DONE,
   REMOVE_GOAL,
   RESET_SELECTED_GOAL,
   RESET_GOALS
@@ -35,7 +37,23 @@ const goalReducer = (state = initialState, action) => {
       return {
         ...state,
         goals: state.goals.map(goal =>
-          goal._id === action.payload._id ? action.payload : goal
+          goal._id === action.payload._id
+            ? {
+                ...action.payload,
+                isWorkingDay: action.payload.activities.some(
+                  activity =>
+                    activity.days[moment().format('dddd').toLowerCase()]
+                ),
+                performanceDone: false
+              }
+            : goal
+        )
+      }
+    case GOAL_PERFORMANCE_DONE:
+      return {
+        ...state,
+        goals: state.goals.map(goal =>
+          goal._id === action.id ? { ...goal, performanceDone: true } : goal
         )
       }
     case REMOVE_GOAL:

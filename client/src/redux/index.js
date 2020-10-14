@@ -9,6 +9,7 @@ export {
   getGoals,
   setSelectedGoal,
   addGoal,
+  goalPerformanceDone,
   updateSelectedGoal,
   removeGoal,
   resetSelectedGoal,

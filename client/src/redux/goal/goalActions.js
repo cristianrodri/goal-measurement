@@ -3,6 +3,7 @@ import {
   SELECTED_GOAL,
   ADD_GOAL,
   UPDATE_GOAL,
+  GOAL_PERFORMANCE_DONE,
   REMOVE_GOAL,
   RESET_GOALS,
   RESET_SELECTED_GOAL
@@ -33,6 +34,13 @@ export const updateSelectedGoal = goal => {
   return {
     type: UPDATE_GOAL,
     payload: goal
+  }
+}
+
+export const goalPerformanceDone = id => {
+  return {
+    type: GOAL_PERFORMANCE_DONE,
+    id
   }
 }
 
