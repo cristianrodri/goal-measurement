@@ -50,12 +50,11 @@ const Header = () => {
   const history = useHistory()
   const avatar = useSelector(state => state.user.avatar)
   const dispatch = useDispatch()
-  const [cookies, , removeCookie] = useCookies()
+  const [cookies, , removeCookie] = useCookies(['token'])
   const token = cookies.token
 
   const logoutAction = () => {
     removeCookie('token')
-    removeCookie('user')
     dispatch(logout())
     dispatch(resetGoals())
     dispatch(resetPerformance())

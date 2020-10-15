@@ -30,7 +30,7 @@ const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [disabled, setDisabled] = useState(false)
-  const [, setCookie] = useCookies(['token'])
+  const [, setCookie] = useCookies()
 
   useEffect(() => {
     document.title = 'Login'
