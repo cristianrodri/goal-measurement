@@ -186,9 +186,10 @@ const userCtrl = {
 
       const token = user.generateAuthToken()
 
-      // res.cookie('token', token, {
-      //   expires: new Date(Date.now() + 6 * 3600000), // 6h
-      // })
+      res.cookie('token', token, {
+        expires: new Date(Date.now() + 6 * 3600000), // 6h
+        httpOnly: true
+      })
 
       res.json({
         success: true,
@@ -208,14 +209,24 @@ const userCtrl = {
   },
 
   /**
-   * @desc User logout by cleaning cookie (NOT USED YET)
+   * @desc Get token
+   * @route /api/user/token
+   * @method GET
+   * @access private
+   */
+  async getToken(req, res) {
+    res.json({ success: true, token: req.cookies.token || '' })
+  },
+
+  /**
+   * @desc User logout by cleaning cookie
    * @route /api/user/logout
    * @method GET
    * @access private
    */
   async logout(req, res) {
     res.clearCookie('token')
-    res.json({ message: 'Signout successfully' })
+    res.json({ success: true, message: 'Signout successfully' })
   },
 
   /**
@@ -230,6 +241,7 @@ const userCtrl = {
       res.json({
         success: true,
         data: user,
+        token: req.cookies.token || '',
         hasAvatar: !!user.avatar
       })
     } catch (error) {

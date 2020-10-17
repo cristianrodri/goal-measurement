@@ -8,7 +8,6 @@ import {
   Checkbox
 } from '@material-ui/core'
 import moment from 'moment'
-import { useCookies } from 'react-cookie'
 import { SecondaryTitle } from '../Title'
 import Progress from './Progress'
 import { PrimaryButton } from './../Button'
@@ -35,7 +34,6 @@ const useStyles = makeStyles(theme => ({
 
 const WorkingPerformance = () => {
   const classes = useStyles()
-  const [cookies] = useCookies()
   const goal = useSelector(state => state.goal.selectedGoal)
   const todayPerformance = useSelector(
     state => state.performance.todayPerformance
@@ -82,7 +80,7 @@ const WorkingPerformance = () => {
     setValue(percentageValue(reachedActivities, activities))
 
     try {
-      const res = await updatePerformanceDay(cookies.token, goal._id, _id, {
+      const res = await updatePerformanceDay(goal._id, _id, {
         done: updatedTodayPerformance.done,
         activities: updatedTodayPerformance.activities
       })
@@ -106,7 +104,7 @@ const WorkingPerformance = () => {
 
     try {
       setIsUploading(true)
-      const res = await updatePerformanceDay(cookies.token, goal._id, _id, {
+      const res = await updatePerformanceDay(goal._id, _id, {
         activities: updatedTodayPerformance.activities,
         done: updatedTodayPerformance.done
       })

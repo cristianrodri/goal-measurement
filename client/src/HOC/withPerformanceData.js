@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useCookies } from 'react-cookie'
 import moment from 'moment'
 import Loading from './../components/Loading'
 import {
@@ -13,8 +12,6 @@ import {
 import { getAllPerformancesByGoal } from '../api/api_performance'
 
 const withPerformanceData = Component => props => {
-  const [cookies] = useCookies()
-  const token = cookies.token
   const selectedGoal = useSelector(state => state.goal.selectedGoal)
   const id = selectedGoal._id
   const todayPerformance = useSelector(
@@ -25,8 +22,8 @@ const withPerformanceData = Component => props => {
   const currentDateUTC = moment().utcOffset()
 
   useEffect(() => {
-    const getAllPerformancesAPI = async (token, id, date) => {
-      const res = await getAllPerformancesByGoal(token, id, date)
+    const getAllPerformancesAPI = async (id, date) => {
+      const res = await getAllPerformancesByGoal(id, date)
 
       if (res.success) {
         dispatch(getAllPerformances(res.data.allPerformances))
@@ -42,7 +39,7 @@ const withPerformanceData = Component => props => {
     }
 
     try {
-      if (!todayPerformance) getAllPerformancesAPI(token, id, currentDateUTC)
+      if (!todayPerformance) getAllPerformancesAPI(id, currentDateUTC)
       else setIsLoading(false)
     } catch (error) {
       dispatch(displayErrorSnackbar(error.message))

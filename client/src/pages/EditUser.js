@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { makeStyles, CardMedia } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
-import { useCookies } from 'react-cookie'
 import { updateUser } from '../api/api_user'
 import {
   FormContainer,
@@ -47,7 +46,6 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const EditUser = () => {
-  const [cookies] = useCookies()
   const history = useHistory()
   const classes = useStyles()
   const [username, setUsername] = useState('')
@@ -85,7 +83,7 @@ const EditUser = () => {
     formData.append('deleteAvatar', !image)
 
     try {
-      const data = await updateUser(cookies.token, formData)
+      const data = await updateUser(formData)
 
       // if change came from 'update user' api
       if (data.success) {

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { useCookies } from 'react-cookie'
 import { updateGoal } from '../../api/api_goals'
 import CompletedGoal from './CompletedGoal'
 import NewEndDate from './NewEndDate'
@@ -11,8 +10,6 @@ import { Dialog } from '@material-ui/core'
 
 const EndDateReached = ({ goal }) => {
   const [step, setStep] = useState(0)
-  const [cookies] = useCookies()
-  const token = cookies.token
   const dispatch = useDispatch()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -26,7 +23,6 @@ const EndDateReached = ({ goal }) => {
       const res = await updateGoal(
         { completed: true },
         goal._id,
-        token,
         moment().utcOffset()
       )
 

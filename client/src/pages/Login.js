@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { Typography } from '@material-ui/core'
 import { Link, useHistory } from 'react-router-dom'
-import { useCookies } from 'react-cookie'
 import { loginUser, resendLinkAPI } from '../api/api_user'
 import ConfirmDialog from '../components/ConfirmDialog'
 import {
@@ -19,7 +18,8 @@ import {
   displayErrorSnackbar,
   userData,
   userAvatar,
-  getGoals
+  getGoals,
+  getToken
 } from '../redux'
 import { URL } from './../api/url'
 import { getGoalsByUser } from '../api/api_goals'
@@ -30,7 +30,6 @@ const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [disabled, setDisabled] = useState(false)
-  const [, setCookie] = useCookies()
 
   useEffect(() => {
     document.title = 'Login'
@@ -60,9 +59,7 @@ const Login = () => {
         // call user goals from API
         await getGoalsAPI(data.token)
 
-        // create two cookies, token and user object data
-        const expires = new Date(Date.now() + 6 * 3600000)
-        setCookie('token', data.token, { expires, path: '/' }) // expires 6h
+        dispatch(getToken(data.token))
 
         // redirect to /my-goals
         history.push('/my-goals')

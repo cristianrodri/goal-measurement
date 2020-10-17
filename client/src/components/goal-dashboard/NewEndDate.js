@@ -12,7 +12,6 @@ import {
 } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
 import { updateGoal } from '../../api/api_goals'
-import { useCookies } from 'react-cookie'
 import moment from 'moment'
 import {
   displayErrorSnackbar,
@@ -24,8 +23,6 @@ import Loading from '../Loading'
 const NewEndDate = ({ handlePrevious }) => {
   const { _id } = useSelector(state => state.goal.selectedGoal)
   const [date, setDate] = useState(moment().format())
-  const [cookies] = useCookies()
-  const token = cookies.token
   const dispatch = useDispatch()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -35,7 +32,6 @@ const NewEndDate = ({ handlePrevious }) => {
       const res = await updateGoal(
         { end: date, completed: false },
         _id,
-        token,
         moment().utcOffset()
       )
 

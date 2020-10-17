@@ -1,5 +1,5 @@
 import React from 'react'
-import { Paper } from '@material-ui/core'
+import { Paper, Typography } from '@material-ui/core'
 import WorkingPerformance from './WorkingPerformance'
 import { useSelector } from 'react-redux'
 
@@ -14,7 +14,7 @@ const Performance = () => {
         {isWorkingDay ? (
           <WorkingPerformance />
         ) : (
-          <p>Don't worry, take a rest</p>
+          <Typography align="center">Don't worry, take a rest</Typography>
         )}
       </Paper>
     </div>

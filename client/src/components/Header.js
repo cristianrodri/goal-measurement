@@ -14,9 +14,15 @@ import PersonIcon from '@material-ui/icons/Person'
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state'
 import logo from '../assets/favicon.png'
 import { Link, useHistory } from 'react-router-dom'
-import { useCookies } from 'react-cookie'
 import { useDispatch, useSelector } from 'react-redux'
-import { emptyForm, logout, resetGoals, resetPerformance } from '../redux'
+import {
+  emptyForm,
+  getToken,
+  logout,
+  resetGoals,
+  resetPerformance
+} from '../redux'
+import { logoutUser } from './../api/api_user'
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -50,16 +56,26 @@ const Header = () => {
   const history = useHistory()
   const avatar = useSelector(state => state.user.avatar)
   const dispatch = useDispatch()
-  const [cookies, , removeCookie] = useCookies(['token'])
-  const token = cookies.token
+  const token = useSelector(state => state.user.token)
 
-  const logoutAction = () => {
-    removeCookie('token')
-    dispatch(logout())
-    dispatch(resetGoals())
-    dispatch(resetPerformance())
-    dispatch(emptyForm())
-    history.push('/')
+  const logoutAction = async () => {
+    console.log(document.cookie)
+    try {
+      const res = await logoutUser()
+
+      if (res.success) {
+        console.log(res)
+
+        dispatch(getToken(''))
+
+        history.push('/')
+
+        dispatch(logout())
+        dispatch(resetGoals())
+        dispatch(resetPerformance())
+        dispatch(emptyForm())
+      }
+    } catch (error) {}
   }
 
   return (

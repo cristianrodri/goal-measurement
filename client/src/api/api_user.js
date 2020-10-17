@@ -38,25 +38,41 @@ const loginUser = data => {
     .catch(err => console.log(err))
 }
 
-const getUserById = token => {
-  return fetch('/api/user/me', {
+const getTokenApi = () => {
+  return fetch('/api/user/token')
+    .then(res => res.json())
+    .catch(err => console.log(err))
+}
+
+const logoutUser = () => {
+  return fetch('/api/user/logout', {
     method: 'GET',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      'Content-Type': 'application/json'
     }
   })
     .then(res => res.json())
     .catch(err => console.log(err))
 }
 
-const updateUser = (token, data) => {
+const getUserById = () => {
+  return fetch('/api/user/me', {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+    .then(res => res.json())
+    .catch(err => console.log(err))
+}
+
+const updateUser = data => {
   return fetch('/api/user/me', {
     method: 'PUT',
     headers: {
-      Accept: 'application/json',
-      Authorization: `Bearer ${token}`
+      Accept: 'application/json'
     },
     body: data
   })
@@ -78,13 +94,12 @@ const deleteUser = (token, data) => {
     .catch(err => console.log(err))
 }
 
-const updatePassword = (token, data) => {
+const updatePassword = data => {
   return fetch('/api/user/update-password', {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify(data)
   })
@@ -96,17 +111,11 @@ const userAvatar = id => {
   return fetch(`/api/user/${id}/avatar`)
 }
 
-// NOT USED YET
-const logoutUser = () => {
-  return fetch('/api/user/logout', {
-    method: 'GET'
-  })
-}
-
 export {
   createUser,
   resendLinkAPI,
   loginUser,
+  getTokenApi,
   logoutUser,
   getUserById,
   updateUser,

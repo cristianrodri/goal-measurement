@@ -18,7 +18,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
 
-if (process.env.NODE_ENV === 'development') morgan('dev')
+if (process.env.NODE_ENV === 'development') app.use(morgan('dev'))
 
 app.use('/api/user', userRoutes)
 app.get('/api/user/:id/avatar', userAvatar)

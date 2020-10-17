@@ -31,4 +31,8 @@ router
 
 router.put('/update-password', auth, userCtrl.updatePassword)
 
+router.get('/token', userCtrl.getToken)
+
+router.get('/logout', auth, userCtrl.logout)
+
 module.exports = router

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useCookies } from 'react-cookie'
 import { useHistory } from 'react-router-dom'
 import { updateGoal, deleteGoal } from '../api/api_goals'
 import withGoal from './../HOC/withGoal'
@@ -30,8 +29,6 @@ import {
 
 const EditGoal = () => {
   const history = useHistory()
-  const [cookies] = useCookies()
-  const token = cookies.token
   const goalFormState = useSelector(state => state.goalForm)
   const dispatch = useDispatch()
   const [disabled, setDisabled] = useState(false)
@@ -73,7 +70,7 @@ const EditGoal = () => {
     try {
       setDisabled(true)
 
-      const res = await updateGoal(data, _id, token, clientUTC)
+      const res = await updateGoal(data, _id, clientUTC)
 
       if (res.success) {
         // update goal from redux
@@ -100,7 +97,7 @@ const EditGoal = () => {
 
   const handleDeleteGoal = async () => {
     try {
-      const res = await deleteGoal(token, _id)
+      const res = await deleteGoal(_id)
 
       if (res.success) {
         // delete goal from redux

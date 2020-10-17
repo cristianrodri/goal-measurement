@@ -8,18 +8,24 @@ import {
   DialogTitle
 } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
-import { useCookies } from 'react-cookie'
 import { useHistory } from 'react-router-dom'
 import { updatePassword, deleteUser } from '../api/api_user'
 import { FormContainer, FormContent, FormPassword } from '../components/Form'
 import { MainTitle } from '../components/Title'
 import { DeleteButton, PrimaryButton } from './../components/Button'
-import { displayErrorSnackbar, displayDialog } from '../redux'
+import {
+  displayErrorSnackbar,
+  displayDialog,
+  getToken,
+  logout,
+  resetGoals,
+  resetPerformance,
+  emptyForm
+} from '../redux'
 
 const Privacy = () => {
   const history = useHistory()
   const dispatch = useDispatch()
-  const [cookies, , removeCookie] = useCookies()
   const [password, setPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -42,7 +48,7 @@ const Privacy = () => {
     }
 
     try {
-      const data = await updatePassword(cookies.token, {
+      const data = await updatePassword({
         password,
         newPassword
       })
@@ -71,7 +77,7 @@ const Privacy = () => {
     e.preventDefault()
 
     try {
-      const data = await deleteUser(cookies.token, {
+      const data = await deleteUser({
         password: passwordToDelete
       })
 
@@ -80,9 +86,13 @@ const Privacy = () => {
 
       // show success deleted dialog and redirect to /
       if (data.success) {
-        removeCookie('token')
-        removeCookie('user')
+        dispatch(getToken(''))
         history.push('/', { fromDeletedUser: true, message: data.message })
+
+        dispatch(logout())
+        dispatch(resetGoals())
+        dispatch(resetPerformance())
+        dispatch(emptyForm())
       } else if (data.error) {
         dispatch(displayErrorSnackbar(data.message))
       }

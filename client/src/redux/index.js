@@ -1,6 +1,7 @@
 export {
   getUserDataAPI,
   userData,
+  getToken,
   userAvatar,
   completedData,
   logout

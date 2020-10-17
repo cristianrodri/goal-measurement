@@ -1,10 +1,9 @@
-export const createNewDayPerformance = (token, goalId, data) => {
+export const createNewDayPerformance = (goalId, data) => {
   return fetch(`/api/${goalId}/createnewday`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify(data)
   })
@@ -12,39 +11,24 @@ export const createNewDayPerformance = (token, goalId, data) => {
     .catch(error => console.log(error))
 }
 
-export const getAllPerformancesByGoal = (token, goalId, currentDate) => {
+export const getAllPerformancesByGoal = (goalId, currentDate) => {
   return fetch(`/api/${goalId}/performances/${currentDate}`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      'Content-Type': 'application/json'
     }
   })
     .then(res => res.json())
     .catch(err => console.log(err))
 }
 
-// const getTodayPerformance = (token, goalId) => {
-//   return fetch(`/api/${goalId}/performance`, {
-//     method: 'GET',
-//     headers: {
-//       Accept: 'application/json',
-//       'Content-Type': 'application/json',
-//       Authorization: `Bearer ${token}`
-//     }
-//   })
-//     .then(res => res.json())
-//     .catch(err => console.log(err))
-// }
-
-export const updatePerformanceDay = (token, goalId, performanceId, data) => {
+export const updatePerformanceDay = (goalId, performanceId, data) => {
   return fetch(`/api/${goalId}/updatePerformanceDay/${performanceId}`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify(data)
   })

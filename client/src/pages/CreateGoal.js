@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useCookies } from 'react-cookie'
 import { useHistory } from 'react-router-dom'
 import { createGoal } from '../api/api_goals'
 import GoalForm from '../components/GoalForm'
@@ -16,8 +15,6 @@ import moment from 'moment'
 
 const CreateGoal = () => {
   const history = useHistory()
-  const [cookies] = useCookies()
-  const token = cookies.token
   const [disabled, setDisabled] = useState(false)
   const goalFormState = useSelector(state => state.goalForm)
   const dispatch = useDispatch()
@@ -41,7 +38,7 @@ const CreateGoal = () => {
     try {
       setDisabled(true)
 
-      const res = await createGoal(data, token, moment().format())
+      const res = await createGoal(data, moment().format())
 
       if (res.success) {
         dispatch(addGoal(res.data.goal))

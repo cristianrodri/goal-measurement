@@ -1,23 +1,21 @@
-const getGoalsByUser = (token, clientUTC) => {
+const getGoalsByUser = clientUTC => {
   return fetch(`/api/goals/${clientUTC}`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      'Content-Type': 'application/json'
     }
   })
     .then(res => res.json())
     .catch(err => console.log(err))
 }
 
-const createGoal = (data, token, currentDate) => {
+const createGoal = (data, currentDate) => {
   return fetch(`/api/goal/create/${currentDate}`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify(data)
   })
@@ -25,26 +23,24 @@ const createGoal = (data, token, currentDate) => {
     .catch(err => console.log(err))
 }
 
-const getGoalById = (token, goalId) => {
+const getGoalById = goalId => {
   return fetch(`/api/goal/${goalId}`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      'Content-Type': 'application/json'
     }
   })
     .then(res => res.json())
     .catch(err => console.log(err))
 }
 
-const updateGoal = (data, id, token, currentDay) => {
+const updateGoal = (data, id, currentDay) => {
   return fetch(`/api/goal/${id}/${currentDay}`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify(data)
   })
@@ -52,13 +48,12 @@ const updateGoal = (data, id, token, currentDay) => {
     .catch(err => console.log(err))
 }
 
-const deleteGoal = (token, goalId) => {
+const deleteGoal = goalId => {
   return fetch(`/api/goal/${goalId}`, {
     method: 'DELETE',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      'Content-Type': 'application/json'
     }
   })
     .then(res => res.json())
