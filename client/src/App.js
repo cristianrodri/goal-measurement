@@ -34,9 +34,7 @@ const App = () => {
     const init = async () => {
       const res = await getTokenApi()
 
-      console.log(res)
-
-      if (res.token) {
+      if (res.hasToken) {
         dispatch(getUserDataAPI())
       } else {
         dispatch(completedData())

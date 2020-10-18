@@ -1,8 +1,8 @@
 export {
   getUserDataAPI,
   userData,
-  getToken,
   userAvatar,
+  isAuthenticated,
   completedData,
   logout
 } from './user/userActions'

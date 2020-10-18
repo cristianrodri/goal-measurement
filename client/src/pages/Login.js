@@ -19,7 +19,7 @@ import {
   userData,
   userAvatar,
   getGoals,
-  getToken
+  isAuthenticated
 } from '../redux'
 import { URL } from './../api/url'
 import { getGoalsByUser } from '../api/api_goals'
@@ -59,7 +59,7 @@ const Login = () => {
         // call user goals from API
         await getGoalsAPI(data.token)
 
-        dispatch(getToken(data.token))
+        dispatch(isAuthenticated(data.hasToken))
 
         // redirect to /my-goals
         history.push('/my-goals')

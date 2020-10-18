@@ -16,7 +16,7 @@ import { DeleteButton, PrimaryButton } from './../components/Button'
 import {
   displayErrorSnackbar,
   displayDialog,
-  getToken,
+  isAuthenticated,
   logout,
   resetGoals,
   resetPerformance,
@@ -86,7 +86,7 @@ const Privacy = () => {
 
       // show success deleted dialog and redirect to /
       if (data.success) {
-        dispatch(getToken(''))
+        dispatch(isAuthenticated(false))
         history.push('/', { fromDeletedUser: true, message: data.message })
 
         dispatch(logout())

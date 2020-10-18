@@ -1,6 +1,6 @@
 import {
   USER_DATA,
-  TOKEN,
+  IS_AUTH,
   RESET,
   USER_AVATAR,
   COMPLETED_DATA
@@ -9,7 +9,7 @@ import {
 const initialState = {
   user: null,
   avatar: '',
-  token: '',
+  isAuth: false,
   isLoading: true
 }
 
@@ -25,10 +25,10 @@ const userReducer = (state = initialState, action) => {
         ...state,
         user: action.payload
       }
-    case TOKEN:
+    case IS_AUTH:
       return {
         ...state,
-        token: action.token
+        isAuth: action.isAuth
       }
     case USER_AVATAR:
       return {

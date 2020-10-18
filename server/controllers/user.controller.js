@@ -195,7 +195,7 @@ const userCtrl = {
         success: true,
         isNotVerified: false,
         user,
-        token,
+        hasToken: !!token,
         hasAvatar: !!user.avatar
       })
     } catch (error) {
@@ -215,7 +215,7 @@ const userCtrl = {
    * @access private
    */
   async getToken(req, res) {
-    res.json({ success: true, token: req.cookies.token || '' })
+    res.json({ success: true, hasToken: !!req.cookies.token })
   },
 
   /**
@@ -241,7 +241,7 @@ const userCtrl = {
       res.json({
         success: true,
         data: user,
-        token: req.cookies.token || '',
+        hasToken: !!req.cookies.token,
         hasAvatar: !!user.avatar
       })
     } catch (error) {

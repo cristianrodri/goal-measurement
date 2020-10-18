@@ -1,9 +1,9 @@
 import {
   USER_DATA,
-  TOKEN,
   RESET,
   USER_AVATAR,
-  COMPLETED_DATA
+  COMPLETED_DATA,
+  IS_AUTH
 } from './userTypes'
 import { displayErrorSnackbar } from '../dialogs/dialogActions'
 import { getUserById } from '../../api/api_user'
@@ -25,7 +25,7 @@ export const getUserDataAPI = () => {
       const goalRes = await getGoalsByUser(moment().utcOffset())
 
       if (goalRes.success) dispatch(getGoals(goalRes.data))
-      dispatch(getToken(res.token))
+      dispatch(isAuthenticated(res.hasToken))
     } else {
       dispatch(displayErrorSnackbar(res.message))
     }
@@ -34,10 +34,10 @@ export const getUserDataAPI = () => {
   }
 }
 
-export const getToken = token => {
+export const isAuthenticated = hasToken => {
   return {
-    type: TOKEN,
-    token
+    type: IS_AUTH,
+    isAuth: hasToken
   }
 }
 

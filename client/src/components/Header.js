@@ -17,7 +17,7 @@ import { Link, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   emptyForm,
-  getToken,
+  isAuthenticated,
   logout,
   resetGoals,
   resetPerformance
@@ -56,17 +56,14 @@ const Header = () => {
   const history = useHistory()
   const avatar = useSelector(state => state.user.avatar)
   const dispatch = useDispatch()
-  const token = useSelector(state => state.user.token)
+  const isAuth = useSelector(state => state.user.isAuth)
 
   const logoutAction = async () => {
-    console.log(document.cookie)
     try {
       const res = await logoutUser()
 
       if (res.success) {
-        console.log(res)
-
-        dispatch(getToken(''))
+        dispatch(isAuthenticated(false))
 
         history.push('/')
 
@@ -87,7 +84,7 @@ const Header = () => {
           </Link>
         </Typography>
         <div className={classes.menuLinks}>
-          {!token && (
+          {!isAuth && (
             <>
               <Button color="secondary" className={classes.links}>
                 <Link to="/signup" style={{ color: 'inherit' }}>
@@ -102,7 +99,7 @@ const Header = () => {
             </>
           )}
 
-          {token && (
+          {isAuth && (
             <PopupState variant="popover" popupId="demo-popup-menu">
               {popupState => (
                 <React.Fragment>
