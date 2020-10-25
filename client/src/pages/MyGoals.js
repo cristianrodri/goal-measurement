@@ -30,6 +30,8 @@ const useStyles = makeStyles(theme => ({
 
 const MyGoals = props => {
   const goals = useSelector(state => state.goal.goals)
+  const uncompletedGoals = goals.filter(goal => !goal.completed)
+  const completedGoals = goals.filter(goal => goal.completed)
   const dispatch = useDispatch()
   const history = useHistory()
   const classes = useStyles()
@@ -49,8 +51,18 @@ const MyGoals = props => {
   return (
     <Container className={classes.container} maxWidth="md">
       <div className={classes.containerGoals}>
-        <MainTitle>My Goals</MainTitle>
-        <Goals goals={goals} />
+        {uncompletedGoals.length > 0 && (
+          <>
+            <MainTitle>My Goals</MainTitle>
+            <Goals goals={uncompletedGoals} />
+          </>
+        )}
+        {completedGoals.length > 0 && (
+          <>
+            <MainTitle>Completed Goals</MainTitle>
+            <Goals goals={completedGoals} />
+          </>
+        )}
         <Link to="/create-goal" className={classes.link}>
           <PrimaryButton
             color="primary"

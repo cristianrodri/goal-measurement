@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Goals = ({ goals }) => (
-  <Grid container spacing={3} justify="center">
+  <Grid container spacing={3} justify="center" style={{ marginBottom: '1rem' }}>
     {goals.map(goal => (
       <GoalCard key={goal._id} goal={goal} />
     ))}
