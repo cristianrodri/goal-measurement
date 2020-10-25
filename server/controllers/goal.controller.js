@@ -119,9 +119,14 @@ const goalCtrl = {
                 ]
             )
 
+        const deadLineHasPassed = moment(
+          moment().utcOffset(clientUTC).startOf('day')
+        ).isSameOrAfter(moment(goal.end).utcOffset(clientUTC).startOf('day'))
+
         return {
           ...goal._doc,
-          isWorkingDay: todayIsWorkingDay,
+          isWorkingDay:
+            deadLineHasPassed || goal.completed || todayIsWorkingDay,
           performanceDone:
             todayIsWorkingDay && !lastPerformanceIsToday
               ? false
