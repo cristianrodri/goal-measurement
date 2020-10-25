@@ -91,9 +91,11 @@ performanceSchema.statics.createNewDayPerformance = async (
         )
 
         const isSameOrAfterPrevGoalDeadline = moment(
-          moment(date).utcOffset(utcClient)
+          moment(date).utcOffset(utcClient).startOf('day')
         ).isSameOrAfter(
-          moment(lastPerformance.goalDeadline).utcOffset(utcClient)
+          moment(lastPerformance.goalDeadline)
+            .utcOffset(utcClient)
+            .startOf('day')
         )
 
         performancesToAdd.push({
