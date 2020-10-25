@@ -126,7 +126,7 @@ const goalCtrl = {
         return {
           ...goal._doc,
           isWorkingDay:
-            deadLineHasPassed || goal.completed || todayIsWorkingDay,
+            deadLineHasPassed || goal.completed ? false : todayIsWorkingDay,
           performanceDone:
             todayIsWorkingDay && !lastPerformanceIsToday
               ? false
