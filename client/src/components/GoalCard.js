@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom'
 import moment from 'moment'
 import { textCapitalize } from './../utils/text'
 import { red, grey, green } from '@material-ui/core/colors'
+import DoneIcon from '@material-ui/icons/Done'
 
 const borderColor = (isWorkingDay, performanceDone) => {
   if (isWorkingDay) {
@@ -54,7 +55,7 @@ const useStyles = ({ isWorkingDay, performanceDone }) =>
   }))
 
 const GoalCard = ({
-  goal: { _id, shortDescription, end, isWorkingDay, performanceDone }
+  goal: { _id, shortDescription, end, isWorkingDay, performanceDone, completed }
 }) => {
   const classes = useStyles({ isWorkingDay, performanceDone })()
   return (
@@ -67,6 +68,7 @@ const GoalCard = ({
             </Typography>
           </CardContent>
           <CardActions className={classes.cardActions}>
+            {completed && <DoneIcon style={{ color: green[500] }} />}
             <Typography variant="body2" component="p">
               {moment(end).format('MMMM Do YYYY')}
             </Typography>
