@@ -34,7 +34,9 @@ const Description = () => {
       </div>
       <div className={classes.description}>
         <span>{`Big reward${rewards.large.length > 1 ? 's' : ''}:`} </span>
-        <span>{rewards.large.length && textCapitalize(rewards.large[0])}</span>
+        <span>
+          {rewards.large.length ? textCapitalize(rewards.large[0]) : ''}
+        </span>
       </div>
     </Paper>
   )
