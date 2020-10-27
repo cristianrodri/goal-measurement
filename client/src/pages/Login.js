@@ -23,6 +23,7 @@ import {
 } from '../redux'
 import { URL } from './../api/url'
 import { getGoalsByUser } from '../api/api_goals'
+import moment from 'moment'
 
 const Login = () => {
   const history = useHistory()
@@ -35,8 +36,8 @@ const Login = () => {
     document.title = 'Login'
   }, [])
 
-  const getGoalsAPI = async token => {
-    const res = await getGoalsByUser(token)
+  const getGoalsAPI = async () => {
+    const res = await getGoalsByUser(moment().utcOffset())
 
     if (res.success) dispatch(getGoals(res.data))
     else dispatch(displayErrorSnackbar(res.message))
@@ -57,7 +58,7 @@ const Login = () => {
         }
 
         // call user goals from API
-        await getGoalsAPI(data.token)
+        await getGoalsAPI()
 
         dispatch(isAuthenticated(data.hasToken))
 

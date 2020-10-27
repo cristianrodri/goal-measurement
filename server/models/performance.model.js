@@ -11,26 +11,20 @@ const performanceSchema = new mongoose.Schema(
               type: String,
               maxLength: 50
             },
-            reached: {
-              type: Boolean,
-              default: false
-            }
+            reached: Boolean
           }
         ],
         date: Date,
-        done: {
-          type: Boolean,
-          default: false
-        },
+        done: Boolean,
         isWorkingDay: Boolean,
         goalWorkingDays: {
-          monday: false,
-          tuesday: false,
-          wednesday: false,
-          thursday: false,
-          friday: false,
-          saturday: false,
-          sunday: false
+          monday: Boolean,
+          tuesday: Boolean,
+          wednesday: Boolean,
+          thursday: Boolean,
+          friday: Boolean,
+          saturday: Boolean,
+          sunday: Boolean
         },
         goalDeadline: Date
       }
@@ -54,8 +48,8 @@ const performanceSchema = new mongoose.Schema(
 performanceSchema.statics.createNewDayPerformance = async (
   goal,
   userId,
-  lastPerformance = undefined,
-  utcClient = undefined
+  utcClient = undefined,
+  lastPerformance = undefined
 ) => {
   const currentDayClient = moment(moment().utcOffset(utcClient))
     .format('dddd')

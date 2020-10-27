@@ -38,7 +38,7 @@ const CreateGoal = () => {
     try {
       setDisabled(true)
 
-      const res = await createGoal(data, moment().format())
+      const res = await createGoal(data, moment().utcOffset())
 
       if (res.success) {
         dispatch(addGoal(res.data.goal))

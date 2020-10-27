@@ -42,6 +42,8 @@ const goalCtrl = {
    * @access private
    */
   async createGoal(req, res) {
+    const clientUTC = +req.params.currentDate
+
     try {
       const goal = new Goal({ owner: req.user._id, ...req.body })
       await goal.save()
@@ -58,13 +60,23 @@ const goalCtrl = {
 
       const newDayPerformance = await Performance.createNewDayPerformance(
         goal,
-        req.user._id
+        req.user._id,
+        clientUTC
       )
 
       res.status(201).json({
         success: true,
         data: {
-          goal,
+          goal: {
+            ...goal._doc,
+            isWorkingDay: goal.activities.some(
+              activity =>
+                activity.days[
+                  moment().utcOffset(clientUTC).format('dddd').toLowerCase()
+                ]
+            ),
+            performanceDone: false
+          },
           allPerformances: newDayPerformance.performance.performances.slice(
             0,
             -1
@@ -110,6 +122,7 @@ const goalCtrl = {
         )
 
         const lastPerformanceIsToday = startCurrentDay && endCurrentDay
+
         const todayIsWorkingDay = lastPerformanceIsToday
           ? lastPerformance.isWorkingDay
           : goal.activities.some(
@@ -122,6 +135,8 @@ const goalCtrl = {
         const deadLineHasPassed = moment(
           moment().utcOffset(clientUTC).startOf('day')
         ).isSameOrAfter(moment(goal.end).utcOffset(clientUTC).startOf('day'))
+
+        // console.log(goal.shortDescription, todayIsWorkingDay)
 
         return {
           ...goal._doc,
