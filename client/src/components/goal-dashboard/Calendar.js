@@ -37,7 +37,7 @@ const Calendar = () => {
     return averagePercentage
   }
 
-  const percentage = getPercentage(workingDays)
+  const percentage = workingDays.length === 0 ? 0 : getPercentage(workingDays)
 
   return (
     <div>
