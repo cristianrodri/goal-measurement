@@ -62,7 +62,10 @@ performanceSchema.statics.createNewDayPerformance = async (
     ? activitiesToday.map(activity => {
         delete activity.days
 
-        return activity
+        return {
+          activity: activity.activity,
+          reached: false
+        }
       })
     : []
 
@@ -92,15 +95,18 @@ performanceSchema.statics.createNewDayPerformance = async (
             .startOf('day')
         )
 
+        console.log(isSameOrAfterPrevGoalDeadline)
+
         performancesToAdd.push({
           activities: isSameOrAfterPrevGoalDeadline
             ? []
             : [...lastPerformanceActivities],
           date,
+          done: false,
           isWorkingDay: isSameOrAfterPrevGoalDeadline
             ? false
             : lastPerformance.goalWorkingDays[
-                moment(moment().utcOffset(utcClient))
+                moment(moment(date).utcOffset(utcClient))
                   .format('dddd')
                   .toLowerCase()
               ],
@@ -114,6 +120,7 @@ performanceSchema.statics.createNewDayPerformance = async (
   const addNewDay = {
     activities,
     date: moment().format(),
+    done: false,
     isWorkingDay: !!activitiesToday.length,
     goalDeadline: goal.end,
     goalWorkingDays: weekDaysMonToSun.reduce(
