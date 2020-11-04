@@ -213,7 +213,7 @@ performanceSchema.statics.checkLastPerformance = async (
         $set: {
           'performances.$.done': false,
           'performances.$.activities': [...activities],
-          'performances.$isWorkingDay': activitiesToday.length
+          'performances.$isWorkingDay': !!activitiesToday.length
         }
       },
       {
