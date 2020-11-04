@@ -196,7 +196,10 @@ performanceSchema.statics.checkLastPerformance = async (
       ? activitiesToday.map(activity => {
           delete activity.days
 
-          return activity
+          return {
+            activity: activity.activity,
+            reached: false
+          }
         })
       : []
 
