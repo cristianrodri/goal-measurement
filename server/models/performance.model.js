@@ -49,7 +49,8 @@ performanceSchema.statics.createNewDayPerformance = async (
   goal,
   userId,
   utcClient = undefined,
-  lastPerformance = undefined
+  lastPerformance = undefined,
+  lastPerformanceWithActivities = undefined
 ) => {
   const currentDayClient = moment(moment().utcOffset(utcClient))
     .format('dddd')
@@ -83,9 +84,17 @@ performanceSchema.statics.createNewDayPerformance = async (
     if (daysDiff > 1) {
       for (let i = 1; i < daysDiff; i++) {
         const date = moment(lastPerformance.date).add(i, 'days').format()
-        const lastPerformanceActivities = lastPerformance.activities.map(
+        let lastPerformanceActivities = lastPerformance.activities.map(
           activity => ({ activity: activity.activity, reached: false })
         )
+
+        if (!lastPerformance.activities.length) {
+          lastPerformanceActivities = lastPerformanceWithActivities.activities.map(
+            activity => ({ activity: activity.activity, reached: false })
+          )
+        }
+
+        // console.log(lastPerformanceActivities)
 
         const isSameOrAfterPrevGoalDeadline = moment(
           moment(date).utcOffset(utcClient).startOf('day')
@@ -95,12 +104,18 @@ performanceSchema.statics.createNewDayPerformance = async (
             .startOf('day')
         )
 
-        console.log(isSameOrAfterPrevGoalDeadline)
+        // console.log(isSameOrAfterPrevGoalDeadline)
 
         performancesToAdd.push({
           activities: isSameOrAfterPrevGoalDeadline
             ? []
-            : [...lastPerformanceActivities],
+            : lastPerformance.goalWorkingDays[
+                moment(moment(date).utcOffset(utcClient))
+                  .format('dddd')
+                  .toLowerCase()
+              ]
+            ? [...lastPerformanceActivities]
+            : [],
           date,
           done: false,
           isWorkingDay: isSameOrAfterPrevGoalDeadline
@@ -133,6 +148,8 @@ performanceSchema.statics.createNewDayPerformance = async (
       {}
     ) // create {monday: true | false, tuesday: true | false ... until sunday}
   }
+
+  // console.log(performancesToAdd)
 
   performancesToAdd.push(addNewDay)
 
