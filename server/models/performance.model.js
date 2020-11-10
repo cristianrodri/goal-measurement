@@ -77,13 +77,19 @@ performanceSchema.statics.createNewDayPerformance = async (
 
   // create previous performance in case some days were empty by checking if the difference between current day and last performance day is greater than 1
   if (lastPerformance) {
-    const lastPerformanceDate = moment(lastPerformance.date).startOf('day')
-    const currentDateClient = moment().startOf('day')
+    const lastPerformanceDate = moment(
+      moment(lastPerformance.date).utcOffset(utcClient)
+    ).startOf('day')
+    const currentDateClient = moment(moment().utcOffset(utcClient)).startOf(
+      'day'
+    )
     const daysDiff = currentDateClient.diff(lastPerformanceDate, 'days')
 
     if (daysDiff > 1) {
       for (let i = 1; i < daysDiff; i++) {
-        const date = moment(lastPerformance.date).add(i, 'days').format()
+        const date = moment(moment(lastPerformance.date).utcOffset(utcClient))
+          .add(i, 'days')
+          .format()
         let lastPerformanceActivities = lastPerformance.activities.map(
           activity => ({ activity: activity.activity, reached: false })
         )
