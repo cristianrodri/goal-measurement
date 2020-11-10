@@ -22,8 +22,11 @@ const withPerformanceData = Component => props => {
   const currentDateUTC = moment().utcOffset()
 
   useEffect(() => {
-    const getAllPerformancesAPI = async (id, date) => {
-      const res = await getAllPerformancesByGoal(id, date)
+    const getAllPerformancesAPI = async (id, dateUTC) => {
+      const res = await getAllPerformancesByGoal(id, dateUTC)
+
+      console.log(res)
+      // console.log('pikoro')
 
       if (res.success) {
         dispatch(getAllPerformances(res.data.allPerformances))
