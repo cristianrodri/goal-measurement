@@ -19,13 +19,13 @@ const goalSchema = new mongoose.Schema(
         days: {
           type: Object,
           default: {
-            monday: false,
-            tuesday: false,
-            wednesday: false,
-            thursday: false,
-            friday: false,
-            saturday: false,
-            sunday: false
+            monday: Boolean,
+            tuesday: Boolean,
+            wednesday: Boolean,
+            thursday: Boolean,
+            friday: Boolean,
+            saturday: Boolean,
+            sunday: Boolean
           }
         },
         activity: {

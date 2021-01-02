@@ -115,20 +115,6 @@ const performanceCtrl = {
 
       const clientDate = moment().utcOffset(currentClientDateUTC)
 
-      let lastPerformanceWithActivities = null
-
-      if (!lastPerformance.activities.length) {
-        const reverse = [...performance.performances]
-        reverse
-          .sort((a, b) => moment(b.date).unix() - moment(a.date).unix())
-          .some(performance => {
-            if (performance.activities.length) {
-              lastPerformanceWithActivities = performance
-              return true
-            }
-          })
-      }
-
       const lastPerformanceIsNotCurrentDay = moment(
         lastPerformance.date
       ).isBefore(moment(clientDate).startOf('day'))
@@ -139,8 +125,7 @@ const performanceCtrl = {
           req.goal,
           req.user._id,
           currentClientDateUTC,
-          lastPerformance,
-          lastPerformanceWithActivities
+          lastPerformance
         )
 
         performance = newPerformance.performance

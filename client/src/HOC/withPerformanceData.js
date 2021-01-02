@@ -29,11 +29,9 @@ const withPerformanceData = Component => props => {
         dispatch(getAllPerformances(res.data.allPerformances))
         dispatch(setTodayPerformance(res.data.todayPerformance))
 
-        // if today is not workind day or last performance is not done yet, remove last performance from allPerformance state
+        // if today is not working day or last performance is not done yet, remove last performance from allPerformance state
         if (
-          res.data.todayPerformance.goalWorkingDays[
-            moment().format('dddd').toLowerCase()
-          ] &&
+          res.data.todayPerformance.isWorkingDay &&
           !res.data.todayPerformance.done
         ) {
           dispatch(removeLastPerformance())

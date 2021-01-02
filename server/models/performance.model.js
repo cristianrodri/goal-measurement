@@ -17,15 +17,23 @@ const performanceSchema = new mongoose.Schema(
         date: Date,
         done: Boolean,
         isWorkingDay: Boolean,
-        goalWorkingDays: {
-          monday: Boolean,
-          tuesday: Boolean,
-          wednesday: Boolean,
-          thursday: Boolean,
-          friday: Boolean,
-          saturday: Boolean,
-          sunday: Boolean
-        },
+        goalActivities: [
+          {
+            activity: String,
+            days: {
+              type: Object,
+              default: {
+                monday: Boolean,
+                tuesday: Boolean,
+                wednesday: Boolean,
+                thursday: Boolean,
+                friday: Boolean,
+                saturday: Boolean,
+                sunday: Boolean
+              }
+            }
+          }
+        ],
         goalDeadline: Date
       }
     ],
@@ -49,8 +57,7 @@ performanceSchema.statics.createNewDayPerformance = async (
   goal,
   userId,
   utcClient = undefined,
-  lastPerformance = undefined,
-  lastPerformanceWithActivities = undefined
+  lastPerformance = undefined
 ) => {
   const currentDayClient = moment(moment().utcOffset(utcClient))
     .format('dddd')
@@ -70,9 +77,6 @@ performanceSchema.statics.createNewDayPerformance = async (
       })
     : []
 
-  const weekDays = moment.weekdays()
-  const weekDaysMonToSun = [...weekDays.slice(1), ...weekDays.slice(0, 1)]
-
   let performancesToAdd = []
 
   // create previous performance in case some days were empty by checking if the difference between current day and last performance day is greater than 1
@@ -90,17 +94,6 @@ performanceSchema.statics.createNewDayPerformance = async (
         const date = moment(moment(lastPerformance.date).utcOffset(utcClient))
           .add(i, 'days')
           .format()
-        let lastPerformanceActivities = lastPerformance.activities.map(
-          activity => ({ activity: activity.activity, reached: false })
-        )
-
-        if (!lastPerformance.activities.length) {
-          lastPerformanceActivities = lastPerformanceWithActivities.activities.map(
-            activity => ({ activity: activity.activity, reached: false })
-          )
-        }
-
-        // console.log(lastPerformanceActivities)
 
         const isSameOrAfterPrevGoalDeadline = moment(
           moment(date).utcOffset(utcClient).startOf('day')
@@ -115,23 +108,27 @@ performanceSchema.statics.createNewDayPerformance = async (
         performancesToAdd.push({
           activities: isSameOrAfterPrevGoalDeadline
             ? []
-            : lastPerformance.goalWorkingDays[
-                moment(moment(date).utcOffset(utcClient))
-                  .format('dddd')
-                  .toLowerCase()
-              ]
-            ? [...lastPerformanceActivities]
-            : [],
+            : lastPerformance.goalActivities.filter(
+                activity =>
+                  activity.days[
+                    moment(moment(date).utcOffset(utcClient))
+                      .format('dddd')
+                      .toLowerCase()
+                  ]
+              ),
           date,
           done: false,
           isWorkingDay: isSameOrAfterPrevGoalDeadline
             ? false
-            : lastPerformance.goalWorkingDays[
-                moment(moment(date).utcOffset(utcClient))
-                  .format('dddd')
-                  .toLowerCase()
-              ],
-          goalWorkingDays: lastPerformance.goalWorkingDays,
+            : lastPerformance.goalActivities.some(
+                activity =>
+                  activity.days[
+                    moment(moment(date).utcOffset(utcClient))
+                      .format('dddd')
+                      .toLowerCase()
+                  ]
+              ),
+          goalActivities: lastPerformance.goalActivities,
           goalDeadline: lastPerformance.goalDeadline
         })
       }
@@ -144,15 +141,7 @@ performanceSchema.statics.createNewDayPerformance = async (
     done: false,
     isWorkingDay: !!activitiesToday.length,
     goalDeadline: goal.end,
-    goalWorkingDays: weekDaysMonToSun.reduce(
-      (prev, cur) => ({
-        ...prev,
-        [cur.toLowerCase()]: goal.activities.some(
-          activity => activity.days[cur.toLowerCase()]
-        )
-      }),
-      {}
-    ) // create {monday: true | false, tuesday: true | false ... until sunday}
+    goalActivities: goal.activities
   }
 
   // console.log(performancesToAdd)
@@ -236,7 +225,7 @@ performanceSchema.statics.checkLastPerformance = async (
         $set: {
           'performances.$.done': false,
           'performances.$.activities': [...activities],
-          'performances.$isWorkingDay': !!activitiesToday.length
+          'performances.$.isWorkingDay': !!activitiesToday.length
         }
       },
       {

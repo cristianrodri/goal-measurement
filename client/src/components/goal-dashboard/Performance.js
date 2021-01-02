@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 
 const Performance = () => {
   const isWorkingDay = useSelector(
-    state => state.performance.todayPerformance.activities.length
+    state => state.performance.todayPerformance.isWorkingDay
   )
 
   return (
