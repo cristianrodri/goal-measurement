@@ -103,8 +103,6 @@ performanceSchema.statics.createNewDayPerformance = async (
             .startOf('day')
         )
 
-        // console.log(isSameOrAfterPrevGoalDeadline)
-
         performancesToAdd.push({
           activities: isSameOrAfterPrevGoalDeadline
             ? []
@@ -143,8 +141,6 @@ performanceSchema.statics.createNewDayPerformance = async (
     goalDeadline: goal.end,
     goalActivities: goal.activities
   }
-
-  // console.log(performancesToAdd)
 
   performancesToAdd.push(addNewDay)
 
