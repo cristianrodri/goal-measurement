@@ -106,14 +106,19 @@ performanceSchema.statics.createNewDayPerformance = async (
         performancesToAdd.push({
           activities: isSameOrAfterPrevGoalDeadline
             ? []
-            : lastPerformance.goalActivities.filter(
-                activity =>
-                  activity.days[
-                    moment(moment(date).utcOffset(utcClient))
-                      .format('dddd')
-                      .toLowerCase()
-                  ]
-              ),
+            : lastPerformance.goalActivities
+                .filter(
+                  activity =>
+                    activity.days[
+                      moment(moment(date).utcOffset(utcClient))
+                        .format('dddd')
+                        .toLowerCase()
+                    ]
+                )
+                .map(activity => ({
+                  activity: activity.activity,
+                  reached: false
+                })),
           date,
           done: false,
           isWorkingDay: isSameOrAfterPrevGoalDeadline
