@@ -19,6 +19,7 @@ export {
 export {
   getAllPerformances,
   setTodayPerformance,
+  setPreviousPerformance,
   removeLastPerformance,
   addLastPerformance,
   resetPerformance

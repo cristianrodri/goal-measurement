@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 
 const connectDB = async () => {
-
   try {
     // Connect to the database
     const connect = await mongoose.connect(process.env.MONGODB_URI, {
@@ -11,7 +10,9 @@ const connectDB = async () => {
       useUnifiedTopology: true
     })
 
-    console.log(`Database connected on port: ${connect.connection.host}`.cyan.underline)
+    console.log(
+      `Database connected on port: ${connect.connection.host}`.cyan.underline
+    )
   } catch (error) {
     console.log(`${error.message}`.red)
     process.exit(1)

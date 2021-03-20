@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import {
   makeStyles,
   FormControl,
@@ -21,6 +22,7 @@ import {
 } from '../../redux'
 import { updatePerformanceDay } from './../../api/api_performance'
 import { goalPerformanceDone } from './../../redux/goal/goalActions'
+import { setPreviousPerformance } from './../../redux/performance/performanceActions'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -32,16 +34,20 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const WorkingPerformance = () => {
+const isTodayPerformance = date => {
+  const startDate = moment(date).startOf('day').format()
+  const endDate = moment(date).endOf('day').format()
+
+  return moment().isSameOrAfter(startDate) && moment().isSameOrBefore(endDate)
+}
+
+const WorkingPerformance = ({ performance, isToday, lastPositionIndex }) => {
   const classes = useStyles()
   const goal = useSelector(state => state.goal.selectedGoal)
-  const todayPerformance = useSelector(
-    state => state.performance.todayPerformance
-  )
   const dispatch = useDispatch()
-  const { activities, _id } = todayPerformance
+  const { activities, _id } = performance
   const [value, setValue] = useState(0)
-  const [isUploading, setIsUploading] = useState(false)
+  const [toReward, setToReward] = useState(false)
 
   const percentageValue = (value, totalActivities) =>
     Math.floor((value / totalActivities.length) * 100)
@@ -51,7 +57,10 @@ const WorkingPerformance = () => {
     const reachedActivities = activities.filter(activity => activity.reached)
       .length
     setValue(percentageValue(reachedActivities, activities))
-  }, [])
+
+    if (isToday && percentageValue(reachedActivities, activities) === 100)
+      setToReward(true)
+  }, [isToday])
 
   const handleChange = async e => {
     const id = e.target.dataset.id
@@ -64,15 +73,23 @@ const WorkingPerformance = () => {
 
     updatedActivity.reached = e.target.checked
 
+    const updatedActivities = [...prevActivities, updatedActivity]
+    const percentage = percentageValue(
+      updatedActivities.filter(activity => activity.reached).length,
+      updatedActivities
+    )
+
     // update activities in todayPerformances state and dispatch the changes
-    const updatedTodayPerformance = {
-      ...todayPerformance,
-      activities: [...prevActivities, updatedActivity].sort((a, b) =>
-        a._id < b._id ? -1 : 1
-      )
+    const updatedPerformance = {
+      ...performance,
+      activities: updatedActivities.sort((a, b) => (a._id < b._id ? -1 : 1)),
+      done: percentage === 100
     }
 
-    dispatch(setTodayPerformance(updatedTodayPerformance))
+    //////////////////////////////////// UPDATE TODAY OR PREVIOUS PERFORMANCE (YESTERDAY) //////////////////////////////////
+    isToday
+      ? dispatch(setTodayPerformance(updatedPerformance))
+      : dispatch(setPreviousPerformance(performance, lastPositionIndex))
 
     // calculate percentage when reached activities is changed
     const reachedActivities = activities.filter(activity => activity.reached)
@@ -81,8 +98,8 @@ const WorkingPerformance = () => {
 
     try {
       const res = await updatePerformanceDay(goal._id, _id, {
-        done: updatedTodayPerformance.done,
-        activities: updatedTodayPerformance.activities
+        done: updatedPerformance.done,
+        activities: updatedPerformance.activities
       })
 
       if (res.success) {
@@ -95,43 +112,23 @@ const WorkingPerformance = () => {
     }
   }
 
-  // change 'done' value in todayPerformance global state to true when 100% is reached and change the UI component to 'WorkDone component'
   const handleDone = async () => {
-    const updatedTodayPerformance = {
-      ...todayPerformance,
-      done: true
-    }
+    dispatch(addLastPerformance(performance))
 
-    try {
-      setIsUploading(true)
-      const res = await updatePerformanceDay(goal._id, _id, {
-        activities: updatedTodayPerformance.activities,
-        done: updatedTodayPerformance.done
-      })
-
-      if (res.success) {
-        dispatch(setTodayPerformance(res.data))
-        dispatch(addLastPerformance(res.data))
-
-        dispatch(goalPerformanceDone(goal._id))
-      } else if (res.error) {
-        dispatch(displayErrorSnackbar(res.message))
-      }
-    } catch (error) {
-      dispatch(displayErrorSnackbar(error.message))
-    } finally {
-      setIsUploading(false)
-    }
+    dispatch(goalPerformanceDone(goal._id))
+    setToReward(true)
   }
 
-  if (todayPerformance.done) return <PrintRewards type="day" />
+  if (toReward && isToday) return <PrintRewards type="day" />
 
   return (
     <div className={classes.container}>
-      <SecondaryTitle>{moment().format('dddd LL')}</SecondaryTitle>
+      <SecondaryTitle>
+        {moment(performance.date).format('dddd LL')}
+      </SecondaryTitle>
       <FormControl component="fieldset" className={classes.formControl}>
         <FormLabel component="legend">
-          You did your activitites today?
+          You did your activitites {isToday ? 'Today' : 'Yesterday'}?
         </FormLabel>
         <FormGroup>
           {activities.map(activity => (
@@ -153,14 +150,24 @@ const WorkingPerformance = () => {
           ))}
         </FormGroup>
         <Progress value={value} variant="determinate" />
-        {value === 100 && (
+        {value === 100 && isToday && (
           <PrimaryButton color="secondary" onClick={handleDone}>
-            {isUploading ? 'Uploading...' : 'Well done!'}
+            Well done!
           </PrimaryButton>
         )}
       </FormControl>
     </div>
   )
+}
+
+WorkingPerformance.defaultProps = {
+  isToday: false
+}
+
+WorkingPerformance.propTypes = {
+  performance: PropTypes.object.isRequired,
+  isToday: PropTypes.bool,
+  lastPositionIndex: PropTypes.number
 }
 
 export default WorkingPerformance

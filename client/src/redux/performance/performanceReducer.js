@@ -3,7 +3,8 @@ import {
   TODAY_PERFORMANCE,
   REMOVE_LAST_PERFORMANCE,
   ADD_LAST_PERFORMANCE,
-  RESET_PERFORMANCE
+  RESET_PERFORMANCE,
+  UPDATE_PREV_PERFORMANCE
 } from './performanceType'
 
 const initialState = {
@@ -23,6 +24,14 @@ const performanceReducer = (state = initialState, action) => {
         ...state,
         todayPerformance: action.payload
       }
+    case UPDATE_PREV_PERFORMANCE: {
+      state.allPerformances[
+        state.allPerformances.length - action.lastPositionIndex
+      ] = action.payload
+      return {
+        ...state
+      }
+    }
     case REMOVE_LAST_PERFORMANCE:
       return {
         ...state,
