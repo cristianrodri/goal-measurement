@@ -21,7 +21,7 @@ import {
   addLastPerformance
 } from '../../redux'
 import { updatePerformanceDay } from './../../api/api_performance'
-import { goalPerformanceDone } from './../../redux/goal/goalActions'
+import { goalPerformancePercentage } from './../../redux/goal/goalActions'
 import { setPreviousPerformance } from './../../redux/performance/performanceActions'
 
 const useStyles = makeStyles(theme => ({
@@ -33,13 +33,6 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(3)
   }
 }))
-
-const isTodayPerformance = date => {
-  const startDate = moment(date).startOf('day').format()
-  const endDate = moment(date).endOf('day').format()
-
-  return moment().isSameOrAfter(startDate) && moment().isSameOrBefore(endDate)
-}
 
 const WorkingPerformance = ({ performance, isToday, lastPositionIndex }) => {
   const classes = useStyles()
@@ -87,9 +80,14 @@ const WorkingPerformance = ({ performance, isToday, lastPositionIndex }) => {
     }
 
     //////////////////////////////////// UPDATE TODAY OR PREVIOUS PERFORMANCE (YESTERDAY) //////////////////////////////////
-    isToday
-      ? dispatch(setTodayPerformance(updatedPerformance))
-      : dispatch(setPreviousPerformance(performance, lastPositionIndex))
+    if (isToday) {
+      dispatch(setTodayPerformance(updatedPerformance))
+
+      // update border card of the goal
+      dispatch(goalPerformancePercentage(goal._id, percentage))
+    } else {
+      dispatch(setPreviousPerformance(performance, lastPositionIndex))
+    }
 
     // calculate percentage when reached activities is changed
     const reachedActivities = activities.filter(activity => activity.reached)
@@ -115,7 +113,6 @@ const WorkingPerformance = ({ performance, isToday, lastPositionIndex }) => {
   const handleDone = async () => {
     dispatch(addLastPerformance(performance))
 
-    dispatch(goalPerformanceDone(goal._id))
     setToReward(true)
   }
 

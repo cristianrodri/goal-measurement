@@ -10,7 +10,7 @@ export {
   getGoals,
   setSelectedGoal,
   addGoal,
-  goalPerformanceDone,
+  goalPerformancePercentage,
   updateSelectedGoal,
   removeGoal,
   resetSelectedGoal,

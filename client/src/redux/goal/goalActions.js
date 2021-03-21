@@ -3,7 +3,7 @@ import {
   SELECTED_GOAL,
   ADD_GOAL,
   UPDATE_GOAL,
-  GOAL_PERFORMANCE_DONE,
+  GOAL_PERCENTAGE_TODAY,
   REMOVE_GOAL,
   RESET_GOALS,
   RESET_SELECTED_GOAL
@@ -37,10 +37,11 @@ export const updateSelectedGoal = goal => {
   }
 }
 
-export const goalPerformanceDone = id => {
+export const goalPerformancePercentage = (id, percentage) => {
   return {
-    type: GOAL_PERFORMANCE_DONE,
-    id
+    type: GOAL_PERCENTAGE_TODAY,
+    id,
+    percentage
   }
 }
 

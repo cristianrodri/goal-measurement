@@ -4,11 +4,12 @@ import DailyPerformance from './DailyPerformance'
 import { useSelector } from 'react-redux'
 
 const useStyles = makeStyles(theme => ({
-  containerPerformances: {
+  container: {
     backgroundColor: theme.palette.grey[50],
     flex: '1',
     gridAutoFlow: 'column',
-    gridAutoColumns: 20
+    gridAutoColumns: 20,
+    overflow: 'auto'
   }
 }))
 
@@ -19,7 +20,7 @@ const HistoricPerformances = () => {
   )
 
   return (
-    <div className={classes.containerPerformances}>
+    <div className={classes.container}>
       {allPerformances.map((performance, i) => (
         <DailyPerformance key={i} performance={performance} index={i} />
       ))}

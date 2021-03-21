@@ -4,7 +4,7 @@ import {
   SELECTED_GOAL,
   ADD_GOAL,
   UPDATE_GOAL,
-  GOAL_PERFORMANCE_DONE,
+  GOAL_PERCENTAGE_TODAY,
   REMOVE_GOAL,
   RESET_SELECTED_GOAL,
   RESET_GOALS
@@ -49,11 +49,13 @@ const goalReducer = (state = initialState, action) => {
             : goal
         )
       }
-    case GOAL_PERFORMANCE_DONE:
+    case GOAL_PERCENTAGE_TODAY:
       return {
         ...state,
         goals: state.goals.map(goal =>
-          goal._id === action.id ? { ...goal, performanceDone: true } : goal
+          goal._id === action.id
+            ? { ...goal, performanceTodayPercentage: action.percentage }
+            : goal
         )
       }
     case REMOVE_GOAL:

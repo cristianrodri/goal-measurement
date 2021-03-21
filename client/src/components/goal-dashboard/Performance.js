@@ -51,7 +51,6 @@ const Performance = () => {
 
   const handleChange = e => {
     setGoalDay(e.target.value)
-    // console.log(e.target.value)
   }
 
   return (

@@ -109,10 +109,11 @@ const goalCtrl = {
       })
 
       const customizedGoals = goals.map(goal => {
-        const belongPerformance = allGoalsPerformances.find(
+        const belongPerformances = allGoalsPerformances.find(
           performance => performance.goal.toString() === goal._id.toString()
         ).performances
-        const lastPerformance = belongPerformance[belongPerformance.length - 1]
+        const lastPerformance =
+          belongPerformances[belongPerformances.length - 1]
 
         const startCurrentDay = moment(lastPerformance.date).isSameOrAfter(
           moment(moment().utcOffset(clientUTC)).startOf('day')
@@ -123,6 +124,7 @@ const goalCtrl = {
 
         const lastPerformanceIsToday = startCurrentDay && endCurrentDay
 
+        // if last performance is today, check today performance (isWorkingDay property), otherwise check goal today's activities whether today is working or not
         const todayIsWorkingDay = lastPerformanceIsToday
           ? lastPerformance.isWorkingDay
           : goal.activities.some(
@@ -136,16 +138,20 @@ const goalCtrl = {
           moment().utcOffset(clientUTC).startOf('day')
         ).isSameOrAfter(moment(goal.end).utcOffset(clientUTC).startOf('day'))
 
-        // console.log(goal.shortDescription, todayIsWorkingDay)
-
         return {
           ...goal._doc,
           isWorkingDay:
             deadLineHasPassed || goal.completed ? false : todayIsWorkingDay,
-          performanceDone:
+          performanceTodayPercentage:
             todayIsWorkingDay && !lastPerformanceIsToday
-              ? false
-              : lastPerformance.done
+              ? 0
+              : Math.floor(
+                  (lastPerformance.activities.filter(
+                    activity => activity.reached
+                  ).length /
+                    lastPerformance.activities.length) *
+                    100
+                )
         }
       })
 

@@ -10,30 +10,22 @@ import {
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import { textCapitalize } from './../utils/text'
-import { red, grey, green } from '@material-ui/core/colors'
+import { green } from '@material-ui/core/colors'
 import DoneIcon from '@material-ui/icons/Done'
+import { borderColors, progressColor } from '../utils/colors'
 
-const borderColor = (isWorkingDay, performanceDone) => {
-  if (isWorkingDay) {
-    if (performanceDone) return green
-    else return red
-  }
-
-  return grey
-}
-
-const useStyles = ({ isWorkingDay, performanceDone }) =>
+const useStyles = ({ isWorkingDay, performanceTodayPercentage }) =>
   makeStyles(theme => ({
     card: {
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
       boxShadow: `0 0 .1rem .2rem ${
-        borderColor(isWorkingDay, performanceDone)[300]
+        borderColors[progressColor(performanceTodayPercentage, isWorkingDay)]
       }`,
       '&:hover': {
         boxShadow: `0 0 .1rem .3rem ${
-          borderColor(isWorkingDay, performanceDone)[300]
+          borderColors[progressColor(performanceTodayPercentage, isWorkingDay)]
         }`
       },
       transition: 'all .2s',
@@ -55,9 +47,16 @@ const useStyles = ({ isWorkingDay, performanceDone }) =>
   }))
 
 const GoalCard = ({
-  goal: { _id, shortDescription, end, isWorkingDay, performanceDone, completed }
+  goal: {
+    _id,
+    shortDescription,
+    end,
+    isWorkingDay,
+    performanceTodayPercentage,
+    completed
+  }
 }) => {
-  const classes = useStyles({ isWorkingDay, performanceDone })()
+  const classes = useStyles({ isWorkingDay, performanceTodayPercentage })()
   return (
     <Grid item xs={12} sm={6} md={4}>
       <Link to={`/my-goals/${_id}`} className={classes.link}>
