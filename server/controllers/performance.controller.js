@@ -91,13 +91,13 @@ const performanceCtrl = {
 
   /**
    * @desc Update one performance by specific goal
-   * @route /api/:goalId/performances
+   * @route /api/:goalId/performances/:clientUTC
    * @method GET
    * @access private
    */
-  async getPerformance(req, res) {
+  async getPerformances(req, res) {
     try {
-      const currentClientDateUTC = +req.params.currentDate
+      const currentClientDateUTC = +req.params.clientUTC
 
       let performance = await Performance.findOne({
         goal: req.goal._id

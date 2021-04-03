@@ -76,7 +76,7 @@ const userCtrl = {
   },
 
   /**
-   * @desc Resend user confirmation link
+   * @desc Resend user confirmation link after login when user is not verified
    * @route /api/user/resend-link
    * @method POST
    * @access public
@@ -297,7 +297,7 @@ const userCtrl = {
       }
 
       // delete user avatar when no image is uploaded while current image is deleted
-      if (JSON.parse(req.body['deleteAvatar'])) {
+      if (JSON.parse(req.body['deleteAvatar']) === 'delete') {
         user.avatar = undefined
       }
 

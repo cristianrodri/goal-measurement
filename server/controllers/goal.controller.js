@@ -37,12 +37,12 @@ const goalCtrl = {
 
   /**
    * @desc Create new goal
-   * @route /api/goal/create
+   * @route /api/goal/create/:clientUTC
    * @method POST
    * @access private
    */
   async createGoal(req, res) {
-    const clientUTC = +req.params.currentDate
+    const clientUTC = +req.params.clientUTC
 
     try {
       const goal = new Goal({ owner: req.user._id, ...req.body })
@@ -95,7 +95,7 @@ const goalCtrl = {
 
   /**
    * @desc Get all the user goals
-   * @route /api/goals
+   * @route /api/goals/:clientUTC
    * @method GET
    * @access private
    */
@@ -183,7 +183,7 @@ const goalCtrl = {
 
   /**
    * @desc Update one goal by id
-   * @route /api/goal/:id
+   * @route /api/goal/:id/:clientUTC
    * @method PUT
    * @access private
    */
@@ -214,7 +214,7 @@ const goalCtrl = {
 
       await req.goal.save()
 
-      const clientUTC = +req.params.currentDate
+      const clientUTC = +req.params.clientUTC
 
       // update activities property of the last day performance belongs to this goal
       const performance = await Performance.checkLastPerformance(

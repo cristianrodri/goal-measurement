@@ -11,7 +11,7 @@ const {
 } = require('../controllers/goal.controller')
 
 // Create goal
-router.post('/goal/create/:currentDate', auth, createGoal)
+router.post('/goal/create/:clientUTC', auth, createGoal)
 
 // Get all user goals
 router.get('/goals/:clientUTC', auth, getGoals)
@@ -23,6 +23,6 @@ router
   .delete(auth, getGoalById, deleteGoal)
 
 // update specific goal
-router.put('/goal/:id/:currentDate', auth, getGoalById, updateGoal)
+router.put('/goal/:id/:clientUTC', auth, getGoalById, updateGoal)
 
 module.exports = router

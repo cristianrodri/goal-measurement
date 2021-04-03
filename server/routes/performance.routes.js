@@ -4,7 +4,7 @@ const {
   goalBelongsToUser,
   createPerformance,
   updatePerformanceDay,
-  getPerformance
+  getPerformances
 } = require('../controllers/performance.controller')
 const auth = require('../middleware/auth')
 
@@ -23,10 +23,10 @@ router.put(
 )
 
 router.get(
-  '/:goalId/performances/:currentDate',
+  '/:goalId/performances/:clientUTC',
   auth,
   goalBelongsToUser,
-  getPerformance
+  getPerformances
 )
 
 module.exports = router
