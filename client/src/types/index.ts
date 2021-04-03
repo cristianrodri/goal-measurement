@@ -55,12 +55,12 @@ export interface GoalFormActivities {
 }
 
 export interface GoalFormDB {
-  shortDescription?: string
-  bigDescription?: string
-  activities?: GoalFormActivities[]
-  rewards?: Rewards
-  weeklyReward?: keyof DaysOfWeek | ''
-  end?: Date | string | undefined
+  shortDescription: string
+  bigDescription: string
+  activities: GoalFormActivities[]
+  rewards: Rewards
+  weeklyReward: keyof DaysOfWeek | ''
+  end: Date | string | undefined
   completed?: boolean
 }
 

@@ -61,7 +61,7 @@ const goalFormReducer = (
     case GoalFormTypes.ADD_ACTIVITY:
       return {
         ...state,
-        activities: state.activities.concat({
+        activities: state.activities?.concat({
           activity: state.activityName,
           days: state.activityDays
         })
@@ -69,7 +69,7 @@ const goalFormReducer = (
     case GoalFormTypes.DELETE_ACTIVITY:
       return {
         ...state,
-        activities: state.activities.filter(
+        activities: state.activities?.filter(
           activity => activity.activity !== action.payload // delete activity by name
         )
       }

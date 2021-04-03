@@ -37,7 +37,11 @@ const getGoalById = (goalId: string) => {
     .catch(err => console.log(err))
 }
 
-const updateGoal = (data: GoalFormDB, id: string, clientUTC: number) => {
+type GoalData = {
+  [Property in keyof GoalFormDB]?: GoalFormDB[Property]
+}
+
+const updateGoal = (data: GoalData, id: string, clientUTC: number) => {
   return fetch(`/api/goal/${id}/${clientUTC}`, {
     method: 'PUT',
     headers: {

@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Route, Redirect, RouteProps } from 'react-router-dom'
+import { RootState } from '../redux'
 
 interface Props {
   component: React.ElementType
@@ -9,7 +10,7 @@ interface Props {
 }
 
 const PublicRoute = ({ component: Component, ...routeProps }: Props) => {
-  const isAuthenticated = useSelector(state => state.user.isAuth)
+  const isAuthenticated = useSelector((state: RootState) => state.user.isAuth)
 
   return (
     <Route
