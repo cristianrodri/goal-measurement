@@ -54,7 +54,7 @@ const Signup = () => {
         dispatch(displayDialog(data.message))
 
         // Empty all input fields after success sign up
-        let fields = [
+        const fields = [
           setUsername,
           setEmail,
           setPassword,

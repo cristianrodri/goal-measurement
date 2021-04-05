@@ -14,22 +14,24 @@ interface Props {
 
 type Classes = 'popover' | 'typography' | keyof typeof colors
 
-const useStyles = makeStyles<Theme, {}, Classes>(theme => ({
-  popover: {
-    pointerEvents: 'none'
-  },
-  typography: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    backgroundColor: grey[100],
-    padding: theme.spacing(1)
-  },
-  ...backgroundColors
-}))
+const useStyles = makeStyles<Theme, Record<string, unknown>, Classes>(
+  theme => ({
+    popover: {
+      pointerEvents: 'none'
+    },
+    typography: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      backgroundColor: grey[100],
+      padding: theme.spacing(1)
+    },
+    ...backgroundColors
+  })
+)
 
 const DailyPerformance = ({ performance, index }: Props) => {
-  const classes = useStyles()
+  const classes = useStyles({})
   const [anchorEl, setAnchorEl] = useState<HTMLSpanElement | null>(null)
   const selectedGoal = useSelector(
     (state: RootState) => state.goal.selectedGoal

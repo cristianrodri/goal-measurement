@@ -64,7 +64,7 @@ const ChooseWeeklyReward = () => {
           className={classes.radioGroup}
           value={weeklyReward}
         >
-          {daysOfWeek.map((day, i) => (
+          {daysOfWeek.map(day => (
             <FormControlLabel
               key={day}
               value={day}

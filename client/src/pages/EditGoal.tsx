@@ -23,7 +23,7 @@ import {
   RootState,
   getGoalData
 } from '../redux'
-import { GoalFormDB, GoalFormState } from '../types'
+import { GoalFormDB } from '../types'
 
 const EditGoal = () => {
   const history = useHistory()

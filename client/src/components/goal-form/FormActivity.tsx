@@ -65,7 +65,7 @@ const FormActivity = () => {
                 control={
                   <Checkbox
                     checked={activityDays[day as keyof DaysOfWeek]}
-                    onChange={e =>
+                    onChange={() =>
                       dispatch(setActivityDays(day as keyof DaysOfWeek))
                     }
                     value={day}

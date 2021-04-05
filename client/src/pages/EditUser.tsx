@@ -1,10 +1,4 @@
-import React, {
-  ChangeEvent,
-  ChangeEventHandler,
-  FormEvent,
-  useEffect,
-  useState
-} from 'react'
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { makeStyles, CardMedia, Theme } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
@@ -77,8 +71,6 @@ const EditUser = () => {
       setEmail(user.email)
       setHasAvatar(!!avatar)
     }
-
-    // eslint-disable-next-line
   }, [])
 
   const handleSubmit = async (event: FormEvent) => {

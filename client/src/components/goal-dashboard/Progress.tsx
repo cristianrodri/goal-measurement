@@ -1,10 +1,5 @@
 import React from 'react'
-import {
-  LinearProgress,
-  Box,
-  Typography,
-  LinearProgressProps
-} from '@material-ui/core'
+import { LinearProgress, Box, Typography } from '@material-ui/core'
 
 interface Props {
   value: number

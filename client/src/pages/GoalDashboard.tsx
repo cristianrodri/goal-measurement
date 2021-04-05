@@ -19,7 +19,7 @@ import Loading from '../components/Loading'
 const GoalDashboard = (
   props: RouteComponentProps<
     { id: string },
-    {},
+    Record<string, never>,
     { fromUpdatedGoal: boolean; message: string }
   >
 ) => {

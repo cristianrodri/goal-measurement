@@ -45,8 +45,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const Home = (
   props: RouteComponentProps<
-    {},
-    {},
+    Record<string, never>,
+    Record<string, never>,
     { fromDeletedUser: boolean; message: string }
   >
 ) => {
@@ -61,13 +61,11 @@ const Home = (
       history.replace('', null) // delete fromDeletedUser and message properties
     }
 
-    try {
-      if (props.location.state.fromDeletedUser) {
-        init()
-      }
-    } catch {}
-
-    // eslint-disable-next-line
+    // try {
+    if (props.location.state.fromDeletedUser) {
+      init()
+    }
+    // } catch {}
   }, [])
 
   return (

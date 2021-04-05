@@ -34,7 +34,7 @@ const ReachedGoalDialog = ({
           <Button onClick={handleNoReached} color="primary">
             Not yet
           </Button>
-          <Button onClick={handleReached} color="primary" autoFocus>
+          <Button onClick={handleReached} color="primary">
             Yes, Of course
           </Button>
         </>

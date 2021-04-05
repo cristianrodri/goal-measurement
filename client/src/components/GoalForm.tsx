@@ -1,5 +1,4 @@
 import React, { FormEvent } from 'react'
-import PropTypes from 'prop-types'
 import { Paper, makeStyles } from '@material-ui/core'
 import { MainTitle } from './Title'
 import {

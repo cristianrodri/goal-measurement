@@ -68,7 +68,7 @@ const PrintRewards = ({ type }: Props) => {
             onChange={handleChange}
           >
             {rewardType &&
-              selectedGoal.rewards[rewardType].map((reward, i) => (
+              selectedGoal.rewards[rewardType].map(reward => (
                 <FormControlLabel
                   key={reward}
                   value={reward}

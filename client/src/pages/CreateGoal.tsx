@@ -14,7 +14,7 @@ import {
 } from '../redux'
 import moment from 'moment'
 import { useDocumentTitle } from './../hooks/useDocumentTitle'
-import { GoalFormDB, GoalFormState } from '../types'
+import { GoalFormDB } from '../types'
 import { Dispatch } from 'redux'
 import { AddGoalAction, SelectedGoalAction } from '../redux/goal/goalTypes'
 import { EmptyFormAction } from '../redux/goal-form/goalFormTypes'

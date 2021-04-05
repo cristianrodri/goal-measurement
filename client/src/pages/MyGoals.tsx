@@ -2,8 +2,7 @@ import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { makeStyles, Container, Theme } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
-import { RouteComponentProps, useHistory } from 'react-router-dom'
-import { Link } from 'react-router-dom'
+import { RouteComponentProps, useHistory, Link } from 'react-router-dom'
 import Goals from '../components/Goals'
 import { MainTitle } from '../components/Title'
 import { PrimaryButton } from '../components/Button'
@@ -31,8 +30,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const MyGoals = (
   props: RouteComponentProps<
-    {},
-    {},
+    Record<string, never>,
+    Record<string, never>,
     { fromEditUser: boolean; fromDeleteGoal: boolean; message: string }
   >
 ) => {

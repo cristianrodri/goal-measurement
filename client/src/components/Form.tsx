@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react'
+import React, { ChangeEvent, FormEvent } from 'react'
 import {
   makeStyles,
   TextField,
@@ -12,7 +12,6 @@ import {
   TextFieldProps
 } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
-import { FormEvent } from 'react'
 
 const useStyles = makeStyles((theme: Theme) => ({
   card: {

@@ -4,9 +4,9 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import { red, green } from '@material-ui/core/colors'
 import MainRouter from './MainRouter'
 import Loading from './components/Loading'
-import { getUserDataAPI, RootState } from './redux'
+import { getUserDataAPI, RootState, completedData } from './redux'
 import { useDispatch, useSelector } from 'react-redux'
-import { completedData } from './redux'
+
 import { getTokenApi } from './api/api_user'
 
 const theme = createMuiTheme({
