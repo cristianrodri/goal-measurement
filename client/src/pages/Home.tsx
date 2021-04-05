@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { makeStyles, Paper, Theme, Typography } from '@material-ui/core'
-import { Link, RouteComponentProps, useHistory } from 'react-router-dom'
+import { Link, RouteComponentProps } from 'react-router-dom'
 import { displaySuccessSnackbar } from '../redux'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 
@@ -51,21 +51,13 @@ const Home = (
   >
 ) => {
   const classes = useStyles()
-  const history = useHistory()
   const dispatch = useDispatch()
   useDocumentTitle('Goal Measurement')
 
   useEffect(() => {
-    const init = () => {
+    if (props.location.state?.fromDeletedUser) {
       dispatch(displaySuccessSnackbar(props.location.state.message))
-      history.replace('', null) // delete fromDeletedUser and message properties
     }
-
-    // try {
-    if (props.location.state.fromDeletedUser) {
-      init()
-    }
-    // } catch {}
   }, [])
 
   return (

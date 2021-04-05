@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Link, RouteComponentProps, useHistory } from 'react-router-dom'
+import { Link, RouteComponentProps } from 'react-router-dom'
 import Title from '../components/goal-dashboard/Title'
 import { Grid } from '@material-ui/core'
 import Description from '../components/goal-dashboard/Description'
@@ -31,15 +31,13 @@ const GoalDashboard = (
   useDocumentTitle(selectedGoal?.shortDescription)
   useSelectedGoal(props.match.params.id)
   const { isLoading } = usePerformanceData()
-  const history = useHistory()
 
   useEffect(() => {
-    if (props.location.state) {
+    if (props.location.state?.fromUpdatedGoal) {
       const { message, fromUpdatedGoal } = props.location.state
 
       if (fromUpdatedGoal) {
         dispatch(displayDialog(message))
-        history.replace('', null) // delete fromUpdatedGoal and message properties
       }
     }
   }, [])
