@@ -33,13 +33,8 @@ const GoalDashboard = (
   const { isLoading } = usePerformanceData()
 
   useEffect(() => {
-    if (props.location.state?.fromUpdatedGoal) {
-      const { message, fromUpdatedGoal } = props.location.state
-
-      if (fromUpdatedGoal) {
-        dispatch(displayDialog(message))
-      }
-    }
+    if (props.location.state?.fromUpdatedGoal)
+      dispatch(displayDialog(props.location.state.message))
   }, [])
 
   if (isLoading) return <Loading />
