@@ -3,6 +3,7 @@ import { makeStyles, Theme, Typography } from '@material-ui/core'
 import { firstItemToLast } from '../../utils/arrays'
 import { weekDays } from '../../utils/dates'
 import { DaysOfWeek, WeekDays } from '../../types'
+import { textCapitalize } from '../../utils/text'
 
 const useStyles = makeStyles((theme: Theme) => ({
   containerDays: {
@@ -30,7 +31,7 @@ const DaysCalendar = () => {
           variant="body2"
           align="center"
         >
-          {day}
+          {textCapitalize(day.slice(0, 3))}
         </Typography>
       ))}
     </div>

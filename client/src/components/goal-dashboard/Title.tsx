@@ -16,7 +16,7 @@ const Title = () => {
     <>
       <MainTitle>{textCapitalize(shortDescription)}</MainTitle>
       <Typography align="center" variant="body1" gutterBottom>
-        {moment(end).format('LL')} ({moment(end).from()})
+        {moment(end).format('LL')} ({moment(end).from(moment().format())})
       </Typography>
     </>
   )
