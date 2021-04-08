@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { makeStyles, CardMedia, Theme } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
@@ -60,6 +60,7 @@ const EditUser = () => {
   const [image, setImage] = useState<File | null>(null)
   const [imageName, setImageName] = useState('')
   const [disabled, setDisabled] = useState(false)
+  const [isAvatarUploaded, setIsAvatarUploaded] = useState(false)
   const user = useSelector((state: RootState) => state.user.user)
   const avatar = useSelector((state: RootState) => state.user.avatar)
   const dispatch = useDispatch()
@@ -70,6 +71,7 @@ const EditUser = () => {
       setUsername(user.username)
       setEmail(user.email)
       setHasAvatar(!!avatar)
+      setIsAvatarUploaded(!!avatar)
     }
   }, [])
 
@@ -80,12 +82,12 @@ const EditUser = () => {
     const formData = new FormData()
     formData.append('username', username)
     formData.append('email', email)
-    if (image) {
-      formData.append('avatar', image)
+    if (isAvatarUploaded) {
+      formData.append('avatar', image as File)
+    } else {
+      // check if the avatar was uploaded or not. In case avatar was not uploaded (!image), the avatar existing or not in DB, will be deleted
+      formData.append('deleteAvatar', 'true')
     }
-
-    // check if the avatar was uploaded or not. In case avatar was not uploaded (!image), the avatar existing or not in DB, will be deleted
-    formData.append('deleteAvatar', !image ? 'delete' : '')
 
     try {
       const data = await updateUser(formData)
@@ -122,11 +124,19 @@ const EditUser = () => {
     if (e.target.files?.length) {
       setImage(e.target.files[0])
       setImageName(e.target.files[0].name)
+      setIsAvatarUploaded(true)
     }
   }
 
   const deleteImage = () => {
+    setIsAvatarUploaded(false)
+    setImageName('')
+    setImage(null)
+  }
+
+  const deleteImageFromMedia = () => {
     setHasAvatar(false)
+    setIsAvatarUploaded(false)
   }
 
   return (
@@ -145,19 +155,17 @@ const EditUser = () => {
           }
           value={email}
         />
-        {!hasAvatar && (
-          <FormAvatar
-            imageName={imageName}
-            setImageName={setImageName}
-            uploadImage={uploadImage}
-          />
-        )}
+        <FormAvatar
+          imageName={imageName}
+          deleteImage={deleteImage}
+          uploadImage={uploadImage}
+        />
         {hasAvatar && (
           <CardMedia
             image={avatar}
             title="User avatar"
             className={classes.cardMedia}
-            onClick={deleteImage}
+            onClick={deleteImageFromMedia}
           />
         )}
         <PrimaryButton disabled={disabled} type="submit">

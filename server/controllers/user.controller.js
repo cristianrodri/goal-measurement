@@ -297,7 +297,7 @@ const userCtrl = {
       }
 
       // delete user avatar when no image is uploaded while current image is deleted
-      if (req.body['deleteAvatar'] === 'delete') {
+      if (req.body['deleteAvatar'] === 'true') {
         user.avatar = undefined
       }
 
@@ -313,7 +313,6 @@ const userCtrl = {
         message: 'Your profile was updated successfully'
       })
     } catch (error) {
-      console.log(error)
       res.status(400).json({
         success: false,
         error: true,

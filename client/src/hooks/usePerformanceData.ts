@@ -47,7 +47,6 @@ export const usePerformanceData = () => {
     try {
       if (!todayPerformance && selectedGoal)
         getAllPerformancesAPI(selectedGoal._id, currentDateUTC)
-      // else setIsLoading(false)
     } catch (error) {
       dispatch(displayErrorSnackbar(error.message))
     }

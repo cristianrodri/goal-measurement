@@ -80,6 +80,10 @@ const Signup = () => {
     }
   }
 
+  const deleteImage = () => {
+    setImageName('')
+  }
+
   return (
     <FormContainer>
       <MainTitle>Sign up</MainTitle>
@@ -112,7 +116,7 @@ const Signup = () => {
         />
         <FormAvatar
           imageName={imageName}
-          setImageName={setImageName}
+          deleteImage={deleteImage}
           uploadImage={uploadImage}
         />
         <PrimaryButton fullWidth disabled={disabled} type="submit">

@@ -105,33 +105,37 @@ export const FormDivider = () => <Divider className={useStyles().divider} />
 
 interface AvatarProps {
   imageName: string
-  setImageName: React.Dispatch<React.SetStateAction<string>>
   uploadImage: (e: ChangeEvent<HTMLInputElement>) => void
+  deleteImage: () => void
 }
 
 export const FormAvatar = ({
   imageName,
-  setImageName,
+  deleteImage,
   uploadImage
 }: AvatarProps) => {
   const classes = useStyles()
   return (
     <div>
-      <input
-        accept="image/*"
-        id="raised-button-file"
-        type="file"
-        style={{ display: 'none' }}
-        onChange={uploadImage}
-      />
-      <label htmlFor="raised-button-file" className={classes.textField}>
-        <Button
-          component="span"
-          className={`${classes.textField} ${classes.upload}`}
-        >
-          Upload an avatar
-        </Button>
-      </label>
+      {!imageName && (
+        <>
+          <input
+            accept="image/*"
+            id="raised-button-file"
+            type="file"
+            style={{ display: 'none' }}
+            onChange={uploadImage}
+          />
+          <label htmlFor="raised-button-file" className={classes.textField}>
+            <Button
+              component="span"
+              className={`${classes.textField} ${classes.upload}`}
+            >
+              Upload an avatar
+            </Button>
+          </label>
+        </>
+      )}
       {imageName && (
         <Typography className={classes.imgName}>
           {imageName}
@@ -140,9 +144,7 @@ export const FormAvatar = ({
             size="small"
             aria-label="close"
             color="inherit"
-            onClick={() => {
-              setImageName('')
-            }}
+            onClick={deleteImage}
           >
             <CloseIcon />
           </IconButton>

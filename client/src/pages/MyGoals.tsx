@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { makeStyles, Container, Theme } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
-import { RouteComponentProps, Link } from 'react-router-dom'
+import { RouteComponentProps, Link, useHistory } from 'react-router-dom'
 import Goals from '../components/Goals'
 import { MainTitle } from '../components/Title'
 import { PrimaryButton } from '../components/Button'
@@ -40,12 +40,14 @@ const MyGoals = (
   const completedGoals = goals.filter(goal => goal.completed)
   const dispatch = useDispatch()
   const classes = useStyles()
+  const history = useHistory()
   const { state } = props.location
   useDocumentTitle('My Goals')
 
   useEffect(() => {
     if (state?.fromEditUser || state?.fromDeleteGoal) {
       dispatch(displayDialog(state.message))
+      history.replace('/my-goals', {})
     }
   }, [])
 
