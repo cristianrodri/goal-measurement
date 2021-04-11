@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Link, RouteComponentProps } from 'react-router-dom'
 import Title from '../components/goal-dashboard/Title'
 import { Grid } from '@material-ui/core'

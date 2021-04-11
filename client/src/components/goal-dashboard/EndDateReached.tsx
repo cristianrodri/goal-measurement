@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { updateGoal } from '../../api/api_goals'
 import CompletedGoal from './CompletedGoal'
 import NewEndDate from './NewEndDate'

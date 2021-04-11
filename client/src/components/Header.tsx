@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   makeStyles,
   AppBar,
@@ -104,7 +103,7 @@ const Header = () => {
           {isAuth && (
             <PopupState variant="popover" popupId="demo-popup-menu">
               {popupState => (
-                <React.Fragment>
+                <>
                   <IconButton
                     style={{ padding: '0' }}
                     className={classes.links}
@@ -125,7 +124,7 @@ const Header = () => {
                     </MenuItem>
                     <MenuItem onClick={logoutAction}>Logout</MenuItem>
                   </Menu>
-                </React.Fragment>
+                </>
               )}
             </PopupState>
           )}

@@ -1,4 +1,4 @@
-import React, { FormEvent } from 'react'
+import { FormEvent } from 'react'
 import { Paper, makeStyles } from '@material-ui/core'
 import { MainTitle } from './Title'
 import {

@@ -1,10 +1,10 @@
-import React from 'react'
+import { ElementType } from 'react'
 import { useSelector } from 'react-redux'
 import { Route, Redirect, RouteProps } from 'react-router-dom'
 import { RootState } from '../redux'
 
 interface Props {
-  component: React.ElementType
+  component: ElementType
   path: RouteProps['path']
   exact?: RouteProps['exact']
 }

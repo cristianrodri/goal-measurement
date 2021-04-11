@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FormEvent } from 'react'
+import { useState, useEffect, FormEvent } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { createGoal } from '../api/api_goals'

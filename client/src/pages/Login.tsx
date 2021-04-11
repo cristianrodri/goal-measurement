@@ -1,4 +1,4 @@
-import React, { useState, FormEvent, ChangeEvent } from 'react'
+import { useState, FormEvent, ChangeEvent } from 'react'
 import { useDispatch } from 'react-redux'
 import { Typography } from '@material-ui/core'
 import { Link, useHistory } from 'react-router-dom'

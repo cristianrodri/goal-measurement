@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { makeStyles, Paper, Theme, Typography } from '@material-ui/core'
 import { Link, RouteComponentProps } from 'react-router-dom'

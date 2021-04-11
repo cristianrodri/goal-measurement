@@ -1,4 +1,4 @@
-import React, { ComponentType, useEffect, useState } from 'react'
+import { ComponentType, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import moment from 'moment'
 import Loading from './../components/Loading'

@@ -1,4 +1,3 @@
-import React from 'react'
 import { makeStyles, Theme } from '@material-ui/core'
 import DailyPerformance from './DailyPerformance'
 import { useSelector } from 'react-redux'

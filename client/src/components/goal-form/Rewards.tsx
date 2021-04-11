@@ -1,4 +1,3 @@
-import React from 'react'
 import { useSelector } from 'react-redux'
 import { SecondaryTitle } from '../Title'
 import { Grid } from '@material-ui/core'

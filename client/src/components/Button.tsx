@@ -1,4 +1,3 @@
-import React from 'react'
 import { makeStyles, Button, Theme, ButtonProps } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) => ({

@@ -1,4 +1,3 @@
-import React from 'react'
 import { makeStyles, useTheme } from '@material-ui/core'
 import ReactLoading from 'react-loading'
 

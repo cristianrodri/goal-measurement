@@ -1,4 +1,3 @@
-import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { makeStyles, Theme } from '@material-ui/core'
 import Home from './pages/Home'

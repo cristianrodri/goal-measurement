@@ -1,4 +1,3 @@
-import React from 'react'
 import { makeStyles, Paper, Theme } from '@material-ui/core'
 import moment from 'moment'
 import { textCapitalize } from './../../utils/text'

@@ -1,4 +1,4 @@
-import React, { ComponentType } from 'react'
+import { ComponentType } from 'react'
 import { makeStyles, Typography, Grid, Theme } from '@material-ui/core'
 import GoalCard from './GoalCard'
 import { Goal } from '../types'

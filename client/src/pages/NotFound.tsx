@@ -1,4 +1,3 @@
-import React from 'react'
 import { Paper, makeStyles, Typography, Button, Theme } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'

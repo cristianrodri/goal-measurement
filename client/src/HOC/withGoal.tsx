@@ -1,4 +1,4 @@
-import React, { ComponentType, useEffect, useState } from 'react'
+import { ComponentType, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, RouteComponentProps } from 'react-router-dom'
 import { resetSelectedGoal, setSelectedGoal, RootState } from '../redux'

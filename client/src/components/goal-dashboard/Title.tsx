@@ -1,4 +1,3 @@
-import React from 'react'
 import { Typography } from '@material-ui/core'
 import { MainTitle } from './../Title'
 import moment from 'moment'

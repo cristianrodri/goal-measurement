@@ -1,4 +1,4 @@
-import React, { ComponentType } from 'react'
+import { ComponentType } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { TextField, TextFieldProps } from '@material-ui/core'
 import { setShortDescription, setBigDescription, RootState } from '../../redux'

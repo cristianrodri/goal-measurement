@@ -35,7 +35,6 @@ const loginUser = ({
       Accept: 'application/json',
       'Content-Type': 'application/json'
     },
-    // credentials: 'include',
     body: JSON.stringify({ email, password })
   })
     .then(res => {
@@ -92,7 +91,6 @@ const deleteUser = ({ password }: { password: string }) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
-      // Authorization: `Bearer ${token}`
     },
     body: JSON.stringify({ password })
   })

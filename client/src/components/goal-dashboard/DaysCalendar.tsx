@@ -1,4 +1,3 @@
-import React from 'react'
 import { makeStyles, Theme, Typography } from '@material-ui/core'
 import { firstItemToLast } from '../../utils/arrays'
 import { weekDays } from '../../utils/dates'

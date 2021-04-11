@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { makeStyles, Container, Theme } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
