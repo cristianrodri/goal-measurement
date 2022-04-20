@@ -39,12 +39,14 @@ const userCtrl = {
       const siteName = process.env.SITE_NAME
 
       transporter.sendMail(mailOptions(user, token, siteName), err => {
-        if (err)
+        if (err) {
+          console.log(err)
           return res.status(400).json({
             success: false,
             error: true,
             message: err.message
           })
+        }
 
         res.status(201).json({
           success: true,

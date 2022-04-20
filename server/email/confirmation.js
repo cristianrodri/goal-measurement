@@ -1,17 +1,18 @@
 const nodemailer = require('nodemailer')
-const sgTransport = require('nodemailer-sendgrid-transport')
 
-const transporter = nodemailer.createTransport(
-  sgTransport({
-    auth: {
-      api_user: process.env.USER,
-      api_key: process.env.PASS
-    }
-  })
-)
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  host: 'smtp.gmail.com ',
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.USER,
+    pass: process.env.PASS
+  }
+})
 
 const mailOptions = (user, token, siteName) => ({
-  from: 'carlo.interpab@gmail.com',
+  from: process.env.USER,
   to: user.email,
   subject: 'Confirmation email',
   text: `
